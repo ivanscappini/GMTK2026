@@ -9,6 +9,16 @@ Some useful guidelines to contribute to this project.
 1. Read the project's `README.md`
 2. Make sure you can open and run the project successfully.
 
+
+## First time project setup
+
+1. Clone the repository.
+2. Initialize GitLFS in your root repo folder
+```bash
+git lfs install
+```
+3. Open the project in Unity.
+
 ---
 
 # Working on a Task

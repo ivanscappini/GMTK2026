@@ -53,19 +53,13 @@ Briefly describe the game:
 
 ---
 
-## Installation
+## Project Installation
 
 ### Requirements
 
 - Unreal Engine 5.6+ (if sharing the source)
 - Windows (or supported platforms)
-
-### Running
-
-1. Clone the repository.
-2. Open the project in Unreal Engine.
-3. Press **Play**, or package the project.
-
+- 
 ---
 
 ## Credits
