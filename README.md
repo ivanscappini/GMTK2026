@@ -57,7 +57,7 @@ Briefly describe the game:
 
 ### Requirements
 
-- Unreal Engine 5.6+ (if sharing the source)
+- Unity (if sharing the source)
 - Windows (or supported platforms)
 - 
 ---
