@@ -47,7 +47,7 @@ Briefly describe the game:
 
 ## Tech stack
 
-- Unreal Engine 6.3(LTS)
+- Unity 6.3(LTS)
 - (Drawing/sculpting softwares?)
 - (Plugins? Middleware?)
 
