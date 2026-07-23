@@ -22,15 +22,17 @@ public class SafeZoneScripts : MonoBehaviour
 
     private bool stopTimer = false;
     private bool startTimer = false;
+    private bool firstTime = true;
 
     private void Start()
     {
         ResetTimer();
+        firstTime = true;
     }
 
     private void Update()
     {
-        if (!startTimer)
+        if (!startTimer || !firstTime)
             return;
         if (stopTimer == true || localSafeZoneTimer < 0)
         {
@@ -71,6 +73,7 @@ public class SafeZoneScripts : MonoBehaviour
     {
         stopTimer = true;
         startTimer = false;
+        firstTime = false;
         safeZonetimerOnScreen.text = "";
         //Missing a call function that start the timer once again the gameTimer from ticking down until one of the two condictions are met (1- Timer is over, 2-Player leaves the safe zone)
         enemy.SetActive(true); //Placeholder, the enemy should have a variable like isActive that once it is true it makes it behave normally
