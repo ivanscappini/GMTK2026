@@ -7,19 +7,15 @@ public class Timer : MonoBehaviour
     public static Timer Instance { get; private set; }
     
     [SerializeField] private float timerStartTime = 10f;
+    [SerializeField] private float playbackSpeed = 1f;
     [HideInInspector] public UnityEvent<float> timerEvent;
     [HideInInspector] public UnityEvent countdownEnd;
     [HideInInspector] public UnityEvent countdownStart;
-
-    private float _time;
-    private Coroutine _countdownCoroutine;
-
-    private void Awake()
+    public float PlaybackSpeed
     {
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        get => playbackSpeed;
+        set => playbackSpeed = Mathf.Max(0f, value);
     }
-    
     public float TheTime
     {
         get => _time;
@@ -29,7 +25,17 @@ public class Timer : MonoBehaviour
             timerEvent?.Invoke(_time);
         }
     }
+    private float _time;
+    private Coroutine _countdownCoroutine;
 
+
+    
+    private void Awake()
+    {
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    
     private void Start()
     {
         StartCountdown(); //temporarily here - tie to event
@@ -43,16 +49,6 @@ public class Timer : MonoBehaviour
         }
         _countdownCoroutine = StartCoroutine(Countdown());
     }
-
-    public void AddTime(float value)
-    {
-        TheTime += value;
-    }
-
-    public void SubtractTime(float value)
-    {
-        TheTime -= value;
-    }
     
     private IEnumerator Countdown()
     {
@@ -62,7 +58,7 @@ public class Timer : MonoBehaviour
 
         while (TheTime > 0f)
         {
-            TheTime -= Time.deltaTime;
+            TheTime -= Time.deltaTime * PlaybackSpeed;
             yield return null; 
         }
         StopCountdown();
@@ -72,5 +68,25 @@ public class Timer : MonoBehaviour
     {
         countdownEnd?.Invoke();
         _countdownCoroutine = null;
+    }
+    
+    public void AddTime(float value)
+    {
+        TheTime += value;
+    }
+
+    public void SubtractTime(float value)
+    {
+        TheTime -= value;
+    }
+
+    public void SetTimerSpeed(float value)
+    {
+        PlaybackSpeed = value;
+    }
+
+    public void PauseCountdown()
+    {
+        SetTimerSpeed(0f);
     }
 }

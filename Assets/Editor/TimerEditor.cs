@@ -28,6 +28,20 @@ public class TimerEditor : Editor
             }
 
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("(x2) Double Speed", GUILayout.Height(30)))
+            {
+                timer.SetTimerSpeed(2f);
+            }
+
+            if (GUILayout.Button("(x0.5) Half Speed", GUILayout.Height(30)))
+            {
+                timer.SetTimerSpeed(.5f);
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
     }
 }
