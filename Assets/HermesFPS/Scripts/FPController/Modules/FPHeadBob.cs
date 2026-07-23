@@ -74,12 +74,6 @@ namespace Hermes
 
                 SpeedRatio = Mathf.InverseLerp(Preset.WalkSpeed, Preset.SprintSpeed, Controller.CurrentSpeed);
             }
-            else if (Activity.IsActive(Controller.Crouch))
-            {
-                SetValues(Preset.HeadBobCrouch);
-
-                SpeedRatio = Mathf.InverseLerp(0f, Preset.CrouchSpeed, Controller.CurrentSpeed);
-            }
             else
             {
                 SetValues(Preset.HeadBobWalk);

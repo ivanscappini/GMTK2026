@@ -26,22 +26,23 @@ namespace Hermes
 
         void OnSprint(InputValue value)
         {
-            FPController.SprintInput = value.isPressed;
+            // Toggle sprint on press (matches crouch behavior)
+            if (!FPController.MovementEnabled)
+            {
+                return;
+            }
+
+            if (value.isPressed)
+            {
+                Activity.TryToggle(FPController.Sprint);
+            }
         }
 
         void OnJump(InputValue value)
         {
-            if (value.isPressed)
+            if (value.isPressed && FPController.MovementEnabled)
             {
                 FPController.TryJump?.Invoke();
-            }
-        }
-
-        void OnCrouch(InputValue value)
-        {
-            if (value.isPressed)
-            {
-                Activity.TryToggle(FPController.Crouch);
             }
         }
 

@@ -19,7 +19,8 @@ MonoBehaviour:
   JumpHeight: 2
   CanDoubleJump: 1
   CoyoteTime: 0.2
-  LookSensitivity: {x: 0.2, y: 0.2}
+  LookSensitivity: {x: 0.08, y: 0.08}
+  LookSmoothing: 0.02
   PitchLimit: 85
   CameraNormalFOV: 60
   CameraSprintFOV: 67.5

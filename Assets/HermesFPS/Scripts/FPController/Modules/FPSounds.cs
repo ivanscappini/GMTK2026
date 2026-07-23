@@ -30,18 +30,10 @@ namespace Hermes
             {
                 float rate, volume;
 
-                if (Activity.IsActive(Controller.Crouch))
-                {
-                    float t = Mathf.InverseLerp(Preset.CrouchSpeed, Preset.WalkSpeed, Controller.CurrentSpeed);
-                    rate = Mathf.Lerp(Preset.FootstepCrouchRate, Preset.FootstepWalkRate, t);
-                    volume = Mathf.Lerp(Preset.FootstepCrouchVolume, Preset.FootstepWalkVolume, t);
-                }
-                else
-                {
-                    float t = Mathf.InverseLerp(Preset.WalkSpeed, Preset.SprintSpeed, Controller.CurrentSpeed);
-                    rate = Mathf.Lerp(Preset.FootstepWalkRate, Preset.FootstepSprintRate, t);
-                    volume = Mathf.Lerp(Preset.FootstepWalkVolume, Preset.FootstepSprintVolume, t);
-                }
+                // interpolate between walk and sprint rates/volumes (crouch removed)
+                float t = Mathf.InverseLerp(Preset.WalkSpeed, Preset.SprintSpeed, Controller.CurrentSpeed);
+                rate = Mathf.Lerp(Preset.FootstepWalkRate, Preset.FootstepSprintRate, t);
+                volume = Mathf.Lerp(Preset.FootstepWalkVolume, Preset.FootstepSprintVolume, t);
 
                 if (Time.time >= footstepTimer)
                 {
@@ -53,6 +45,9 @@ namespace Hermes
 
         void OnLanded()
         {
+            if (Controller.VerticalVelocity > -Preset.LandVelocityThreshold)
+                return;
+
             float scale = Mathf.InverseLerp(0f, -20f, Controller.VerticalVelocity);
 
             scale *= Preset.MaxLandSoundVolume;

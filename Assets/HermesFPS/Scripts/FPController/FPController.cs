@@ -16,11 +16,8 @@ namespace Hermes
         {
             get
             {
-                if (Activity.IsActive(Crouch))
-                    return Preset.CrouchSpeed;
-                if (Activity.IsActive(Sprint))
-                    return Preset.SprintSpeed;
-                return Preset.WalkSpeed;
+                // Character is always sprinting now.
+                return Preset.SprintSpeed;
             }
         }
 
@@ -28,7 +25,8 @@ namespace Hermes
         {
             get
             {
-                return Activity.IsActive(Sprint);
+                // Always sprinting by design.
+                return true;
             }
         }
 
@@ -45,7 +43,7 @@ namespace Hermes
         }
 
         [Header("Camera Parameters")]
-        public Vector3 CurrentCameraPosition {get; private set;} = new Vector3(0f, 1.6f, 0f);
+        // public Vector3 CurrentCameraPosition {get; private set;} = new Vector3(0f, 1.6f, 0f);
 
         [Space(10)]
         public Vector3 CameraPositionOffset = Vector3.zero;
@@ -54,6 +52,9 @@ namespace Hermes
         [Header("Physics Parameters")]
 
         public float VerticalVelocity = 0f;
+
+        public bool LookEnabled = true;
+        public bool MovementEnabled = true;
 
         public Vector3 CurrentVelocity { get; private set; }
         public float CurrentSpeed { get; private set; }
@@ -67,6 +68,9 @@ namespace Hermes
         public Vector2 LookInput;
         public bool SprintInput;
 
+        [Tooltip("When enabled, sprint will toggle on/off with a press. When disabled, sprint is hold-to-run.")]
+        public bool SprintToggleMode = false;
+
         [Header("Components")]
         [SerializeField] CinemachineCamera fpCamera;
         [SerializeField] CharacterController characterController;
@@ -79,7 +83,6 @@ namespace Hermes
 
         [Header("Activities")]
         public FPSprint Sprint;
-        public FPCrouch Crouch;
 
         [Header("Events")]
         public UnityEvent Landed;
@@ -89,9 +92,8 @@ namespace Hermes
         public UnityAction TryJump;
         public UnityAction RequestCameraOffset;
 
-        [Header("Looking Parameters")]
-        [Range(0.01f, 1f)]
-        public Vector2 LookSensitivity = new Vector2(0.1f, 0.1f);
+        Vector2 smoothedLookInput = Vector2.zero;
+        Vector2 lookInputVelocity = Vector2.zero;
 
         #region Unity Methods
         void OnValidate()
@@ -110,22 +112,11 @@ namespace Hermes
             LookUpdate();
             CameraUpdate();
 
-            //check if player is crouching and adjust camera height
+            // camera height / character collider: crouch removed, always standing height
+            Vector3 targetCameraPosition = Vector3.up * 1.6f; // default camera height
 
-            Vector3 targetCameraPosition = Vector3.up * 1.6f; //default camera height
-
-            if(Activity.IsActive(Crouch))
-            {
-                targetCameraPosition = Vector3.up * 0.9f; //crouch camera height
-
-                characterController.height = 1f;
-                characterController.center = Vector3.up * 0.5f; //adjust character hitbox when crouching
-            }
-            else
-            {
-                characterController.height = 2f;
-                characterController.center = Vector3.up * 1f; //reset character hitbox when not crouching
-            }
+            characterController.height = 2f;
+            characterController.center = Vector3.up * 1f; // keep a consistent hitbox
 
             CurrentCameraPosition = Vector3.Lerp(CurrentCameraPosition, targetCameraPosition, 7f * Time.deltaTime);
 
@@ -143,6 +134,13 @@ namespace Hermes
 
         void MoveUpdate()
         {
+            if (MovementEnabled == false)
+            {
+                VerticalVelocity = 0f;
+                CurrentVelocity = Vector3.zero;
+                return;
+            }
+
             Vector3 motion = transform.forward * MoveInput.y + transform.right * MoveInput.x; //y input is forward/backward (W/S), x input is left/right (A/D)
             motion.y = 0f;
             motion.Normalize();
@@ -179,15 +177,34 @@ namespace Hermes
 
         void LookUpdate()
         {
-            Vector2 input = new Vector2(LookInput.x * Preset.LookSensitivity.x, LookInput.y * Preset.LookSensitivity.y);
+            if (LookEnabled == false)
+            {
+                return;
+            }
+
+            // Consume look input once per frame to avoid reusing stale mouse delta.
+            Vector2 rawInput = LookInput;
+            LookInput = Vector2.zero;
+
+            Vector2 targetInput = new Vector2(rawInput.x * Preset.LookSensitivity.x, rawInput.y * Preset.LookSensitivity.y);
+
+            if (Preset.LookSmoothing > 0f)
+            {
+                smoothedLookInput = Vector2.SmoothDamp(smoothedLookInput, targetInput, ref lookInputVelocity, Preset.LookSmoothing);
+            }
+            else
+            {
+                smoothedLookInput = targetInput;
+                lookInputVelocity = Vector2.zero;
+            }
 
             //looking up and down
-            CurrentPitch -= input.y; //invert y input for more natural mouse look feel
+            CurrentPitch -= smoothedLookInput.y; //invert y input for more natural mouse look feel
 
             fpCamera.transform.localRotation = Quaternion.Euler(CurrentPitch, 0f, 0f) * CameraRotationOffset;
 
             //looking left and right
-            transform.Rotate(Vector3.up * input.x);
+            transform.Rotate(Vector3.up * smoothedLookInput.x);
         }
 
         void UpdateCameraOffset()
@@ -211,10 +228,16 @@ namespace Hermes
 
             fpCamera.Lens.FieldOfView = Mathf.Lerp(fpCamera.Lens.FieldOfView, targetFOV, Preset.CameraFOVSmoothing * Time.deltaTime);
 
-            fpCamera.transform.localPosition = CurrentCameraPosition + CameraPositionOffset;
+            // NOTE: Do NOT override camera world position here.
+            // The camera is driven by FPCameraController (it follows the model's head CameraTarget).
+            // Removing assignment to localPosition prevents fighting with FPCameraController.
+            //
+            // fpCamera.transform.localPosition = CurrentCameraPosition + CameraPositionOffset;
         }
 
         #endregion
 
+        // keep the previous public camera position property for compatibility
+        public Vector3 CurrentCameraPosition { get; private set; } = new Vector3(0f, 1.6f, 0f);
     }
 }
