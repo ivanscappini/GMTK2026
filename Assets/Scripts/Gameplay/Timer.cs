@@ -1,3 +1,5 @@
+using Hermes;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -5,7 +7,7 @@ using UnityEngine.Events;
 public class Timer : MonoBehaviour
 {
     public static Timer Instance { get; private set; }
-    
+
     [SerializeField] private float timerStartTime = 10f;
     [SerializeField] private float playbackSpeed = 1f;
     [HideInInspector] public UnityEvent<float> timerEvent;
@@ -28,17 +30,39 @@ public class Timer : MonoBehaviour
     private float _time;
     private Coroutine _countdownCoroutine;
 
+    [SerializeField] private float timerDuration = 0.5f; // Duration of the timer in seconds
+    private float timer;
 
-    
+    private bool isMoving = false;
+
+    public event Action OnMoving;
+    public event Action OnStoppedMoving;
+
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    
+
     private void Start()
     {
+        FPController.Instance.OnMoving += StartedMoving;
+        FPController.Instance.OnStationary += StoppedMoving;
         StartCountdown(); //temporarily here - tie to event
+    }
+
+    private void Update()
+    {
+        if (isMoving && timer != 0)
+        {
+            timer = 0;
+            OnMoving?.Invoke();
+        }
+
+        if (!isMoving)
+        {
+            StartTimer();
+        }
     }
 
     private void StartCountdown()
@@ -49,17 +73,17 @@ public class Timer : MonoBehaviour
         }
         _countdownCoroutine = StartCoroutine(Countdown());
     }
-    
+
     private IEnumerator Countdown()
     {
         countdownStart?.Invoke();
-        
+
         TheTime = timerStartTime;
 
         while (TheTime > 0f)
         {
             TheTime -= Time.deltaTime * PlaybackSpeed;
-            yield return null; 
+            yield return null;
         }
         StopCountdown();
     }
@@ -69,7 +93,7 @@ public class Timer : MonoBehaviour
         countdownEnd?.Invoke();
         _countdownCoroutine = null;
     }
-    
+
     public void AddTime(float value)
     {
         TheTime += value;
@@ -88,5 +112,31 @@ public class Timer : MonoBehaviour
     public void PauseCountdown()
     {
         SetTimerSpeed(0f);
+    }
+
+    private void StartedMoving()
+    {
+        isMoving = true;
+
+        SetTimerSpeed(1f);
+    }
+
+    private void StoppedMoving()
+    {
+        isMoving = false;
+    }
+
+    private void StartTimer()
+    {
+        if (timer < timerDuration)
+        {
+            timer += Time.deltaTime;
+        }
+        else
+        {
+            timer = 0;
+            OnStoppedMoving?.Invoke();
+            SetTimerSpeed(2f);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine.Events;
+using System;
 
 namespace Hermes
 {
@@ -11,7 +12,7 @@ namespace Hermes
     public class FPController : MonoBehaviour
     {
         public FPControllerPreset Preset;
-        
+
         float MaxSpeed
         {
             get
@@ -45,7 +46,7 @@ namespace Hermes
         }
 
         [Header("Camera Parameters")]
-        public Vector3 CurrentCameraPosition {get; private set;} = new Vector3(0f, 1.6f, 0f);
+        public Vector3 CurrentCameraPosition { get; private set; } = new Vector3(0f, 1.6f, 0f);
 
         [Space(10)]
         public Vector3 CameraPositionOffset = Vector3.zero;
@@ -86,6 +87,9 @@ namespace Hermes
         public UnityEvent Jumped;
         public UnityEvent DoubleJumped;
 
+        public event Action OnMoving;
+        public event Action OnStationary;
+
         public UnityAction TryJump;
         public UnityAction RequestCameraOffset;
 
@@ -93,12 +97,26 @@ namespace Hermes
         [Range(0.01f, 1f)]
         public Vector2 LookSensitivity = new Vector2(0.1f, 0.1f);
 
+        public static FPController Instance { get; private set; }
+
         #region Unity Methods
         void OnValidate()
         {
-            if(characterController == null)
+            if (characterController == null)
             {
                 characterController = GetComponent<CharacterController>();
+            }
+        }
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Instance = this;
             }
         }
 
@@ -114,7 +132,7 @@ namespace Hermes
 
             Vector3 targetCameraPosition = Vector3.up * 1.6f; //default camera height
 
-            if(Activity.IsActive(Crouch))
+            if (Activity.IsActive(Crouch))
             {
                 targetCameraPosition = Vector3.up * 0.9f; //crouch camera height
 
@@ -150,10 +168,12 @@ namespace Hermes
             if (motion.sqrMagnitude >= 0.01f)
             {
                 CurrentVelocity = Vector3.Lerp(CurrentVelocity, motion * MaxSpeed, Preset.Acceleration * Time.deltaTime);
+                OnMoving?.Invoke();
             }
             else
             {
                 CurrentVelocity = Vector3.Lerp(CurrentVelocity, Vector3.zero, Preset.Acceleration * Time.deltaTime);
+                OnStationary?.Invoke();
             }
 
             if (Grounded && VerticalVelocity <= 0.01f)
@@ -161,7 +181,7 @@ namespace Hermes
                 VerticalVelocity = -3f; //downward force to keep the player grounded
             }
             else
-            { 
+            {
                 VerticalVelocity += Physics.gravity.y * Preset.GravityScale * Time.deltaTime; //simple gravity implementation
             }
 
