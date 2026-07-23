@@ -25,10 +25,6 @@ public class MonsterBehaviour : MonoBehaviour
         Timer.Instance.OnStoppedMoving += DoubleSpeed;
     }
 
-    private void Update()
-    {
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -66,7 +62,7 @@ public class MonsterBehaviour : MonoBehaviour
     {
         if (isFaster) return;
         isFaster = true;
-        splineAnimator.MaxSpeed *= 2f;
+        splineAnimator.Duration /= 2f;
         splineAnimator.ElapsedTime /= 2f;   // Adjust ElapsedTime to maintain the same position on the spline
     }
 
@@ -74,7 +70,7 @@ public class MonsterBehaviour : MonoBehaviour
     {
         if (!isFaster) return;
         isFaster = false;
-        splineAnimator.MaxSpeed /= 2f;
+        splineAnimator.Duration *= 2f;
         splineAnimator.ElapsedTime *= 2f;   // Adjust ElapsedTime to maintain the same position on the spline
     }
 }
