@@ -35,6 +35,11 @@ public class TimerEditor : Editor
             {
                 timer.SetTimerSpeed(2f);
             }
+            
+            if (GUILayout.Button("(x1) Normal Speed", GUILayout.Height(30)))
+            {
+                timer.SetTimerSpeed(1f);
+            }
 
             if (GUILayout.Button("(x0.5) Half Speed", GUILayout.Height(30)))
             {
