@@ -23,8 +23,8 @@ public class MonsterBehaviour : MonoBehaviour
 
         Timer.Instance.OnMoving += ResetSpeed;
         Timer.Instance.OnStoppedMoving += DoubleSpeed;
+        Timer.Instance.OnTimerChanged += RecalculateElapsedTime;
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -73,4 +73,14 @@ public class MonsterBehaviour : MonoBehaviour
         splineAnimator.Duration *= 2f;
         splineAnimator.ElapsedTime *= 2f;   // Adjust ElapsedTime to maintain the same position on the spline
     }
+    
+    private void RecalculateElapsedTime()
+    {
+        
+        float pickedTime = (Timer.Instance.TimerStartTime - splineAnimator.ElapsedTime) - Timer.Instance.TheTime;
+        splineAnimator.ElapsedTime += pickedTime;
+        
+        Debug.Log($"Picked time {pickedTime} - Spline animator time: {splineAnimator.ElapsedTime}");
+    }
+
 }

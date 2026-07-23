@@ -13,6 +13,13 @@ public class Timer : MonoBehaviour
     [HideInInspector] public UnityEvent<float> timerEvent;
     [HideInInspector] public UnityEvent countdownEnd;
     [HideInInspector] public UnityEvent countdownStart;
+    [HideInInspector] public event Action OnTimerChanged;
+
+    public float TimerStartTime
+    {
+        get => timerStartTime;
+        set => timerStartTime = value;
+    }
     public float PlaybackSpeed
     {
         get => playbackSpeed;
@@ -97,11 +104,13 @@ public class Timer : MonoBehaviour
     public void AddTime(float value)
     {
         TheTime += value;
+        OnTimerChanged?.Invoke();
     }
 
     public void SubtractTime(float value)
     {
         TheTime -= value;
+        OnTimerChanged?.Invoke();
     }
 
     public void SetTimerSpeed(float value)
