@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 28196243129823429}
   - component: {fileID: 1513064297154895022}
   - component: {fileID: 713415629812727730}
+  - component: {fileID: 5245567198605343937}
   - component: {fileID: 1376368898235384902}
   - component: {fileID: 1511133722821477632}
   m_Layer: 0
@@ -115,6 +116,33 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 30
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5245567198605343937
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3743995395772469131}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &1376368898235384902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,8 +178,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 243eebe7a150abe44bbab1cc60238694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterBehaviour
-  minDistance: 10
-  maxDistance: 30
+  minDistance: 0
+  maxDistance: 0
 --- !u!1 &5168577434480121006
 GameObject:
   m_ObjectHideFlags: 0

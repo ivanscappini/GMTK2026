@@ -724,38 +724,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
   m_PrefabInstance: {fileID: 344547054}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &464806166 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3743995395772469131, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-  m_PrefabInstance: {fileID: 5880406176244833904}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &464806175
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464806166}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &553006459 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4048631862370831030, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
@@ -1212,10 +1180,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 713415629812727730, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1376368898235384902, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
       propertyPath: m_Target
       value: 
@@ -1223,18 +1187,6 @@ PrefabInstance:
     - target: {fileID: 3743995395772469131, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
       propertyPath: m_Name
       value: Monster
-      objectReference: {fileID: 0}
-    - target: {fileID: 5353544979227383602, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_Size.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5353544979227383602, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5353544979227383602, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_ProvidesContacts
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1279,10 +1231,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3743995395772469131, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 464806175}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
 --- !u!114 &7438389869817341089 stripped
 MonoBehaviour:
