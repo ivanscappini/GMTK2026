@@ -1,9 +1,16 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerRespawn : MonoBehaviour
+public class PlayerRespawn : MonoBehaviour, ISerializationCallbackReceiver
 {
     
-    [SerializeField] private GameObject gameOverScreen;
+    [Header("Scene Routing")]
+#if UNITY_EDITOR
+    [SerializeField] private UnityEditor.SceneAsset gameOverSceneAsset;
+#endif
+    [HideInInspector] 
+    [SerializeField] private string gameOverSceneName;
+    
     [SerializeField] GameObject Player;
     CharacterController cc;
 
@@ -40,6 +47,18 @@ public class PlayerRespawn : MonoBehaviour
     
     private void ShowGameOver()
     {
-        gameOverScreen.SetActive(true);
+        SceneManager.LoadScene(gameOverSceneName);
     }
+    
+    public void OnBeforeSerialize()
+    {
+#if UNITY_EDITOR
+        if(gameOverSceneAsset != null)
+            gameOverSceneName = gameOverSceneAsset.name;
+        else
+            gameOverSceneName = string.Empty;
+#endif
+    }
+
+    public void OnAfterDeserialize() { }
 }

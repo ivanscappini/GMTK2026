@@ -26,7 +26,6 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
     private void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     
     public void Button_MainMenu()
