@@ -336,6 +336,39 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 302380317151088118, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
   m_PrefabInstance: {fileID: 1328198235}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1059667736 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1509750889683737805, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+  m_PrefabInstance: {fileID: 1328198235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059667735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b130e745cab1d54e8f57ebdda0852d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPSprint
+--- !u!114 &1059667738 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3395242750816677069, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+  m_PrefabInstance: {fileID: 1328198235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059667735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df0193ccc7cb96447bee4bcc516d2ca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPCameraLand
+--- !u!114 &1059667742 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5831501224752902948, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+  m_PrefabInstance: {fileID: 1328198235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059667735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a498ceb91f584343aa5dc5aac8c9045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPJump
 --- !u!114 &1059667744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,17 +378,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1059667735}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fb077e82580e1649bd95ca917b1a31d, type: 3}
+  m_Script: {fileID: 11500000, guid: af8aa5839807188448016b8b79b278d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPMovement
-  Velocity: {x: 0, y: 0, z: 0}
+  interruptList: []
+  blockedByList:
+  - {fileID: 1059667745}
+--- !u!114 &1059667745 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1963180618446572754, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+  m_PrefabInstance: {fileID: 1328198235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059667735}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26debbed6878ed742a40055168a10493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FPLedgeClimb
 --- !u!114 &1059667746 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4226236089201488050, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
   m_PrefabInstance: {fileID: 1328198235}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059667735}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 737ac2e3662d90642a13e06cb19bd797, type: 3}
   m_Name: 
@@ -387,6 +433,34 @@ PrefabInstance:
     - target: {fileID: 263192938444325681, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509750889683737805, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: blockedByList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509750889683737805, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: interruptList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509750889683737805, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'blockedByList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1059667745}
+    - target: {fileID: 1509750889683737805, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'blockedByList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1059667742}
+    - target: {fileID: 1509750889683737805, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'interruptList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1059667746}
+    - target: {fileID: 1963180618446572754, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226236089201488050, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4889173079886533915, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
       propertyPath: m_LocalPosition.x
@@ -428,6 +502,58 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4974451229081255291, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: AlwaysRun
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831501224752902948, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: blockedByList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831501224752902948, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: interruptList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831501224752902948, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'blockedByList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1059667745}
+    - target: {fileID: 5831501224752902948, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'interruptList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1059667736}
+    - target: {fileID: 5831501224752902948, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'interruptList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1059667746}
+    - target: {fileID: 6065206835561174814, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: activitiesListInternal.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065206835561174814, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'activitiesListInternal.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1059667742}
+    - target: {fileID: 6065206835561174814, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'activitiesListInternal.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1059667736}
+    - target: {fileID: 6065206835561174814, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'activitiesListInternal.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1059667746}
+    - target: {fileID: 6065206835561174814, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'activitiesListInternal.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1059667738}
+    - target: {fileID: 6065206835561174814, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'activitiesListInternal.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1059667745}
+    - target: {fileID: 6065206835561174814, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: 'activitiesListInternal.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1059667744}
     - target: {fileID: 7301389931733117674, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
       propertyPath: Crouch
       value: 
@@ -1218,6 +1344,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e4759fa26a52942869511082b0adc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPFullBodyAnimator
+  LeftHandClimbEnabled: 1
+  RightHandClimbEnabled: 1
+  RightHandRig: {fileID: 0}
+  RightHandTarget: {fileID: 0}
+  LeftHandRig: {fileID: 0}
+  LeftHandTarget: {fileID: 0}
+  HandSpacing: 0.3
+  MaxArmReach: 0.8
+  RightHandTargetRotationOffset: {x: 90, y: 0, z: 0}
+  LeftHandTargetRotationOffset: {x: 90, y: 0, z: 0}
+  LeftShoulderBone: {fileID: 0}
+  RightShoulderBone: {fileID: 0}
   controller: {fileID: 1225632200}
   animator: {fileID: 3600409645218556074}
 --- !u!1 &3600409645240371712

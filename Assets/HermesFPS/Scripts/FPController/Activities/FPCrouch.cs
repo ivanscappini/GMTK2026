@@ -1,19 +1,17 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Hermes
 {
+    // blocked by Sprint, Ledge Climb
+
     public class FPCrouch : FPActivity
     {
-        protected override void Awake()
-        {
-            base.Awake();
-
-            Controller.Crouch = this;
-        }
 
         public override bool CanStartActivity()
         {
-            if (Activity.IsActive(Controller.Sprint))
+            if (!Controller.Grounded)
             {
                 return false;
             }
@@ -23,26 +21,22 @@ namespace Hermes
 
         public override bool CanStopActivity()
         {
-            var cc = Controller.CharacterController;
-            float standingHeight = 2f; // Your standing collider height
-            float crouchedHeight = cc.height; // Current collider height when crouched
+            // crouch can't be stopped if we have obstacles above us
 
-            // Calculate the position at the top of the crouched collider
-            Vector3 crouchedTop = Controller.transform.position + cc.center + Vector3.up * (crouchedHeight / 2f);
+            Ray ray = new Ray(Controller.CameraTransform.position, Vector3.up);
 
-            // Calculate how much higher the standing collider would be
-            float heightDifference = standingHeight - crouchedHeight;
+            float standingHeight = 2f;
+            float raycastDistance = standingHeight - Controller.CameraTransform.localPosition.y;
 
-            if (heightDifference <= 0f)
-                return true; // Already at or above standing height
+            raycastDistance = Mathf.Max(0f, raycastDistance);
 
-            // Raycast from the top of the crouched collider upwards
-            if (Physics.Raycast(crouchedTop, Vector3.up, heightDifference, Preset.ObstacleLayerMask))
+            if (Physics.Raycast(ray, raycastDistance, Preset.ObstacleLayerMask))
             {
                 return false;
             }
 
             return true;
         }
+
     }
 }

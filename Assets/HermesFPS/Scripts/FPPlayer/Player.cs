@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Hermes
@@ -8,18 +8,21 @@ namespace Hermes
     [RequireComponent(typeof(FPController))]
     public class Player : MonoBehaviour
     {
+        [SerializeField] bool AlwaysRun = false;
 
-        [SerializeField] bool AlwaysRun = true;
 
         [Header("Components")]
         [SerializeField] FPController FPController;
 
-        public void SetAlwaysRun(bool value)
+
+
+        public void SetAlwaysRun(bool alwaysRun)
         {
-            AlwaysRun = value;
+            AlwaysRun = alwaysRun;
 
             FPController.SprintInput = false;
         }
+
 
         #region Input Handling
 
@@ -40,7 +43,20 @@ namespace Hermes
                 return;
             }
 
-            // Toggle sprint on press (matches crouch behavior)
+            FPController.SprintInput = value.isPressed;
+
+            if (!FPController.MovementEnabled)
+            {
+                FPController.SprintInput = false;
+            }
+        }
+
+
+        ActivityManager ActivityManager => FPController.ActivityManager;
+
+
+        void OnJump(InputValue value)
+        {
             if (!FPController.MovementEnabled)
             {
                 return;
@@ -48,31 +64,44 @@ namespace Hermes
 
             if (value.isPressed)
             {
-                Activity.TryToggle(FPController.Sprint);
-            }
-        }
+                // stand when trying to jump while crouched
+                if (FPController.Crouching)
+                {
+                    ActivityManager.TryStop<FPCrouch>();
+                    return;
+                }
 
-        void OnJump(InputValue value)
-        {
-            if (value.isPressed && FPController.MovementEnabled)
-            {
+                // jumping
+                if (!ActivityManager.IsActive<FPJump>())
+                {
+                    ActivityManager.TryStart<FPJump>();
+                    return;
+                }
+
                 FPController.TryJump?.Invoke();
             }
         }
 
-        #endregion
-
-        #region Unity Methods
-
-        private void OnValidate()
+        void OnCrouch(InputValue value)
         {
-            if (FPController == null)
+            if (value.isPressed && FPController.MovementEnabled)
             {
-                FPController = GetComponent<FPController>();
+                ActivityManager.TryToggle<FPCrouch>();
             }
         }
 
-        private void Start()
+
+        #endregion
+
+
+        #region Unity Methods
+
+        void OnValidate()
+        {
+            if (FPController == null) FPController = GetComponent<FPController>();
+        }
+
+        void Start()
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -80,12 +109,16 @@ namespace Hermes
 
         private void Update()
         {
-            if (AlwaysRun && FPController.MovementEnabled)
+            //Time.timeScale = 0.1f;
+
+
+            if (AlwaysRun)
             {
-                Activity.TryStart(FPController.Sprint);
+                FPController.SprintInput = true;
             }
         }
 
         #endregion
     }
 }
+

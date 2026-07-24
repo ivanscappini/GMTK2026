@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Hermes
 {
@@ -24,8 +26,10 @@ namespace Hermes
         [Header("Recovery State")]
         [SerializeField] float RecoverySmoothness = 1f;
 
+
         private Vector3 targetOffset;
         private Vector3 currentOffset;
+
 
         protected override void Awake()
         {
@@ -41,19 +45,20 @@ namespace Hermes
         private void Update()
         {
             stateTimer += Time.deltaTime;
-            
+
             if (Active)
             {
                 if (state == EState.Land)
                 {
                     float t = LandCurve.Evaluate(stateTimer / LandDuration);
 
-                    currentOffset = Vector3.LerpUnclamped(Vector3.zero, targetOffset, t); //unclamped to allow for overshooting on the animation curve
+                    currentOffset = Vector3.LerpUnclamped(Vector3.zero, targetOffset, t);
                 }
                 else if (state == EState.Recovery)
                 {
-                    currentOffset = Vector3.Lerp(currentOffset, Vector3.zero, RecoverySmoothness * Time.deltaTime);
+                    currentOffset = Vector3.Lerp(currentOffset, Vector3.zero, Time.deltaTime * RecoverySmoothness);
                 }
+
 
                 if (state == EState.Land && stateTimer >= LandDuration)
                 {
@@ -61,21 +66,31 @@ namespace Hermes
                 }
                 else if (state == EState.Recovery && Vector3.Distance(currentOffset, Vector3.zero) <= 0.05f)
                 {
-                    TryStop(this);
+                    Manager.TryStop(this);
                 }
             }
         }
 
+
         void OnLanded()
         {
+            if (Controller.VerticalSpeed >= -Preset.LandVelocityThreshold)
+            {
+                return;
+            }
+
+
             float scale = Mathf.InverseLerp(0f, MaxVerticalSpeed, Mathf.Abs(Controller.VerticalSpeed));
+
+            //Debug.Log($"Landed vel = {Controller.VerticalVelocity} scale = {scale}");
 
             targetOffset = new Vector3(0f, -MaxOffset * scale, 0f);
 
-            TryStart(this);
+            Manager.TryStart(this);
 
             ChangeState(EState.Land);
         }
+
 
         void ChangeState(EState newState)
         {

@@ -1,49 +1,51 @@
-using Unity.Cinemachine;
+using Hermes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Hermes
 {
-    [CreateAssetMenu(menuName = "HermesFPS/FPContollerPreset")]
+    [CreateAssetMenu(menuName = "Hermes/FPControllerPreset")]
     public class FPControllerPreset : ScriptableObject
     {
         [Header("Character Dimensions")]
-        public float StandHeight = 1.7f;
+        public float StandHeight = 1.75f;
         public float CrouchHeight = 1.5f;
-        public float SlideHeight = 0.5f;
+        public float ProneHeight = 0.5f;
+
 
         [Header("Movement Parameters")]
         public float Acceleration = 20f;
         public float Deceleration = 30f;
-        public float StrafeAcceleration = 10f;
 
-        [Space(10)]
-        public float WalkSpeed = 5f;
+        [Space(20f)]
+        public float StrafeAcceleration = 20f;
+        public float StrafeSprintSpeed = 4f;
+        public float StrafeWalkSpeed = 3f;
+        public float StrafeCrouchSpeed = 1.5f;
+
+        [Space(15)]
+        public float CrouchSpeed = 2f;
+        public float WalkSpeed = 3.5f;
         public float SprintSpeed = 10f;
-        public float CrouchSpeed = 2.5f;
 
-        public float MaxStrafeWalkSpeed = 4f;
-        public float MaxStrafeSprintSpeed = 8f;
-        public float MaxStrafeCrouchSpeed = 3f;
 
-        [Header("Jump Parameters")]
-        [Tooltip("This is how high the player can jump.")]
+        [Header("Jumping Parameters")]
+        [Tooltip("This is how high the character can jump.")]
         public float JumpHeight = 2f;
 
         public bool CanDoubleJump = true;
-        public float CoyoteTime = 0.15f; //how long after leaving a platform the player can still jump
+        public float CoyoteTime = 0.3f;
 
-        [Tooltip("The landed event is only triggered if the player is falling faster than minus this value.")]
+        [Tooltip("The Landed event is only triggered when vertical velocity is above minus this value.")]
         [Min(0.001f)]
-        public float LandVelocityThreshold = 7f;
+        public float LandVelocityThreshold = 5f;
+
 
         [Header("Looking Parameters")]
         public Vector2 LookSensitivity = new Vector2(0.1f, 0.1f);
-        [Min(0f)] public float LookSmoothing = 0.02f;
 
-        public float PitchLimit = 85f; //how much the player can look up and down
+        public float PitchLimit = 85f;
 
         [Header("Camera Parameters")]
         public float CameraNormalFOV = 60f;
@@ -52,27 +54,36 @@ namespace Hermes
 
         [Header("Head Bobbing")]
         public HeadBobPreset HeadBobWalk;
-        public HeadBobPreset HeadBobSprint;
         public HeadBobPreset HeadBobCrouch;
+        public HeadBobPreset HeadBobSprint;
+
 
         [Header("Physics Parameters")]
         public float GravityScale = 2f;
         public LayerMask ObstacleLayerMask = Physics.DefaultRaycastLayers;
 
-        public FPGroundSensorPreset GroundSensorPreset;
+        public GroundSensorPreset GroundSensor;
 
-        [Header("Sound Parameters")]
-        public float FootstepWalkRate = 0.5f; // normal
-        public float FootstepSprintRate = 0.3f; // fast
-        public float FootstepCrouchRate = 0.7f; // slow
-
-        [Space(15)]
-        public float FootstepWalkVolume = 0.8f;
-        public float FootstepSprintVolume = 1.0f;
-        public float FootstepCrouchVolume = 0.6f;
+        [Header("Sounds & Footsteps Parameters")]
+        [Min(0.01f)] public float FootstepWalkInterval = 0.55f;
+        [Min(0.01f)] public float FootstepCrouchInterval = 0.4f;
+        [Min(0.01f)] public float FootstepSprintInterval = 0.35f;
 
         [Space(15)]
-        public float JumpSoundVolume = 0.4f;
+        [Min(0.01f)] public float FootstepWalkVolume = 0.1f;
+        [Min(0.01f)] public float FootstepCrouchVolume = 0.06f;
+        [Min(0.01f)] public float FootstepSprintVolume = 0.3f;
+
+        [Space(15)]
         public float MaxLandSoundVolume = 0.7f;
+        public float JumpSoundVolume = 0.5f;
+
+
+        [Header("Animation Lengths (In Seconds)")]
+        public float AnimationLengthClimb = 1.3f;
+        public float AnimationLengthVault = 1.3f;
+        public float AnimationLengthStep = 1.3f;
+
     }
 }
+

@@ -1,50 +1,87 @@
+using NUnit.Framework;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Hermes {
-    public class Activity : MonoBehaviour
+    public abstract class Activity : MonoBehaviour
     {
-        public virtual bool Active { get; protected set; } = false;
+        public bool Active => Manager.IsActive(this);
 
         public ActivityManager Manager { get; internal set; }
 
-        #region Static Methods
+        [Tooltip("Activities that will be stopped when this activity starts")]
+        [SerializeField, HideInInspector] List<Activity> interruptList = new();
 
-        public static bool IsActive(Activity activity)
+        public IReadOnlyList<Activity> InterruptList => interruptList.AsReadOnly();
+
+        [Tooltip("This activity cannot start if any of the activities in this list are active")]
+        [SerializeField, HideInInspector] List<Activity> blockedByList = new();
+
+        public IReadOnlyList<Activity> BlockedByList => blockedByList.AsReadOnly();
+
+        #region InterruptList Management
+
+        public bool InInterruptList(Activity other)
         {
-            return activity != null && activity.Active;
+            return interruptList.Contains(other);
         }
 
-        public static bool TryStart(Activity activity)
+        public void AddToInterruptList(Activity activity)
         {
-            return activity != null && activity.TryStartActivity();
+            if (!interruptList.Contains(activity))
+            {
+                interruptList.Add(activity);
+            }
         }
 
-        public static bool TryStop(Activity activity)
+        public void RemoveFromInterruptList(Activity activity)
         {
-            return activity != null && activity.TryStopActivity();
-        }
-
-        public static bool TryToggle(Activity activity)
-        {
-            return activity != null && activity.TryToggleActivity();
+            if (interruptList.Contains(activity))
+            {
+                interruptList.Remove(activity);
+            }
         }
 
         #endregion
 
+        #region BlockedByList Management
+
+        public bool IsAnyBlockingActivityActive()
+        {
+            foreach (var activity in blockedByList)
+            {
+                if (activity.Active) return true;
+            }
+            return false;
+        }
+
+        public bool InBlockedByList(Activity other)
+        {
+            return blockedByList.Contains(other);
+        }
+
+        public void AddToBlockedByList(Activity activity)
+        {
+            if (!blockedByList.Contains(activity))
+            {
+                blockedByList.Add(activity);
+            }
+        }
+
+        public void RemoveFromBlockedByList(Activity activity)
+        {
+            if (blockedByList.Contains(activity))
+            {
+                blockedByList.Remove(activity);
+            }
+        }
+
+        #endregion
+
+        #region Virtual Methods
         public virtual bool CanStartActivity()
         {
             return true;
-        }
-
-        protected virtual void OnActivityStarted()
-        {
-            // Override in derived classes to implement custom behavior when the activity starts.
-        }
-
-        private void StartActivity()
-        {
-            Active = true;
-            OnActivityStarted();
         }
 
         public virtual bool CanStopActivity()
@@ -52,49 +89,17 @@ namespace Hermes {
             return true;
         }
 
-        protected virtual void OnActivityStopped()
+        public virtual void OnActivityStarted()
+        {
+            // Override in derived classes to implement custom behavior when the activity starts.
+        }
+
+        public virtual void OnActivityStopped()
         {
             // Override in derived classes to implement custom behavior when the activity stops.
         }
 
-        private void StopActivity()
-        {
-            Active = false;
-            OnActivityStopped();
-        }
-
-        public bool TryStartActivity()
-        {
-            if (!CanStartActivity())
-            {
-                return false;
-            }
-
-            StartActivity();
-            return true;
-        }
-
-        public bool TryStopActivity()
-        {
-            if (!CanStopActivity())
-            {
-                return false;
-            }
-
-            StopActivity();
-            return true;
-        }
-
-        public bool TryToggleActivity()
-        {
-            if (Active)
-            {
-                return TryStopActivity();
-            }
-
-            return TryStartActivity();
-        }
-
+        #endregion
 
     }
 }

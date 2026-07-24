@@ -14,6 +14,7 @@ namespace Hermes
 
         private Vector3 smoothDampVelocity;
 
+
         private void Awake()
         {
             controller = GetComponentInParent<FPController>();
@@ -24,9 +25,11 @@ namespace Hermes
             }
         }
 
+
         private void Update()
         {
             Vector3 targetPosition = CameraTarget.position + controller.CameraPositionOffset;
+
             controller.CameraTransform.position = Vector3.SmoothDamp(
                 controller.CameraTransform.position,
                 targetPosition,
@@ -34,5 +37,7 @@ namespace Hermes
                 smoothTime);
 
         }
+
     }
 }
+

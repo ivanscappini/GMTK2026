@@ -6,20 +6,24 @@ using UnityEngine.Events;
 
 namespace Hermes
 {
-    [RequireComponent(typeof(CharacterController))]
-
+    [RequireComponent(typeof(CharacterController), typeof(ActivityManager))]
     public partial class FPController : MonoBehaviour
     {
         public FPControllerPreset Preset;
 
-        public bool Sprinting
-        {
-            get
-            {
-                // Always sprinting by design.
-                return true;
-            }
-        }
+
+        #region Accessors
+
+        public bool Crouching => ActivityManager.IsActive<FPCrouch>();
+
+        public bool Sprinting => ActivityManager.IsActive<FPSprint>();
+
+        public bool LedgeClimbing => ActivityManager.IsActive<FPLedgeClimb>();
+
+        #endregion
+
+
+
 
         [SerializeField] float currentPitch = 0f;
 
@@ -34,31 +38,40 @@ namespace Hermes
         }
 
         [Header("Camera Parameters")]
-        // public Vector3 CurrentCameraPosition {get; private set;} = new Vector3(0f, 1.6f, 0f);
 
         [Space(10)]
         public Vector3 CameraPositionOffset = Vector3.zero;
         public Quaternion CameraRotationOffset = Quaternion.identity;
 
         [Header("Control Parameters")]
+
         public bool LookEnabled = true;
         public bool MovementEnabled = true;
+
 
         public float VerticalSpeed
         {
             get => Movement.VerticalSpeed;
             set { Movement.VerticalSpeed = value; }
         }
+
         public Vector3 HorizontalVelocity => Movement.HorizontalVelocity;
+
         public float HorizontalSpeed => Movement.HorizontalSpeed;
+
+
+        public Vector3 ForwardVelocity
+        {
+            get => Movement.ForwardVelocity;
+            set => Movement.SetForwardVelocity(value);
+        }
+
 
         [Header("Input")]
         public Vector2 MoveInput;
         public Vector2 LookInput;
         public bool SprintInput;
 
-        [Tooltip("When enabled, sprint will toggle on/off with a press. When disabled, sprint is hold-to-run.")]
-        public bool SprintToggleMode = false;
 
         [Header("Components")]
         [SerializeField] CinemachineCamera fpCamera;
@@ -70,45 +83,65 @@ namespace Hermes
 
         public Transform CameraTransform => fpCamera.transform;
 
-        [Header("Activities")]
-        public FPMovement Movement;
-        public FPSprint Sprint;
-        public FPCrouch Crouch;
+        public ActivityManager ActivityManager;
 
+        public FPMovement Movement;
 
         [Header("Events")]
         public UnityEvent Landed;
         public UnityEvent Jumped;
         public UnityEvent DoubleJumped;
 
+
         public UnityAction TryJump;
 
+        // Invoked when movement was enabled or disabled
         public UnityAction<bool> MovementToggled;
         public UnityAction RequestCameraOffset;
 
-        Vector2 smoothedLookInput = Vector2.zero;
-        Vector2 lookInputVelocity = Vector2.zero;
 
         #region Unity Methods
+
+        private void OnDrawGizmos()
+        {
+            TryDrawGroundSensorGizmos();
+        }
+
+
         void OnValidate()
         {
-            if(characterController == null)
+            if (characterController == null)
             {
                 characterController = GetComponent<CharacterController>();
             }
+
+            if (ActivityManager == null)
+            {
+                ActivityManager = GetComponent<ActivityManager>();
+            }
         }
 
-        private void Update()
+
+        void Update()
         {
             UpdateCameraOffset();
 
             LookUpdate();
             CameraUpdate();
 
-            // camera height / character collider: crouch removed, always standing height
-            Vector3 targetCameraPosition = Vector3.up * 1.6f; // default camera height
+            UpdateCharacterHeight();
+            UpdateGroundCheck();
+        }
 
-            if (Activity.IsActive(Crouch))
+        #endregion
+
+
+
+        #region Controller Methods
+
+        void UpdateCharacterHeight()
+        {
+            if (Crouching)
             {
                 characterController.height = Preset.CrouchHeight;
                 characterController.center = Vector3.up * Preset.CrouchHeight * 0.5f;
@@ -116,49 +149,30 @@ namespace Hermes
             else
             {
                 characterController.height = Preset.StandHeight;
-                characterController.center = Vector3.up *  Preset.StandHeight * 0.5f; // keep a consistent hitbox
+                characterController.center = Vector3.up * Preset.StandHeight * 0.5f;
             }
-
-            CurrentCameraPosition = Vector3.Lerp(CurrentCameraPosition, targetCameraPosition, 7f * Time.deltaTime);
-
-            UpdateGroundCheck();
         }
 
-        # endregion
-
-        #region Controller Methods
-
-        void LookUpdate()
+		
+		void LookUpdate()
         {
             if (LookEnabled == false)
             {
                 return;
             }
 
-            // Consume look input once per frame to avoid reusing stale mouse delta.
-            Vector2 rawInput = LookInput;
-            LookInput = Vector2.zero;
+            Vector2 input = new Vector2(LookInput.x * Preset.LookSensitivity.x, LookInput.y * Preset.LookSensitivity.y);
 
-            Vector2 targetInput = new Vector2(rawInput.x * Preset.LookSensitivity.x, rawInput.y * Preset.LookSensitivity.y);
-
-            if (Preset.LookSmoothing > 0f)
-            {
-                smoothedLookInput = Vector2.SmoothDamp(smoothedLookInput, targetInput, ref lookInputVelocity, Preset.LookSmoothing);
-            }
-            else
-            {
-                smoothedLookInput = targetInput;
-                lookInputVelocity = Vector2.zero;
-            }
-
-            //looking up and down
-            CurrentPitch -= smoothedLookInput.y; //invert y input for more natural mouse look feel
+            // looking up and down
+            CurrentPitch -= input.y;
 
             fpCamera.transform.localRotation = Quaternion.Euler(CurrentPitch, 0f, 0f) * CameraRotationOffset;
 
-            //looking left and right
-            transform.Rotate(Vector3.up * smoothedLookInput.x);
+
+            // looking left and right
+            transform.Rotate(Vector3.up * input.x);
         }
+
 
         void UpdateCameraOffset()
         {
@@ -168,8 +182,10 @@ namespace Hermes
             RequestCameraOffset?.Invoke();
         }
 
+
         void CameraUpdate()
         {
+
             float targetFOV = Preset.CameraNormalFOV;
 
             if (Sprinting)
@@ -179,12 +195,16 @@ namespace Hermes
                 targetFOV = Mathf.Lerp(Preset.CameraNormalFOV, Preset.CameraSprintFOV, speedRatio);
             }
 
+
             fpCamera.Lens.FieldOfView = Mathf.Lerp(fpCamera.Lens.FieldOfView, targetFOV, Preset.CameraFOVSmoothing * Time.deltaTime);
+
+
+            //fpCamera.transform.localPosition = CurrentCameraPosition + CameraPositionOffset;
         }
+
 
         #endregion
 
-        // keep the previous public camera position property for compatibility
-        public Vector3 CurrentCameraPosition { get; private set; } = new Vector3(0f, 1.6f, 0f);
+
     }
 }
