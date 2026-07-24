@@ -29,6 +29,20 @@ namespace Hermes
         public float WalkSpeed = 3.5f;
         public float SprintSpeed = 10f;
 
+        // Air control tuning
+        [Header("Air Control")]
+        [Tooltip("Multiplier applied to acceleration while in air (0..1). Lower = weaker air control.")]
+        [Range(0f, 1f)] public float AirAccelerationMultiplier = 0.5f;
+
+        [Tooltip("Multiplier applied to deceleration while in air (0..1). Lower = momentum preserved longer in air.")]
+        [Range(0f, 1f)] public float AirDecelerationMultiplier = 0.08f;
+
+        [Tooltip("Multiplier applied to strafe acceleration while in air.")]
+        [Range(0f, 1f)] public float AirStrafeAccelerationMultiplier = 0.5f;
+
+        [Tooltip("Multiplier applied to strafe max speed while in air.")]
+        [Range(0f, 1f)] public float AirStrafeSpeedMultiplier = 1f;
+
 
         [Header("Jumping Parameters")]
         [Tooltip("This is how high the character can jump.")]

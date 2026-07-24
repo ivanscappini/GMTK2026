@@ -13,9 +13,15 @@ namespace Hermes
         /// <summary>
         /// This array is only used in the inspector to feed the lookup directory
         /// </summary>
-        [SerializeField] internal List<Activity> activitiesListInternal;
+        [SerializeField] internal List<Activity> activitiesListInternal = new();
+
+        // Parallel list persisted in the inspector that stores whether each activity is enabled.
+        [SerializeField] internal List<bool> activitiesEnabledInternal = new();
 
         internal Dictionary<System.Type, Activity> lookup;
+
+        // runtime cache for enabled state keyed by activity Type
+        internal Dictionary<System.Type, bool> enabledLookup;
 
         private HashSet<Activity> activeActivities = new();
 
@@ -37,11 +43,36 @@ namespace Hermes
         void PopulateLookupDictionary()
         {
             lookup = new();
+            enabledLookup = new();
 
-            foreach (var activity in activitiesListInternal)
+            // Ensure enabled list matches activities list length
+            if (activitiesEnabledInternal == null)
+                activitiesEnabledInternal = new();
+
+            while (activitiesEnabledInternal.Count < activitiesListInternal.Count)
             {
+                activitiesEnabledInternal.Add(true); // default enabled
+            }
+
+            if (activitiesEnabledInternal.Count > activitiesListInternal.Count)
+            {
+                activitiesEnabledInternal.RemoveRange(activitiesListInternal.Count, activitiesEnabledInternal.Count - activitiesListInternal.Count);
+            }
+
+            for (int i = 0; i < activitiesListInternal.Count; i++)
+            {
+                var activity = activitiesListInternal[i];
+                if (activity == null)
+                    continue;
+
                 activity.Manager = this;
                 lookup[activity.GetType()] = activity;
+
+                bool enabled = true;
+                if (i < activitiesEnabledInternal.Count)
+                    enabled = activitiesEnabledInternal[i];
+
+                enabledLookup[activity.GetType()] = enabled;
             }
         }
 
@@ -72,6 +103,79 @@ namespace Hermes
 
         #endregion
 
+        #region Activity Enabled/Disabled API
+
+        public bool IsEnabled(Activity activity)
+        {
+            if (activity == null)
+                return false;
+
+            return IsEnabled(activity.GetType());
+        }
+
+        public bool IsEnabled<T>() where T : Activity
+        {
+            return IsEnabled(typeof(T));
+        }
+
+        public bool IsEnabled(System.Type activityType)
+        {
+            if (activityType == null)
+                return false;
+
+            if (enabledLookup == null)
+                return true;
+
+            if (enabledLookup.TryGetValue(activityType, out bool enabled))
+                return enabled;
+
+            // default to true if unknown
+            return true;
+        }
+
+        public void SetEnabled(Activity activity, bool enabled)
+        {
+            if (activity == null)
+                return;
+
+            SetEnabled(activity.GetType(), enabled);
+
+            // also update serializable list if activity exists there
+            int idx = activitiesListInternal.IndexOf(activity);
+            if (idx >= 0)
+            {
+                if (activitiesEnabledInternal == null)
+                    activitiesEnabledInternal = new();
+                while (activitiesEnabledInternal.Count < activitiesListInternal.Count)
+                    activitiesEnabledInternal.Add(true);
+                activitiesEnabledInternal[idx] = enabled;
+            }
+        }
+
+        public void SetEnabled<T>(bool enabled) where T : Activity
+        {
+            SetEnabled(typeof(T), enabled);
+        }
+
+        public void SetEnabled(System.Type activityType, bool enabled)
+        {
+            if (activityType == null)
+                return;
+
+            if (enabledLookup == null)
+                enabledLookup = new();
+
+            enabledLookup[activityType] = enabled;
+
+            // If disabling an active activity, stop it immediately
+            if (!enabled && lookup != null && lookup.TryGetValue(activityType, out var activity) && IsActive(activity))
+            {
+                ForceStop(activity);
+            }
+        }
+
+        #endregion
+
         #region Activity Management Methods (Internal List)
         internal bool HasActivityInternal(Activity activity)
         {
@@ -93,6 +197,11 @@ namespace Hermes
             }
 
             activitiesListInternal.Add(activity);
+
+            // keep enabled list in sync
+            if (activitiesEnabledInternal == null)
+                activitiesEnabledInternal = new();
+            activitiesEnabledInternal.Add(true);
         }
 
         internal void RemoveNullActivitiesInternal()
@@ -108,6 +217,8 @@ namespace Hermes
                 if (activitiesListInternal[i] == null)
                 {
                     activitiesListInternal.RemoveAt(i);
+                    if (activitiesEnabledInternal != null && activitiesEnabledInternal.Count > i)
+                        activitiesEnabledInternal.RemoveAt(i);
                 }
             }
         }
@@ -135,10 +246,20 @@ namespace Hermes
                     if (writeIndex != i)
                     {
                         activitiesListInternal[writeIndex] = activitiesListInternal[i];
+                        // move enabled flag as well
+                        if (activitiesEnabledInternal != null && activitiesEnabledInternal.Count > i)
+                        {
+                            activitiesEnabledInternal[writeIndex] = activitiesEnabledInternal[i];
+                        }
                     }
 
                     writeIndex++;
                 }
+            }
+
+            if (activitiesEnabledInternal != null && activitiesEnabledInternal.Count > writeIndex)
+            {
+                activitiesEnabledInternal.RemoveRange(writeIndex, activitiesEnabledInternal.Count - writeIndex);
             }
 
             activitiesListInternal.RemoveRange(writeIndex, activitiesListInternal.Count - writeIndex);
@@ -153,6 +274,12 @@ namespace Hermes
             if (IsActive(activity))
             {
                 return false; // Already active
+            }
+
+            // Respect enabled state
+            if (!IsEnabled(activity))
+            {
+                return false; // Activity disabled
             }
 
             if (activity.IsAnyBlockingActivityActive())

@@ -34,17 +34,27 @@ namespace Hermes
 		{
 			get
 			{
+				float baseSpeed;
 				if (Controller.Crouching)
 				{
-					return Preset.StrafeCrouchSpeed;
+					baseSpeed = Preset.StrafeCrouchSpeed;
 				}
-
-				if (Controller.Sprinting)
+				else if (Controller.Sprinting)
 				{
-					return Preset.StrafeSprintSpeed;
+					baseSpeed = Preset.StrafeSprintSpeed;
+				}
+				else
+				{
+					baseSpeed = Preset.StrafeWalkSpeed;
 				}
 
-				return Preset.StrafeWalkSpeed;
+				// allow an optional air multiplier
+				if (!Grounded)
+				{
+					return baseSpeed * Preset.AirStrafeSpeedMultiplier;
+				}
+
+				return baseSpeed;
 			}
 		}
 
@@ -148,15 +158,24 @@ namespace Hermes
 			motion.y = 0f;
 			motion.Normalize();
 
+			// choose acceleration/deceleration depending on grounded state
+			float accel = Preset.Acceleration * (Grounded ? 1f : Preset.AirAccelerationMultiplier);
+			float decelWhenOpposite = Preset.Deceleration; // braking should remain responsive
+			float decelWhenIdle = Preset.Deceleration * (Grounded ? 1f : Preset.AirDecelerationMultiplier);
+
 			if (motion.sqrMagnitude >= 0.01f)
 			{
-				forwardVelocity = Vector3.MoveTowards(forwardVelocity, motion * MaxSpeed, Preset.Acceleration * Time.deltaTime);
+				forwardVelocity = Vector3.MoveTowards(forwardVelocity, motion * MaxSpeed, accel * Time.deltaTime);
 			}
 
-			if (motion.sqrMagnitude < 0.01f || Vector3.Dot(forwardVelocity, motion) < 0f)
+			// Determine whether we are braking (opposite direction) or simply idle (no input).
+			float dot = Vector3.Dot(forwardVelocity, motion);
+
+			if (motion.sqrMagnitude < 0.01f || dot < 0f)
 			{
-				// decelerating
-				forwardVelocity = Vector3.MoveTowards(forwardVelocity, Vector3.zero, Preset.Deceleration * Time.deltaTime);
+				// decelerating / braking
+				float decelToUse = dot < 0f ? decelWhenOpposite : decelWhenIdle;
+				forwardVelocity = Vector3.MoveTowards(forwardVelocity, Vector3.zero, decelToUse * Time.deltaTime);
 			}
 
 
@@ -174,15 +193,23 @@ namespace Hermes
 			motion.Normalize();
 
 
+			float strafeAccelBase = Preset.StrafeAcceleration;
+			float strafeAccel = strafeAccelBase * (Grounded ? 1f : Preset.AirStrafeAccelerationMultiplier);
+			float decelWhenOpposite = Preset.Deceleration;
+			float decelWhenIdle = Preset.Deceleration * (Grounded ? 1f : Preset.AirDecelerationMultiplier);
+
+
 			if (motion.sqrMagnitude >= 0.01f)
 			{
-				rightVelocity = Vector3.MoveTowards(rightVelocity, motion * MaxStrafeSpeed, Preset.StrafeAcceleration * Time.deltaTime);
+				rightVelocity = Vector3.MoveTowards(rightVelocity, motion * MaxStrafeSpeed, strafeAccel * Time.deltaTime);
 			}
 
-			if (motion.sqrMagnitude < 0.01f || Vector3.Dot(rightVelocity, motion) < 0f)
+			float dot = Vector3.Dot(rightVelocity, motion);
+
+			if (motion.sqrMagnitude < 0.01f || dot < 0f)
 			{
-				// decelerating
-				rightVelocity = Vector3.MoveTowards(rightVelocity, Vector3.zero, Preset.Deceleration * Time.deltaTime);
+				float decelToUse = dot < 0f ? decelWhenOpposite : decelWhenIdle;
+				rightVelocity = Vector3.MoveTowards(rightVelocity, Vector3.zero, decelToUse * Time.deltaTime);
 			}
 
 			// eliminating forward velocity

@@ -7,6 +7,7 @@ namespace Hermes
     public class ActivityManagerEditor : Editor
     {
         bool activitiesFoldout = true;
+        bool enableFlagsFoldout = true;
 
         public override void OnInspectorGUI()
         {
@@ -21,6 +22,7 @@ namespace Hermes
                 manager.RemoveDuplicateActivitiesInternal();
                 DrawDefaultInspector();
                 DrawStrayActivitiesInspector();
+                DrawActivityEnableFlagsInspector(manager);
             }
 
             DrawRuntimeActivitiesStatusInspector();
@@ -65,7 +67,6 @@ namespace Hermes
 
             foreach (var child in children)
             {
-                // Count activities that belong to this manager in the hierarchy but are NOT present in the internal list.
                 if (IsDirectChild(child) && !manager.HasActivityInternal(child))
                 {
                     count++;
@@ -82,7 +83,6 @@ namespace Hermes
 
             foreach (var child in children)
             {
-                // Add only activities that belong to this manager in the hierarchy and are not already in the list.
                 if (IsDirectChild(child) && !manager.HasActivityInternal(child))
                 {
                     manager.AddActivityInternal(child);
@@ -100,6 +100,63 @@ namespace Hermes
 
         #endregion
 
+        #region Activity Enable Flags Inspector
+
+        void DrawActivityEnableFlagsInspector(ActivityManager manager)
+        {
+            if (manager.activitiesListInternal == null || manager.activitiesListInternal.Count == 0)
+                return;
+
+            EditorGUILayout.Space();
+            enableFlagsFoldout = EditorGUILayout.Foldout(enableFlagsFoldout, "Activity Enable Flags", true);
+            if (!enableFlagsFoldout)
+                return;
+
+            EditorGUI.indentLevel++;
+            EditorGUI.BeginChangeCheck();
+
+            // Ensure the enabled list exists and is synced visually with activities list length
+            if (manager.activitiesEnabledInternal == null)
+                manager.activitiesEnabledInternal = new System.Collections.Generic.List<bool>();
+
+            while (manager.activitiesEnabledInternal.Count < manager.activitiesListInternal.Count)
+                manager.activitiesEnabledInternal.Add(true);
+
+            for (int i = 0; i < manager.activitiesListInternal.Count; i++)
+            {
+                var activity = manager.activitiesListInternal[i];
+                if (activity == null)
+                    continue;
+
+                bool current = true;
+                if (i < manager.activitiesEnabledInternal.Count)
+                    current = manager.activitiesEnabledInternal[i];
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(activity.GetType().Name, GUILayout.MaxWidth(180));
+                bool next = EditorGUILayout.ToggleLeft("Enabled", current, GUILayout.Width(80));
+                EditorGUILayout.ObjectField(activity, typeof(Activity), true);
+                EditorGUILayout.EndHorizontal();
+
+                if (next != current)
+                {
+                    Undo.RecordObject(target, "Toggle Activity Enabled");
+                    manager.activitiesEnabledInternal[i] = next;
+                    manager.SetEnabled(activity, next);
+                    EditorUtility.SetDirty(target);
+                }
+            }
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(target);
+            }
+
+            EditorGUI.indentLevel--;
+        }
+
+        #endregion
+
         void DrawRuntimeActivitiesStatusInspector()
         {
             var manager = (ActivityManager)target;
@@ -112,6 +169,8 @@ namespace Hermes
 
                 foreach (var activity in manager.activitiesListInternal)
                 {
+                    if (activity == null)
+                        continue;
                     EditorGUILayout.LabelField(activity.GetType().Name);
                 }
 
