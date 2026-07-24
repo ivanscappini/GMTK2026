@@ -3,19 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class GameOverController : MonoBehaviour
 {
-    [SerializeField] private GameObject gameOverScreen;
 
-    private void Awake()
+    private void OnEnable()
     {
-        gameOverScreen.SetActive(false);
+        OnGameOver();
     }
-
+    
     public void OnGameOver()
     {
         Time.timeScale = 0f;
-
-        gameOverScreen.SetActive(true);
-
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -24,11 +20,17 @@ public class GameOverController : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        gameObject.SetActive(false);
     }
 
     public void Button_MainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("TitleMenu");
+    }
+
+    private void OnDisable()
+    {
+        Time.timeScale = 1f;
     }
 }

@@ -16,6 +16,10 @@ public class TimerEditor : Editor
             EditorGUILayout.LabelField("Debug Controls", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Set Timer Zero", GUILayout.Height(30)))
+            {
+                timer.SetZeroTimer();
+            }
             
             if (GUILayout.Button("+ Add Time", GUILayout.Height(30)))
             {

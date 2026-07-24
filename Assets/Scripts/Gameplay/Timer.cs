@@ -14,7 +14,9 @@ public class Timer : MonoBehaviour
     [HideInInspector] public UnityEvent countdownEnd;
     [HideInInspector] public UnityEvent countdownStart;
     [HideInInspector] public event Action OnTimerChanged;
-
+    public event Action OnMoving;
+    public event Action OnStoppedMoving;
+    
     public float TimerStartTime
     {
         get => timerStartTime;
@@ -41,9 +43,6 @@ public class Timer : MonoBehaviour
     private float timer;
 
     private bool isMoving = false;
-
-    public event Action OnMoving;
-    public event Action OnStoppedMoving;
 
     private void Awake()
     {
@@ -147,5 +146,12 @@ public class Timer : MonoBehaviour
             OnStoppedMoving?.Invoke();
             SetTimerSpeed(2f);
         }
+    }
+
+    public void SetZeroTimer()
+    {
+        StopCoroutine(_countdownCoroutine);
+        TheTime = 0f;
+        StopCountdown();
     }
 }

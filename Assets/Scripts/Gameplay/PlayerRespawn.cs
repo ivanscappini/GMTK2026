@@ -2,14 +2,18 @@ using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
+    
+    [SerializeField] private GameObject gameOverScreen;
     [SerializeField] GameObject Player;
     CharacterController cc;
 
     private Vector3 respawnLocation;
     private Quaternion respawnRotation;
-
+    
     private void Start()
     {
+        Timer.Instance.countdownEnd.AddListener(ShowGameOver);
+        
         cc = Player.GetComponent<CharacterController>();
         respawnLocation = Player.transform.position;
         respawnRotation = Player.transform.rotation;
@@ -32,5 +36,10 @@ public class PlayerRespawn : MonoBehaviour
         respawnLocation = target.transform.position; //- new Vector3(0,(target.GetComponent<BoxCollider>().bounds.min.y + 3),0);
         respawnRotation = target.transform.rotation;
 
+    }
+    
+    private void ShowGameOver()
+    {
+        gameOverScreen.SetActive(true);
     }
 }
