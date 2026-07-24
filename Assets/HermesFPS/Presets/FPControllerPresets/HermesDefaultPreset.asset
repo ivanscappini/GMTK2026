@@ -15,10 +15,10 @@ MonoBehaviour:
   StandHeight: 1.7
   CrouchHeight: 1.5
   ProneHeight: 0.5
-  Acceleration: 5
+  Acceleration: 25
   Deceleration: 20
   StrafeAcceleration: 20
-  StrafeSprintSpeed: 4
+  StrafeSprintSpeed: 15
   StrafeWalkSpeed: 3
   StrafeCrouchSpeed: 1.5
   CrouchSpeed: 2.5
