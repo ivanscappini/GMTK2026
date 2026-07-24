@@ -7,6 +7,7 @@ public class PlayerRespawn : MonoBehaviour
 
     private Vector3 respawnLocation;
     private Quaternion respawnRotation;
+    private float timeToAddUponRespawn;
 
     private void Start()
     {
@@ -25,12 +26,14 @@ public class PlayerRespawn : MonoBehaviour
         Player.transform.position = respawnLocation;
         Player.transform.rotation = respawnRotation;
         cc.enabled = true;
+        Timer.Instance.AddTime(timeToAddUponRespawn);
     }
 
-    public void setRespawnLocation(GameObject target)
+    public void setRespawnLocation(GameObject target, float timeToAdd)
     {
         respawnLocation = target.transform.position; //- new Vector3(0,(target.GetComponent<BoxCollider>().bounds.min.y + 3),0);
         respawnRotation = target.transform.rotation;
+        timeToAddUponRespawn = timeToAdd;
 
     }
 }
