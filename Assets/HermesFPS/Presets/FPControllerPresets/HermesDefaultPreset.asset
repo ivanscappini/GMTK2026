@@ -12,13 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c9c99abc6bea642b6ce2f62438bb7c, type: 3}
   m_Name: HermesDefaultPreset
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPControllerPreset
-  Acceleration: 20
+  StandHeight: 1.7
+  CrouchHeight: 1.5
+  SlideHeight: 0.5
+  Acceleration: 5
+  Deceleration: 20
   WalkSpeed: 5
   SprintSpeed: 10
   CrouchSpeed: 2.5
   JumpHeight: 2
   CanDoubleJump: 1
   CoyoteTime: 0.2
+  LandVelocityThreshold: 7
   LookSensitivity: {x: 0.08, y: 0.08}
   LookSmoothing: 0.02
   PitchLimit: 85
@@ -36,19 +41,20 @@ MonoBehaviour:
     NoiseScale: 0.7
     MaxRotation: 1
   HeadBobCrouch:
-    Amplitude: 0.07
-    Frequency: 4.5
-    NoiseScale: 0.1
-    MaxRotation: 0.4
+    Amplitude: 0.5
+    Frequency: 5
+    NoiseScale: 1
+    MaxRotation: 30
   GravityScale: 2
   ObstacleLayerMask:
     serializedVersion: 2
     m_Bits: 1
+  GroundSensorPreset: {fileID: 11400000, guid: a8c06ee15d747684fb310b532dfaabc0, type: 2}
   FootstepWalkRate: 0.5
   FootstepSprintRate: 0.4
   FootstepCrouchRate: 0.7
   FootstepWalkVolume: 0.5
   FootstepSprintVolume: 0.8
-  FootstepCrouchVolume: 0.25
+  FootstepCrouchVolume: 0.6
   JumpSoundVolume: 0.4
   MaxLandSoundVolume: 0.7

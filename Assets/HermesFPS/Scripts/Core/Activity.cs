@@ -34,9 +34,15 @@ namespace Hermes {
             return true;
         }
 
-        protected virtual void StartActivity()
+        protected virtual void OnActivityStarted()
+        {
+            // Override in derived classes to implement custom behavior when the activity starts.
+        }
+
+        private void StartActivity()
         {
             Active = true;
+            OnActivityStarted();
         }
 
         public virtual bool CanStopActivity()
@@ -44,9 +50,15 @@ namespace Hermes {
             return true;
         }
 
-        protected virtual void StopActivity()
+        protected virtual void OnActivityStopped()
+        {
+            // Override in derived classes to implement custom behavior when the activity stops.
+        }
+
+        private void StopActivity()
         {
             Active = false;
+            OnActivityStopped();
         }
 
         public bool TryStartActivity()

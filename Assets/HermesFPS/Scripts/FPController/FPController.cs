@@ -8,18 +8,9 @@ namespace Hermes
 {
     [RequireComponent(typeof(CharacterController))]
 
-    public class FPController : MonoBehaviour
+    public partial class FPController : MonoBehaviour
     {
         public FPControllerPreset Preset;
-        
-        float MaxSpeed
-        {
-            get
-            {
-                // Character is always sprinting now.
-                return Preset.SprintSpeed;
-            }
-        }
 
         public bool Sprinting
         {
@@ -49,19 +40,17 @@ namespace Hermes
         public Vector3 CameraPositionOffset = Vector3.zero;
         public Quaternion CameraRotationOffset = Quaternion.identity;
 
-        [Header("Physics Parameters")]
-
-        public float VerticalVelocity = 0f;
-
+        [Header("Control Parameters")]
         public bool LookEnabled = true;
         public bool MovementEnabled = true;
 
-        public Vector3 CurrentVelocity { get; private set; }
-        public float CurrentSpeed { get; private set; }
-
-        private bool wasGrounded = false;
-
-        public bool Grounded => characterController.isGrounded;
+        public float VerticalSpeed
+        {
+            get => Movement.VerticalSpeed;
+            set { Movement.VerticalSpeed = value; }
+        }
+        public Vector3 HorizontalVelocity => Movement.HorizontalVelocity;
+        public float HorizontalSpeed => Movement.HorizontalSpeed;
 
         [Header("Input")]
         public Vector2 MoveInput;
@@ -82,7 +71,10 @@ namespace Hermes
         public Transform CameraTransform => fpCamera.transform;
 
         [Header("Activities")]
+        public FPMovement Movement;
         public FPSprint Sprint;
+        public FPCrouch Crouch;
+
 
         [Header("Events")]
         public UnityEvent Landed;
@@ -90,6 +82,8 @@ namespace Hermes
         public UnityEvent DoubleJumped;
 
         public UnityAction TryJump;
+
+        public UnityAction<bool> MovementToggled;
         public UnityAction RequestCameraOffset;
 
         Vector2 smoothedLookInput = Vector2.zero;
@@ -108,72 +102,31 @@ namespace Hermes
         {
             UpdateCameraOffset();
 
-            MoveUpdate();
             LookUpdate();
             CameraUpdate();
 
             // camera height / character collider: crouch removed, always standing height
             Vector3 targetCameraPosition = Vector3.up * 1.6f; // default camera height
 
-            characterController.height = 2f;
-            characterController.center = Vector3.up * 1f; // keep a consistent hitbox
+            if (Activity.IsActive(Crouch))
+            {
+                characterController.height = Preset.CrouchHeight;
+                characterController.center = Vector3.up * Preset.CrouchHeight * 0.5f;
+            }
+            else
+            {
+                characterController.height = Preset.StandHeight;
+                characterController.center = Vector3.up *  Preset.StandHeight * 0.5f; // keep a consistent hitbox
+            }
 
             CurrentCameraPosition = Vector3.Lerp(CurrentCameraPosition, targetCameraPosition, 7f * Time.deltaTime);
 
-            if (!wasGrounded && Grounded)
-            {
-                Landed?.Invoke();
-            }
-
-            wasGrounded = Grounded;
+            UpdateGroundCheck();
         }
 
         # endregion
 
         #region Controller Methods
-
-        void MoveUpdate()
-        {
-            if (MovementEnabled == false)
-            {
-                VerticalVelocity = 0f;
-                CurrentVelocity = Vector3.zero;
-                return;
-            }
-
-            Vector3 motion = transform.forward * MoveInput.y + transform.right * MoveInput.x; //y input is forward/backward (W/S), x input is left/right (A/D)
-            motion.y = 0f;
-            motion.Normalize();
-
-            if (motion.sqrMagnitude >= 0.01f)
-            {
-                CurrentVelocity = Vector3.Lerp(CurrentVelocity, motion * MaxSpeed, Preset.Acceleration * Time.deltaTime);
-            }
-            else
-            {
-                CurrentVelocity = Vector3.Lerp(CurrentVelocity, Vector3.zero, Preset.Acceleration * Time.deltaTime);
-            }
-
-            if (Grounded && VerticalVelocity <= 0.01f)
-            {
-                VerticalVelocity = -3f; //downward force to keep the player grounded
-            }
-            else
-            { 
-                VerticalVelocity += Physics.gravity.y * Preset.GravityScale * Time.deltaTime; //simple gravity implementation
-            }
-
-            Vector3 fullVelocity = new Vector3(CurrentVelocity.x, VerticalVelocity, CurrentVelocity.z);
-
-            CollisionFlags flags = characterController.Move(fullVelocity * Time.deltaTime);
-            if ((flags & CollisionFlags.Above) != 0 && VerticalVelocity > 0.01f)
-            {
-                VerticalVelocity = 0f; //stop upward velocity if hitting ceiling
-            }
-
-            //updating speed
-            CurrentSpeed = CurrentVelocity.magnitude;
-        }
 
         void LookUpdate()
         {
@@ -221,18 +174,12 @@ namespace Hermes
 
             if (Sprinting)
             {
-                float speedRatio = CurrentSpeed / Preset.SprintSpeed;
+                float speedRatio = HorizontalSpeed / Preset.SprintSpeed;
 
                 targetFOV = Mathf.Lerp(Preset.CameraNormalFOV, Preset.CameraSprintFOV, speedRatio);
             }
 
             fpCamera.Lens.FieldOfView = Mathf.Lerp(fpCamera.Lens.FieldOfView, targetFOV, Preset.CameraFOVSmoothing * Time.deltaTime);
-
-            // NOTE: Do NOT override camera world position here.
-            // The camera is driven by FPCameraController (it follows the model's head CameraTarget).
-            // Removing assignment to localPosition prevents fighting with FPCameraController.
-            //
-            // fpCamera.transform.localPosition = CurrentCameraPosition + CameraPositionOffset;
         }
 
         #endregion

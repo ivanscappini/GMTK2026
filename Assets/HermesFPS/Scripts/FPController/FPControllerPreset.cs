@@ -9,11 +9,24 @@ namespace Hermes
     [CreateAssetMenu(menuName = "HermesFPS/FPContollerPreset")]
     public class FPControllerPreset : ScriptableObject
     {
+        [Header("Character Dimensions")]
+        public float StandHeight = 1.7f;
+        public float CrouchHeight = 1.5f;
+        public float SlideHeight = 0.5f;
+
         [Header("Movement Parameters")]
         public float Acceleration = 20f;
+        public float Deceleration = 30f;
+        public float StrafeAcceleration = 10f;
 
+        [Space(10)]
         public float WalkSpeed = 5f;
         public float SprintSpeed = 10f;
+        public float CrouchSpeed = 2.5f;
+
+        public float MaxStrafeWalkSpeed = 4f;
+        public float MaxStrafeSprintSpeed = 8f;
+        public float MaxStrafeCrouchSpeed = 3f;
 
         [Header("Jump Parameters")]
         [Tooltip("This is how high the player can jump.")]
@@ -40,17 +53,23 @@ namespace Hermes
         [Header("Head Bobbing")]
         public HeadBobPreset HeadBobWalk;
         public HeadBobPreset HeadBobSprint;
+        public HeadBobPreset HeadBobCrouch;
 
         [Header("Physics Parameters")]
         public float GravityScale = 2f;
+        public LayerMask ObstacleLayerMask = Physics.DefaultRaycastLayers;
+
+        public FPGroundSensorPreset GroundSensorPreset;
 
         [Header("Sound Parameters")]
         public float FootstepWalkRate = 0.5f; // normal
         public float FootstepSprintRate = 0.3f; // fast
+        public float FootstepCrouchRate = 0.7f; // slow
 
         [Space(15)]
         public float FootstepWalkVolume = 0.8f;
         public float FootstepSprintVolume = 1.0f;
+        public float FootstepCrouchVolume = 0.6f;
 
         [Space(15)]
         public float JumpSoundVolume = 0.4f;

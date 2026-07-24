@@ -9,8 +9,17 @@ namespace Hermes
     public class Player : MonoBehaviour
     {
 
+        [SerializeField] bool AlwaysRun = true;
+
         [Header("Components")]
         [SerializeField] FPController FPController;
+
+        public void SetAlwaysRun(bool value)
+        {
+            AlwaysRun = value;
+
+            FPController.SprintInput = false;
+        }
 
         #region Input Handling
 
@@ -26,6 +35,11 @@ namespace Hermes
 
         void OnSprint(InputValue value)
         {
+            if (AlwaysRun)
+            {
+                return;
+            }
+
             // Toggle sprint on press (matches crouch behavior)
             if (!FPController.MovementEnabled)
             {
@@ -63,6 +77,15 @@ namespace Hermes
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
+
+        private void Update()
+        {
+            if (AlwaysRun && FPController.MovementEnabled)
+            {
+                Activity.TryStart(FPController.Sprint);
+            }
+        }
+
         #endregion
     }
 }
