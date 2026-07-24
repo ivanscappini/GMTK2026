@@ -11,6 +11,12 @@ public class MainMenuController : MonoBehaviour, ISerializationCallbackReceiver
     [HideInInspector] 
     [SerializeField] private string gameplaySceneName;
 
+    private void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+    
     public void Button_StartGame()
     {
         if (string.IsNullOrEmpty(gameplaySceneName))

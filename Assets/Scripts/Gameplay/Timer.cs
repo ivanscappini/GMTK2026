@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
@@ -14,7 +15,9 @@ public class Timer : MonoBehaviour
     [HideInInspector] public UnityEvent countdownEnd;
     [HideInInspector] public UnityEvent countdownStart;
     [HideInInspector] public event Action OnTimerChanged;
-
+    public event Action OnMoving;
+    public event Action OnStoppedMoving;
+    
     public float TimerStartTime
     {
         get => timerStartTime;
@@ -42,13 +45,9 @@ public class Timer : MonoBehaviour
 
     private bool isMoving = false;
 
-    public event Action OnMoving;
-    public event Action OnStoppedMoving;
-
     private void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -99,6 +98,7 @@ public class Timer : MonoBehaviour
     {
         countdownEnd?.Invoke();
         _countdownCoroutine = null;
+        SceneManager.LoadScene("GameOver");
     }
 
     public void AddTime(float value)
@@ -153,5 +153,12 @@ public class Timer : MonoBehaviour
             OnStoppedMoving?.Invoke();
             SetTimerSpeed(2f);
         }
+    }
+
+    public void SetZeroTimer()
+    {
+        StopCoroutine(_countdownCoroutine);
+        TheTime = 0f;
+        StopCountdown();
     }
 }
