@@ -1,7 +1,6 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 namespace Hermes {
     public class FPMovement : FPActivity
@@ -17,29 +16,25 @@ namespace Hermes {
         {
             get
             {
+                // Use crouch/walk/sprint speeds
                 if (Activity.IsActive(Controller.Crouch))
                     return Preset.CrouchSpeed;
                 if (Activity.IsActive(Controller.Sprint))
                     return Preset.SprintSpeed;
-                else return Preset.WalkSpeed;
+                return Preset.WalkSpeed;
             }
         }
 
-        private Vector3 velocity = Vector3.zero;
-
-        public Vector3 Velocity => velocity;
+        public Vector3 Velocity = Vector3.zero;
 
         public float VerticalSpeed
         {
             get => Velocity.y;
 
             set {
-                velocity.y = value;
+                Velocity.y = value;
             }
         }
-
-        Vector3 forwardVelocity;
-        Vector3 rightVelocity;
 
         public Vector3 HorizontalVelocity
         {
@@ -55,12 +50,12 @@ namespace Hermes {
 
         protected override void OnActivityStarted()
         {
-            // Controller.MovementToggled.Invoke(true);
+            Controller.MovementToggled.Invoke(true);
         }
 
         protected override void OnActivityStopped()
         {
-            // Controller.MovementToggled.Invoke(false);
+            Controller.MovementToggled.Invoke(false);
 
             VerticalSpeed = 0f;
             HorizontalVelocity = Vector3.zero;
@@ -75,6 +70,7 @@ namespace Hermes {
             base.Awake();
 
             Controller.Movement = this;
+            Debug.Log($"[FPMovement] Awake on '{name}' - Movement assigned to Controller");
         }
 
         private void Update()
@@ -96,69 +92,21 @@ namespace Hermes {
 
         #endregion
 
-
-        void ComputeForwardVelocity()
+        void MoveUpdate()
         {
-            Vector3 motion = transform.forward * MoveInput.y;
+            Debug.Log($"[FPMovement] MoveUpdate - MoveInput={MoveInput} HorizontalSpeed={HorizontalSpeed:F2}");
+            Vector3 motion = transform.forward * MoveInput.y + transform.right * MoveInput.x; //y input is forward/backward (W/S), x input is left/right (A/D)
             motion.y = 0f;
             motion.Normalize();
 
             if (motion.sqrMagnitude >= 0.01f)
             {
-                forwardVelocity = Vector3.MoveTowards(forwardVelocity, motion * MaxSpeed, Preset.Acceleration * Time.deltaTime);
-            }
-            if (motion.sqrMagnitude < 0.01f || Vector3.Dot(forwardVelocity, motion) < 0f)
-            {
-                // decelerating to a stop when no input is given
-                forwardVelocity = Vector3.MoveTowards(forwardVelocity, Vector3.zero, Preset.Deceleration * Time.deltaTime);
-            }
-
-            Vector3 sidewaysVelocity = transform.right * Vector3.Dot(transform.right, forwardVelocity);
-
-            forwardVelocity -= sidewaysVelocity;
-        }
-
-        void ComputeRightVelocity()
-        {
-            Vector3 motion = transform.forward * MoveInput.y;
-            motion.y = 0f;
-            motion.Normalize();
-
-            float maxSpeed;
-            if (Activity.IsActive(Controller.Crouch))
-            {
-                maxSpeed = Preset.MaxStrafeCrouchSpeed;
-            }
-            else if (Activity.IsActive(Controller.Sprint))
-            {
-                maxSpeed = Preset.MaxStrafeSprintSpeed;
+                HorizontalVelocity = Vector3.Lerp(HorizontalVelocity, motion * MaxSpeed, Preset.Acceleration * Time.deltaTime);
             }
             else
             {
-                maxSpeed = Preset.MaxStrafeWalkSpeed;
+                HorizontalVelocity = Vector3.Lerp(HorizontalVelocity, Vector3.zero, Preset.Acceleration * Time.deltaTime);
             }
-
-            if (motion.sqrMagnitude >= 0.01f)
-            {
-                rightVelocity = Vector3.MoveTowards(rightVelocity, motion * maxSpeed, Preset.StrafeAcceleration * Time.deltaTime);
-            }
-            if (motion.sqrMagnitude < 0.01f || Vector3.Dot(rightVelocity, motion) < 0f)
-            {
-                // decelerating to a stop when no input is given
-                rightVelocity = Vector3.MoveTowards(rightVelocity, Vector3.zero, Preset.StrafeAcceleration * Time.deltaTime);
-            }
-
-            Vector3 fwdVelocity = transform.forward * Vector3.Dot(transform.forward, rightVelocity);
-
-            forwardVelocity -= fwdVelocity;
-        }
-
-        void MoveUpdate()
-        {
-            ComputeForwardVelocity();
-            ComputeRightVelocity();
-
-            HorizontalVelocity = forwardVelocity + rightVelocity;
 
             if (Grounded && VerticalSpeed <= 0.01f)
             {
@@ -169,9 +117,9 @@ namespace Hermes {
                 VerticalSpeed += Physics.gravity.y * Preset.GravityScale * Time.deltaTime; //simple gravity implementation
             }
 
-            velocity = new Vector3(HorizontalVelocity.x, VerticalSpeed, HorizontalVelocity.z);
+            Vector3 fullVelocity = new Vector3(HorizontalVelocity.x, VerticalSpeed, HorizontalVelocity.z);
 
-            CollisionFlags flags = characterController.Move(Velocity * Time.deltaTime);
+            CollisionFlags flags = characterController.Move(fullVelocity * Time.deltaTime);
             if ((flags & CollisionFlags.Above) != 0 && VerticalSpeed > 0.01f)
             {
                 VerticalSpeed = 0f; //stop upward velocity if hitting ceiling

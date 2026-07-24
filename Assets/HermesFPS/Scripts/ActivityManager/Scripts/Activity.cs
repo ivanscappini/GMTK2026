@@ -5,6 +5,8 @@ namespace Hermes {
     {
         public virtual bool Active { get; protected set; } = false;
 
+        public ActivityManager Manager { get; internal set; }
+
         #region Static Methods
 
         public static bool IsActive(Activity activity)
