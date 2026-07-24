@@ -113,6 +113,12 @@ public class Timer : MonoBehaviour
         OnTimerChanged?.Invoke();
     }
 
+    public void SetTime(float value)
+    {
+        TheTime = value;
+        OnTimerChanged?.Invoke();
+    }
+
     public void SetTimerSpeed(float value)
     {
         PlaybackSpeed = value;

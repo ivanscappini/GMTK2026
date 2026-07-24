@@ -6,7 +6,7 @@ public class SafeZoneScripts : MonoBehaviour
     [SerializeField] GameObject safeZoneSpawnPoint;
 
     //How long the safe zone is considered safe
-    [SerializeField] float safeZoneAddTimer = 20.0f;
+    [SerializeField] float safeZoneSetTimer = 20.0f;
 
 
     //A game object that has a TextMeshPro-TextUI that is connected to the player and is used to display on screen the timer left before the enemy catches you
@@ -25,7 +25,7 @@ public class SafeZoneScripts : MonoBehaviour
     {
         if (other.gameObject.Equals(playerRef))
         {
-            playerRef.GetComponent<PlayerRespawn>().setRespawnLocation(safeZoneSpawnPoint,safeZoneAddTimer);
+            playerRef.GetComponent<PlayerRespawn>().setRespawnLocation(safeZoneSpawnPoint, safeZoneSetTimer);
         }
     }
 }

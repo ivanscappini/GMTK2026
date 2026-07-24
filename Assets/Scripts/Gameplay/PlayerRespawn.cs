@@ -26,7 +26,7 @@ public class PlayerRespawn : MonoBehaviour
         Player.transform.position = respawnLocation;
         Player.transform.rotation = respawnRotation;
         cc.enabled = true;
-        Timer.Instance.AddTime(timeToAddUponRespawn);
+        Timer.Instance.SetTime(timeToAddUponRespawn);
     }
 
     public void setRespawnLocation(GameObject target, float timeToAdd)
