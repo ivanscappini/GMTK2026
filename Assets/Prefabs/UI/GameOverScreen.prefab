@@ -588,10 +588,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 136c9b7f21e6f064799049a531c67a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  gameplaySceneAsset: {fileID: 102900000, guid: 8d248d64159ebfa4cb681c23c0a4a3ca, type: 3}
   mainMenuSceneAsset: {fileID: 102900000, guid: f0ac64bcb1d20344281fc5b7ac0d7c18, type: 3}
-  gameplaySceneName: Prototype Map
-  mainMenuSceneName: TitleMenu
+  gameplaySceneAsset: {fileID: 102900000, guid: 8d248d64159ebfa4cb681c23c0a4a3ca, type: 3}
+  mainMenuSceneAssetName: TitleMenu
+  gameplaySceneAssetName: Prototype Map
 --- !u!1 &4207955818561483021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,4 +1013,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5236576801848493650}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2382571587022111257}
+        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
+        m_MethodName: Button_MainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
