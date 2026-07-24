@@ -5,9 +5,11 @@ using UnityEngine.Serialization;
 
 public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
 {
+    public static PauseController Instance { get; private set; }
+    
     [Header("UI Reference")]
     [SerializeField] private GameObject pauseMenuPanel;
-
+    
     [Header("PlayerInput Map")]
     [SerializeField] private PlayerInput playerInput;
     
@@ -19,11 +21,17 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
     [HideInInspector] 
     [SerializeField] private string mainMenuSceneAssetName;
 
+    public bool IsPaused { get; private set; }
+    
+    private void Awake()
+    {
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    
     public void Button_MainMenu()
     {
-        // CRITICAL: Unfreeze time before leaving the scene!
-        Time.timeScale = 1f;
-        IsPaused = false;
+        ResumeGame();
         
         if (string.IsNullOrEmpty(mainMenuSceneAssetName))
         {
@@ -47,7 +55,6 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
 
     public void OnAfterDeserialize() { }
     
-    public static bool IsPaused { get; private set; }
 
     private void Start()
     {
