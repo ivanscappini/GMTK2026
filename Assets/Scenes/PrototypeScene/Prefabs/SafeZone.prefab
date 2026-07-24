@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 178d1e4412780fa49b28bce9e97169c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SafeZoneScripts
-  safeZonetimerOnScreen: {fileID: 0}
-  safeZonetimer: 20
+  safeZoneSpawnPoint: {fileID: 6976319454961637972}
+  safeZoneSetTimer: 20
   gameTimerText: {fileID: 0}
 --- !u!1 &6976319454961637972
 GameObject:
