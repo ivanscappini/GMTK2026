@@ -24,6 +24,10 @@ MonoBehaviour:
   CrouchSpeed: 2.5
   WalkSpeed: 5
   SprintSpeed: 10
+  AirAccelerationMultiplier: 0
+  AirDecelerationMultiplier: 0
+  AirStrafeAccelerationMultiplier: 0.5
+  AirStrafeSpeedMultiplier: 1
   JumpHeight: 2
   CanDoubleJump: 1
   CoyoteTime: 0.2
