@@ -1,16 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerRespawn : MonoBehaviour, ISerializationCallbackReceiver
+public class PlayerRespawn : MonoBehaviour
 {
-    
-    [Header("Scene Routing")]
-#if UNITY_EDITOR
-    [SerializeField] private UnityEditor.SceneAsset gameOverSceneAsset;
-#endif
-    [HideInInspector] 
-    [SerializeField] private string gameOverSceneName;
-    
     [SerializeField] GameObject Player;
     CharacterController cc;
 
@@ -19,8 +11,6 @@ public class PlayerRespawn : MonoBehaviour, ISerializationCallbackReceiver
     
     private void Start()
     {
-        Timer.Instance.countdownEnd.AddListener(ShowGameOver);
-        
         cc = Player.GetComponent<CharacterController>();
         respawnLocation = Player.transform.position;
         respawnRotation = Player.transform.rotation;
@@ -42,23 +32,6 @@ public class PlayerRespawn : MonoBehaviour, ISerializationCallbackReceiver
     {
         respawnLocation = target.transform.position; //- new Vector3(0,(target.GetComponent<BoxCollider>().bounds.min.y + 3),0);
         respawnRotation = target.transform.rotation;
-
     }
-    
-    private void ShowGameOver()
-    {
-        SceneManager.LoadScene(gameOverSceneName);
-    }
-    
-    public void OnBeforeSerialize()
-    {
-#if UNITY_EDITOR
-        if(gameOverSceneAsset != null)
-            gameOverSceneName = gameOverSceneAsset.name;
-        else
-            gameOverSceneName = string.Empty;
-#endif
-    }
-
-    public void OnAfterDeserialize() { }
+  
 }

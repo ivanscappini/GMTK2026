@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
@@ -47,7 +48,6 @@ public class Timer : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -98,6 +98,7 @@ public class Timer : MonoBehaviour
     {
         countdownEnd?.Invoke();
         _countdownCoroutine = null;
+        SceneManager.LoadScene("GameOver");
     }
 
     public void AddTime(float value)

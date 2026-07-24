@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class KillPlayerToRemove : MonoBehaviour
 {
@@ -6,9 +7,8 @@ public class KillPlayerToRemove : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            GameManager.Instance.player.GetComponent<PlayerRespawn>().RespawnPlayer();
+            SceneManager.LoadScene("GameOver");
             Debug.Log("Player Collision");
         }
-        Debug.Log("Not Player Collision");
     }
 }
