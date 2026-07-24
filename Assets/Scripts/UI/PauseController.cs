@@ -78,7 +78,7 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
         {
             pauseMenuPanel.SetActive(IsPaused);
         }
-
+        
         Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = IsPaused;
 
