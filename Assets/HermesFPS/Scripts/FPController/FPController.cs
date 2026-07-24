@@ -3,35 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine.Events;
-using System;
 
 namespace Hermes
 {
-    [RequireComponent(typeof(CharacterController))]
-
-    public class FPController : MonoBehaviour
+    [RequireComponent(typeof(CharacterController), typeof(ActivityManager))]
+    public partial class FPController : MonoBehaviour
     {
         public FPControllerPreset Preset;
 
-        float MaxSpeed
-        {
-            get
-            {
-                if (Activity.IsActive(Crouch))
-                    return Preset.CrouchSpeed;
-                if (Activity.IsActive(Sprint))
-                    return Preset.SprintSpeed;
-                return Preset.WalkSpeed;
-            }
-        }
 
-        public bool Sprinting
-        {
-            get
-            {
-                return Activity.IsActive(Sprint);
-            }
-        }
+        #region Accessors
+
+        public bool Crouching => ActivityManager.IsActive<FPCrouch>();
+
+        public bool Sprinting => ActivityManager.IsActive<FPSprint>();
+
+        public bool LedgeClimbing => ActivityManager.IsActive<FPLedgeClimb>();
+
+        #endregion
+
+
+
 
         [SerializeField] float currentPitch = 0f;
 
@@ -46,27 +38,40 @@ namespace Hermes
         }
 
         [Header("Camera Parameters")]
-        public Vector3 CurrentCameraPosition { get; private set; } = new Vector3(0f, 1.6f, 0f);
 
         [Space(10)]
         public Vector3 CameraPositionOffset = Vector3.zero;
         public Quaternion CameraRotationOffset = Quaternion.identity;
 
-        [Header("Physics Parameters")]
+        [Header("Control Parameters")]
 
-        public float VerticalVelocity = 0f;
+        public bool LookEnabled = true;
+        public bool MovementEnabled = true;
 
-        public Vector3 CurrentVelocity { get; private set; }
-        public float CurrentSpeed { get; private set; }
 
-        private bool wasGrounded = false;
+        public float VerticalSpeed
+        {
+            get => Movement.VerticalSpeed;
+            set { Movement.VerticalSpeed = value; }
+        }
 
-        public bool Grounded => characterController.isGrounded;
+        public Vector3 HorizontalVelocity => Movement.HorizontalVelocity;
+
+        public float HorizontalSpeed => Movement.HorizontalSpeed;
+
+
+        public Vector3 ForwardVelocity
+        {
+            get => Movement.ForwardVelocity;
+            set => Movement.SetForwardVelocity(value);
+        }
+
 
         [Header("Input")]
         public Vector2 MoveInput;
         public Vector2 LookInput;
         public bool SprintInput;
+
 
         [Header("Components")]
         [SerializeField] CinemachineCamera fpCamera;
@@ -78,137 +83,96 @@ namespace Hermes
 
         public Transform CameraTransform => fpCamera.transform;
 
-        [Header("Activities")]
-        public FPSprint Sprint;
-        public FPCrouch Crouch;
+        public ActivityManager ActivityManager;
+
+        public FPMovement Movement;
 
         [Header("Events")]
         public UnityEvent Landed;
         public UnityEvent Jumped;
         public UnityEvent DoubleJumped;
 
-        public event Action OnMoving;
-        public event Action OnStationary;
 
         public UnityAction TryJump;
+
+        // Invoked when movement was enabled or disabled
+        public UnityAction<bool> MovementToggled;
         public UnityAction RequestCameraOffset;
 
-        [Header("Looking Parameters")]
-        [Range(0.01f, 1f)]
-        public Vector2 LookSensitivity = new Vector2(0.1f, 0.1f);
-
-        public static FPController Instance { get; private set; }
 
         #region Unity Methods
+
+        private void OnDrawGizmos()
+        {
+            TryDrawGroundSensorGizmos();
+        }
+
+
         void OnValidate()
         {
             if (characterController == null)
             {
                 characterController = GetComponent<CharacterController>();
             }
-        }
 
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
+            if (ActivityManager == null)
             {
-                Destroy(this.gameObject);
-            }
-            else
-            {
-                Instance = this;
+                ActivityManager = GetComponent<ActivityManager>();
             }
         }
 
-        private void Update()
+
+        void Update()
         {
             UpdateCameraOffset();
 
-            MoveUpdate();
             LookUpdate();
             CameraUpdate();
 
-            //check if player is crouching and adjust camera height
-
-            Vector3 targetCameraPosition = Vector3.up * 1.6f; //default camera height
-
-            if (Activity.IsActive(Crouch))
-            {
-                targetCameraPosition = Vector3.up * 0.9f; //crouch camera height
-
-                characterController.height = 1f;
-                characterController.center = Vector3.up * 0.5f; //adjust character hitbox when crouching
-            }
-            else
-            {
-                characterController.height = 2f;
-                characterController.center = Vector3.up * 1f; //reset character hitbox when not crouching
-            }
-
-            CurrentCameraPosition = Vector3.Lerp(CurrentCameraPosition, targetCameraPosition, 7f * Time.deltaTime);
-
-            if (!wasGrounded && Grounded)
-            {
-                Landed?.Invoke();
-            }
-
-            wasGrounded = Grounded;
+            UpdateCharacterHeight();
+            UpdateGroundCheck();
         }
 
-        # endregion
+        #endregion
+
+
 
         #region Controller Methods
 
-        void MoveUpdate()
+        void UpdateCharacterHeight()
         {
-            Vector3 motion = transform.forward * MoveInput.y + transform.right * MoveInput.x; //y input is forward/backward (W/S), x input is left/right (A/D)
-            motion.y = 0f;
-            motion.Normalize();
-
-            if (motion.sqrMagnitude >= 0.01f)
+            if (Crouching)
             {
-                CurrentVelocity = Vector3.Lerp(CurrentVelocity, motion * MaxSpeed, Preset.Acceleration * Time.deltaTime);
-                OnMoving?.Invoke();
+                characterController.height = Preset.CrouchHeight;
+                characterController.center = Vector3.up * Preset.CrouchHeight * 0.5f;
             }
             else
             {
-                CurrentVelocity = Vector3.Lerp(CurrentVelocity, Vector3.zero, Preset.Acceleration * Time.deltaTime);
-                OnStationary?.Invoke();
+                characterController.height = Preset.StandHeight;
+                characterController.center = Vector3.up * Preset.StandHeight * 0.5f;
             }
-
-            if (Grounded && VerticalVelocity <= 0.01f)
-            {
-                VerticalVelocity = -3f; //downward force to keep the player grounded
-            }
-            else
-            {
-                VerticalVelocity += Physics.gravity.y * Preset.GravityScale * Time.deltaTime; //simple gravity implementation
-            }
-
-            Vector3 fullVelocity = new Vector3(CurrentVelocity.x, VerticalVelocity, CurrentVelocity.z);
-
-            CollisionFlags flags = characterController.Move(fullVelocity * Time.deltaTime);
-            if ((flags & CollisionFlags.Above) != 0 && VerticalVelocity > 0.01f)
-            {
-                VerticalVelocity = 0f; //stop upward velocity if hitting ceiling
-            }
-
-            //updating speed
-            CurrentSpeed = CurrentVelocity.magnitude;
         }
 
-        void LookUpdate()
+		
+		void LookUpdate()
         {
+            if (LookEnabled == false)
+            {
+                return;
+            }
+
             Vector2 input = new Vector2(LookInput.x * Preset.LookSensitivity.x, LookInput.y * Preset.LookSensitivity.y);
 
-            //looking up and down
-            CurrentPitch -= input.y; //invert y input for more natural mouse look feel
+            // looking up and down
+            CurrentPitch -= input.y;
 
             fpCamera.transform.localRotation = Quaternion.Euler(CurrentPitch, 0f, 0f) * CameraRotationOffset;
 
-            //looking left and right
+
+            // looking left and right
             transform.Rotate(Vector3.up * input.x);
         }
+
 
         void UpdateCameraOffset()
         {
@@ -218,23 +182,29 @@ namespace Hermes
             RequestCameraOffset?.Invoke();
         }
 
+
         void CameraUpdate()
         {
+
             float targetFOV = Preset.CameraNormalFOV;
 
             if (Sprinting)
             {
-                float speedRatio = CurrentSpeed / Preset.SprintSpeed;
+                float speedRatio = HorizontalSpeed / Preset.SprintSpeed;
 
                 targetFOV = Mathf.Lerp(Preset.CameraNormalFOV, Preset.CameraSprintFOV, speedRatio);
             }
 
+
             fpCamera.Lens.FieldOfView = Mathf.Lerp(fpCamera.Lens.FieldOfView, targetFOV, Preset.CameraFOVSmoothing * Time.deltaTime);
 
-            fpCamera.transform.localPosition = CurrentCameraPosition + CameraPositionOffset;
+
+            //fpCamera.transform.localPosition = CurrentCameraPosition + CameraPositionOffset;
         }
 
+
         #endregion
+
 
     }
 }

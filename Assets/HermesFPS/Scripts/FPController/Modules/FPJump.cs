@@ -4,11 +4,29 @@ using System.Collections.Generic;
 
 namespace Hermes
 {
-    public class FPJump : FPControllerModule
+    public class FPJump : FPActivity
     {
         [SerializeField] bool hasDoubleJumped = false;
 
         [SerializeField] float coyoteTimer = 0f;
+
+
+        public override bool CanStartActivity()
+        {
+            return coyoteTimer <= Preset.CoyoteTime && !HasObstaclesAbove();
+        }
+
+        public override void OnActivityStarted()
+        {
+            Jump();
+            Controller.Jumped?.Invoke();
+        }
+
+        public override void OnActivityStopped()
+        {
+            hasDoubleJumped = false;
+        }
+
 
         private void Start()
         {
@@ -16,6 +34,7 @@ namespace Hermes
 
             Controller.Landed.AddListener(OnLanded);
         }
+
 
         private void Update()
         {
@@ -29,43 +48,44 @@ namespace Hermes
             }
         }
 
+
+        bool HasObstaclesAbove()
+        {
+            Ray ray = new Ray(Controller.CameraTransform.position, Vector3.up);
+
+            float raycastDistance = 0.5f;
+
+            if (Physics.Raycast(ray, raycastDistance, Preset.ObstacleLayerMask))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
         void OnLanded()
         {
-            hasDoubleJumped = false;
+            Manager.ForceStop(this);
         }
+
 
         void OnTryJump()
         {
-            // jumping
-            if(coyoteTimer <= Preset.CoyoteTime)
-            {
-                Jump();
-
-                Controller.Jumped?.Invoke();
-
-                return;
-            }
-
-            // double jumping
-            if (Preset.CanDoubleJump == false)
-            {
-                return;
-            }
-
-            if (!hasDoubleJumped)
+            if (Active && Preset.CanDoubleJump && !hasDoubleJumped)
             {
                 Jump();
                 hasDoubleJumped = true;
 
-                Controller.Jumped?.Invoke();
+                Controller.DoubleJumped?.Invoke();
             }
-
         }
 
         void Jump()
         {
-            Controller.VerticalVelocity = Mathf.Sqrt(Preset.JumpHeight * -2f * (Physics.gravity.y * Preset.GravityScale)); //v = sqrt(h * -2 * g)
+            Controller.VerticalSpeed = Mathf.Sqrt(Preset.JumpHeight * -2f * Physics.gravity.y * Preset.GravityScale);
         }
 
     }
 }
+

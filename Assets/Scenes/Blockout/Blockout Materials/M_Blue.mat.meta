@@ -1,8 +1,15 @@
 fileFormatVersion: 2
-guid: 40a32eb34377d1d4ab0a96e8e1bce61d
+<<<<<<<< HEAD:Assets/Scenes/Blockout/Blockout Materials/M_Blue.mat.meta
+guid: 5d117e9d9d857c840958bf9a350c7ce4
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000
+========
+guid: 0fdd135a72becea428e686be5916f513
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+>>>>>>>> character-controller:Assets/HermesFPS/Content/Animations/Animator/FPCharacterAnimator.controller.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 

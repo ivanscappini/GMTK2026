@@ -23,6 +23,10 @@ namespace Hermes
         public bool CanDoubleJump = true;
         public float CoyoteTime = 0.15f; //how long after leaving a platform the player can still jump
 
+        [Tooltip("The landed event is only triggered if the player is falling faster than minus this value.")]
+        [Min(0.001f)]
+        public float LandVelocityThreshold = 7f;
+
         [Header("Looking Parameters")]
         public Vector2 LookSensitivity = new Vector2(0.1f, 0.1f);
         [Min(0f)] public float LookSmoothing = 0.02f;

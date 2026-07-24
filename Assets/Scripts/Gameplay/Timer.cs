@@ -53,8 +53,8 @@ public class Timer : MonoBehaviour
 
     private void Start()
     {
-        FPController.Instance.OnMoving += StartedMoving;
-        FPController.Instance.OnStationary += StoppedMoving;
+        FPMovement.Instance.OnMoving += StartedMoving;
+        FPMovement.Instance.OnStationary += StoppedMoving;
         StartCountdown(); //temporarily here - tie to event
     }
 

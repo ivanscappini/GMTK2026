@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: b82f51a17f1619f4f837662e3227fd44
+<<<<<<<< HEAD:Assets/Editor.meta
+guid: 5cbb76aa49efd2e44944e28612c13ed4
+========
+guid: 2bf7fb3fd718ff844a262e87161717e3
+>>>>>>>> character-controller:Assets/HermesFPS/Content.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

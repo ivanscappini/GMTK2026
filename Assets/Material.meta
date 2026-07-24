@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 9c021efb93e2d474abef60df35418281
+<<<<<<<< HEAD:Assets/Material.meta
+guid: ff277c050973a114c981f2055bda8b65
+========
+guid: a8070d4794b218d40afbf5c3806d59df
+>>>>>>>> character-controller:Assets/HermesFPS/Scripts/ActivityManager.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -4,13 +4,17 @@ namespace Hermes
 {
     public class FPSounds : FPControllerModule
     {
-        [SerializeField] AudioSource audioSource;
-        [SerializeField] AudioClip[] footstepSounds;
-        [SerializeField] AudioClip[] jumpSounds;
-        [SerializeField] AudioClip[] doubleJumpSounds;
-        [SerializeField] AudioClip[] landSounds;
+        [SerializeField] AudioSource AudioSource;
 
-        float footstepTimer = 0f;
+
+        [SerializeField] AudioClip[] FootstepSounds;
+        [SerializeField] AudioClip[] LandSounds;
+        [SerializeField] AudioClip[] JumpSounds;
+        [SerializeField] AudioClip[] DoubleJumpSounds;
+
+
+        [SerializeField] float footstepTimer = 0f;
+
 
         private void Start()
         {
@@ -19,46 +23,72 @@ namespace Hermes
             Controller.Landed.AddListener(OnLanded);
         }
 
-        private void Update()
+
+        void Update()
         {
             UpdateFootstepSounds();
         }
 
+
+
+        void GetFootstepIntervalAndVolume(out float interval, out float volume)
+        {
+            interval = Preset.FootstepWalkInterval;
+            volume = Preset.FootstepWalkVolume;
+
+
+            if (!Controller.Crouching)
+            {
+                float t = Mathf.InverseLerp(Preset.WalkSpeed, Preset.SprintSpeed, Controller.HorizontalSpeed);
+
+                interval = Mathf.Lerp(Preset.FootstepWalkInterval, Preset.FootstepSprintInterval, t);
+                volume = Mathf.Lerp(Preset.FootstepWalkVolume, Preset.FootstepSprintVolume, t);
+            }
+            else
+            {
+                float t = Mathf.InverseLerp(Preset.CrouchSpeed, Preset.WalkSpeed, Controller.HorizontalSpeed);
+
+                interval = Mathf.Lerp(Preset.FootstepCrouchInterval, Preset.FootstepWalkInterval, t);
+                volume = Mathf.Lerp(Preset.FootstepCrouchVolume, Preset.FootstepWalkVolume, t);
+            }
+        }
+
+
         void UpdateFootstepSounds()
         {
-            if (Controller.Grounded && Controller.CurrentSpeed >= 0.2f)
+            if (Controller.Grounded && Controller.HorizontalSpeed >= 0.2f)
             {
-                float rate, volume;
+                GetFootstepIntervalAndVolume(out float interval, out float volume);
 
-                if (Activity.IsActive(Controller.Crouch))
-                {
-                    float t = Mathf.InverseLerp(Preset.CrouchSpeed, Preset.WalkSpeed, Controller.CurrentSpeed);
-                    rate = Mathf.Lerp(Preset.FootstepCrouchRate, Preset.FootstepWalkRate, t);
-                    volume = Mathf.Lerp(Preset.FootstepCrouchVolume, Preset.FootstepWalkVolume, t);
-                }
-                else
-                {
-                    float t = Mathf.InverseLerp(Preset.WalkSpeed, Preset.SprintSpeed, Controller.CurrentSpeed);
-                    rate = Mathf.Lerp(Preset.FootstepWalkRate, Preset.FootstepSprintRate, t);
-                    volume = Mathf.Lerp(Preset.FootstepWalkVolume, Preset.FootstepSprintVolume, t);
-                }
 
                 if (Time.time >= footstepTimer)
                 {
-                    PlaySound(footstepSounds, volume);
-                    footstepTimer = Time.time + rate;
+                    PlaySound(FootstepSounds, volume);
+
+                    footstepTimer = Time.time + interval;
                 }
             }
         }
 
+
+
+
         void OnLanded()
         {
-            float scale = Mathf.InverseLerp(0f, -20f, Controller.VerticalVelocity);
+            //Debug.Log($"Velocity: {Controller.VerticalVelocity}");
+
+            if (Controller.VerticalSpeed >= -Preset.LandVelocityThreshold)
+            {
+                return;
+            }
+
+            float scale = Mathf.InverseLerp(0f, -20f, Controller.VerticalSpeed);
 
             scale *= Preset.MaxLandSoundVolume;
 
-            PlaySound(landSounds, scale);
+            PlaySound(LandSounds, scale);
         }
+
 
         void PlaySound(AudioClip[] clips, float volumeScale = 1f)
         {
@@ -68,21 +98,20 @@ namespace Hermes
 
                 AudioClip clip = clips[index];
 
-                audioSource.PlayOneShot(clip, volumeScale);
+                AudioSource.PlayOneShot(clip, volumeScale);
             }
             catch { }
-            }
+        }
+
 
         void PlayJumpSound()
         {
-            PlaySound(jumpSounds, Preset.JumpSoundVolume);
+            PlaySound(JumpSounds, Preset.JumpSoundVolume);
         }
 
         void PlayDoubleJumpSound()
         {
-            PlaySound(doubleJumpSounds, Preset.JumpSoundVolume);
+            PlaySound(DoubleJumpSounds, Preset.JumpSoundVolume);
         }
-
     }
 }
-

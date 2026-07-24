@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 2995f833494975446ac2c6ba2dc5a096
+<<<<<<<< HEAD:Assets/2D.meta
+guid: af2b54ce9f8da0f4b986640ca98f2624
+========
+guid: 32d40c346c3060f4ab076887607124b8
+>>>>>>>> character-controller:Assets/EditorJay.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

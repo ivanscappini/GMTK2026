@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Hermes
+{
+    public class FPCameraSwitch : FPControllerModule
+    {
+        [SerializeField] private Camera firstPersonCamera;
+        [SerializeField] private Camera thirdPersonCamera;
+
+        bool isFirstPerson = true;
+
+        void Start()
+        {
+            FirstPersonCamera.SetActive(true);
+            ThirdPersonCamera.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (keyboard.current.pKey.wasPressedThisFrame)
+            {
+                isFirstPerson = !isFirstPerson;
+
+                FirstPersonCamera.SetActive(isFirstPerson);
+                ThirdPersonCamera.SetActive(!isFirstPerson);
+            }
+        }
+    }
+}

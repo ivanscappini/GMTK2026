@@ -7,14 +7,13 @@ namespace Hermes
     public class FPControllerModule : MonoBehaviour
     {
         protected FPController Controller;
-        protected FPControllerPreset Preset;
+
+        protected FPControllerPreset Preset => Controller.Preset;
+
 
         protected virtual void Awake()
         {
             Controller = GetComponentInParent<FPController>();
-            if (Controller != null)
-                Preset = Controller.Preset;
         }
     }
-
 }
