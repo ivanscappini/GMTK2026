@@ -42,27 +42,6 @@ namespace Hermes
         [SerializeField] FPController controller;
         [SerializeField] Animator animator;
 
-        [Header("Lower Body Alignment")]
-        [Tooltip("When enabled, rotate the character root to face wall-forward while wall-running/jumping, keeping the camera world rotation unchanged.")]
-        [SerializeField] bool AlignLowerBodyDuringWallActions = true;
-
-        [SerializeField]
-        [Min(0f)]
-        float LowerBodyAlignSpeed = 10f;
-
-        [Header("Wall Alignment")]
-        [Tooltip("If true, use wall normal/tangent from active activities to orient lower body and mirror animations when needed.")]
-        [SerializeField] bool UseWallSurfaceAlignment = true;
-
-        // optional blend time to smoothly align orientation/flip flags
-        [SerializeField, Min(0f)] float WallAlignmentBlend = 0.12f;
-
-        // runtime
-        Quaternion targetBodyRotation = Quaternion.identity;
-        float wallAlignTimer = 0f;
-        bool lastWallFlip = false;
-
-
         private float jumpFinishTime = 0f;
         private float doubleJumpFinishTime = 0f;
 
@@ -87,7 +66,6 @@ namespace Hermes
         bool warnedNoWallRunCancelParam = false;
         bool warnedNoWallJumpParam = false;
         bool lastWallRunState = false;
-        bool warnedNoWallAlignParam = false;
         bool warnedNoWallMirrorParam = false;
 
 
@@ -156,24 +134,8 @@ namespace Hermes
             {
                 if (activity is FPWallJump wj)
                 {
-                    // set alignment/mirror based on last wall normal
-                    if (UseWallSurfaceAlignment)
-                    {
-                        Vector3 normal = wj.LastWallNormal;
-                        if (normal.sqrMagnitude > 0.0001f)
-                        {
-                            Vector3 wallForward = Vector3.Cross(normal, Vector3.up).normalized;
-                            if (Vector3.Dot(wallForward, controller.CameraTransform.forward) < 0f) wallForward = -wallForward;
+                    UpdateWallMirror(wj.LastWallNormal);
 
-                            float angle = Vector3.SignedAngle(controller.transform.forward, wallForward, Vector3.up);
-                            SetAnimatorFloat("WallAlignAngle", angle, ref warnedNoWallAlignParam);
-
-                            bool mirror = Vector3.Dot(controller.transform.right, normal) > 0f;
-                            SetAnimatorBool("WallMirror", mirror, ref warnedNoWallMirrorParam);
-                        }
-                    }
-
-                    // trigger WallJump animation
                     if (AnimatorHasParameter("WallJump"))
                     {
                         animator.SetTrigger("WallJump");
@@ -250,88 +212,9 @@ namespace Hermes
             }
             catch { }
 
-            try
-            {
-                UpdateLowerBodyAlignment();
-            }
-            catch { }
-        }
+}
 
         #endregion
-
-        void UpdateLowerBodyAlignment()
-        {
-            if (!AlignLowerBodyDuringWallActions) return;
-
-            bool wallRunActive = controller.ActivityManager != null && controller.ActivityManager.IsActive<FPWallRun>();
-            var wallJumpActivity = controller.ActivityManager?.GetActivity<FPWallJump>();
-            bool wallJumpActive = wallJumpActivity != null && wallJumpActivity.IsWallJumpActive;
-
-            if (!wallRunActive && !wallJumpActive)
-            {
-                wallAlignTimer = 0f;
-                return;
-            }
-
-            // During wall RUN, FPWallRun handles yaw clamping on the controller transform directly.
-            // Only rotate the body here for wall JUMP (instantaneous, no ongoing yaw control).
-            if (wallJumpActive && !wallRunActive)
-            {
-                Vector3 horiz = controller.ForwardVelocity;
-                horiz = Vector3.ProjectOnPlane(horiz, Vector3.up);
-                if (horiz.sqrMagnitude >= 0.001f)
-                {
-                    Vector3 bodyForward = horiz.normalized;
-                    Transform body = controller.transform;
-                    Quaternion targetRot = Quaternion.LookRotation(bodyForward, Vector3.up);
-
-                    Transform cam = controller.CameraTransform;
-                    Quaternion camWorldRot = cam.rotation;
-
-                    wallAlignTimer = Mathf.Min(wallAlignTimer + Time.deltaTime, WallAlignmentBlend);
-                    float t = WallAlignmentBlend > 0f ? Mathf.SmoothStep(0f, 1f, wallAlignTimer / WallAlignmentBlend) : 1f;
-                    body.rotation = Quaternion.Slerp(body.rotation, targetRot, Mathf.Clamp01(t * LowerBodyAlignSpeed * Time.deltaTime));
-
-                    cam.rotation = camWorldRot;
-                }
-            }
-
-            // Set animator params for alignment angle and mirror during wall run
-            if (UseWallSurfaceAlignment && wallRunActive)
-            {
-                var wract = controller.ActivityManager?.GetActivity<FPWallRun>();
-                if (wract != null && wract.WallNormal.sqrMagnitude > 0.0001f)
-                {
-                    Vector3 normal = wract.WallNormal;
-                    Vector3 wf = Vector3.Cross(normal, Vector3.up).normalized;
-                    if (Vector3.Dot(wf, controller.CameraTransform.forward) < 0f) wf = -wf;
-
-                    float alignAngle = Vector3.SignedAngle(controller.transform.forward, wf, Vector3.up);
-                    SetAnimatorFloat("WallAlignAngle", alignAngle, ref warnedNoWallAlignParam);
-
-                    bool mirror = Vector3.Dot(controller.transform.right, normal) > 0f;
-                    SetAnimatorBool("WallMirror", mirror, ref warnedNoWallMirrorParam);
-                }
-            }
-
-            // Set alignment params for wall jump based on stored normal
-            if (UseWallSurfaceAlignment && wallJumpActive && wallJumpActivity != null)
-            {
-                Vector3 normal = wallJumpActivity.LastWallNormal;
-                if (normal.sqrMagnitude > 0.0001f)
-                {
-                    Vector3 wf = Vector3.Cross(normal, Vector3.up).normalized;
-                    if (Vector3.Dot(wf, controller.CameraTransform.forward) < 0f) wf = -wf;
-
-                    float alignAngle = Vector3.SignedAngle(controller.transform.forward, wf, Vector3.up);
-                    SetAnimatorFloat("WallAlignAngle", alignAngle, ref warnedNoWallAlignParam);
-
-                    bool mirror = Vector3.Dot(controller.transform.right, normal) > 0f;
-                    SetAnimatorBool("WallMirror", mirror, ref warnedNoWallMirrorParam);
-                }
-            }
-        }
-
 
         void OnLedgeClimbStarted()
         {
@@ -442,6 +325,14 @@ namespace Hermes
 
         #region Animator Methods
 
+        void UpdateWallMirror(Vector3 wallNormal)
+        {
+            if (wallNormal.sqrMagnitude <= 0.0001f) return;
+
+            bool wallOnRight = Vector3.Dot(controller.transform.right, wallNormal) < 0f;
+            SetAnimatorBool("WallMirror", wallOnRight, ref warnedNoWallMirrorParam);
+        }
+
         void SetAnimatorBool(string name, bool value, ref bool warnedFlag)
         {
             if (animator == null) return;
@@ -471,9 +362,16 @@ namespace Hermes
         }
 
 
+        bool IsWallRunning()
+        {
+            return controller.ActivityManager != null
+                && controller.ActivityManager.IsEnabled(typeof(FPWallRun))
+                && controller.ActivityManager.IsActive<FPWallRun>();
+        }
+
         bool IsFalling()
         {
-            if (controller.GroundDistance <= 2f || IsJumping() || IsDoubleJumping() || IsLedgeClimbing())
+            if (controller.GroundDistance <= 2f || IsJumping() || IsDoubleJumping() || IsLedgeClimbing() || IsWallRunning())
             {
                 return false;
             }
@@ -483,7 +381,7 @@ namespace Hermes
 
         bool IsJumping()
         {
-            if (IsLedgeClimbing() || IsDoubleJumping())
+            if (IsLedgeClimbing() || IsDoubleJumping() || IsWallRunning())
             {
                 return false;
             }
@@ -500,7 +398,7 @@ namespace Hermes
 
         bool IsDoubleJumping()
         {
-            if (IsLedgeClimbing())
+            if (IsLedgeClimbing() || IsWallRunning())
             {
                 return false;
             }
@@ -579,7 +477,10 @@ namespace Hermes
 
             if (wallRunActive && !lastWallRunState)
             {
-                // entering wall run
+                var wr = controller.ActivityManager.GetActivity<FPWallRun>();
+                if (wr != null)
+                    UpdateWallMirror(wr.WallNormal);
+
                 if (AnimatorHasParameter("WallRun"))
                 {
                     animator.SetTrigger("WallRun");
