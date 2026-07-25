@@ -23,8 +23,8 @@ public class BarkGameOver : MonoBehaviour
     [SerializeField] private float delayBetweenDialogues = 1f;
     [SerializeField] private float delayBeforeCharactersVanish = 1.2f;
     [SerializeField] private float delayBetweenShakes = 0.08f;
-    [SerializeField] private float deltaX = 10f;
-    [SerializeField] private float deltaY = 10f;
+    [SerializeField] private float deltaX = 0.7f;
+    [SerializeField] private float deltaY = 0.7f;
 
     [Header("Barks fonts")]
     [SerializeField] private TMP_FontAsset barkFontMonster;
@@ -164,7 +164,7 @@ public class BarkGameOver : MonoBehaviour
     /// Randomly jitters the text's position for "shakeDuration" seconds, then
     /// snaps it back to where it started.
     /// </summary>
-    IEnumerator ShakeText(Vector2 initialPosition, float shakeDuration, TMP_Text textComponent)
+    IEnumerator ShakeText(Vector3 initialPosition, float shakeDuration, TMP_Text textComponent)
     {
         float timerDuration = 0f;
         float timerBetweenShakes = 0f;
@@ -173,8 +173,9 @@ public class BarkGameOver : MonoBehaviour
         {
             if (timerBetweenShakes >= delayBetweenShakes)
             {
-                textComponent.rectTransform.position = new Vector2(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
-                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1));
+                textComponent.rectTransform.position = new Vector3(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
+                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1),
+                                                                   initialPosition.z);
                 timerBetweenShakes = 0f;
             }
 
