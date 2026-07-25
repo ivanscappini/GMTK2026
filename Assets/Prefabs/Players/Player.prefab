@@ -910,10 +910,6 @@ MonoBehaviour:
   RightShoulderBone: {fileID: 0}
   controller: {fileID: 2326769336307238917}
   animator: {fileID: 7771451661319413317}
-  AlignLowerBodyDuringWallActions: 1
-  LowerBodyAlignSpeed: 10
-  UseWallSurfaceAlignment: 1
-  WallAlignmentBlend: 0.12
 --- !u!114 &6434711065967222981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2914,15 +2910,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.63988
+      value: 489.52
       objectReference: {fileID: 0}
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: -16.17
       objectReference: {fileID: 0}
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -77.25934
+      value: 4.82
       objectReference: {fileID: 0}
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3054,15 +3050,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.022998998
+      value: 0.022999952
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.539
+      value: 1.5389996
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.19200018
+      value: 0.19200064
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalRotation.w
