@@ -218,7 +218,7 @@ public class BarksManager : MonoBehaviour
         }
     }
 
-    IEnumerator ShakeText(Vector2 initialPosition, float shakeDuration, TMP_Text textComponent, bool isThisPauseBark)
+    IEnumerator ShakeText(Vector3 initialPosition, float shakeDuration, TMP_Text textComponent, bool isThisPauseBark)
     {
         float timerDuration = 0f;
         float timerBetweenShakes = 0f;
@@ -227,8 +227,9 @@ public class BarksManager : MonoBehaviour
         {
             if (timerBetweenShakes >= delayBetweenShakes)
             {
-                textComponent.rectTransform.position = new Vector2(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
-                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1));
+                textComponent.rectTransform.position = new Vector3(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
+                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1),
+                                                                   0);
                 timerBetweenShakes = 0f;
             }
 
