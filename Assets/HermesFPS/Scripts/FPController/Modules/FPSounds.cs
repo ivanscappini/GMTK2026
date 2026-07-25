@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Hermes
@@ -6,6 +7,7 @@ namespace Hermes
     {
         [SerializeField] AudioSource AudioSource;
 
+        [Header("Default Clips (used when no SurfaceAudioMap override exists)")]
         [SerializeField] AudioClip[] FootstepSounds;
         [SerializeField] AudioClip[] LandSounds;
         [SerializeField] AudioClip[] WallJumpSounds;
@@ -17,7 +19,18 @@ namespace Hermes
         [SerializeField] AudioClip SlideLoopClip;
         [SerializeField, Range(0f, 1f)] float SlideVolume = 0.6f;
 
+        // Wall run sounds
+        [SerializeField] AudioClip[] WallRunStartSounds;
+        [SerializeField] AudioSource WallRunAudioSource;
+        [SerializeField] AudioClip WallRunLoopClip;
+        [SerializeField, Range(0f, 1f)] float WallRunVolume = 0.6f;
+
+        [Header("Surface Audio")]
+        [Tooltip("Optional. When assigned, overrides default clips based on the surface the player is touching.")]
+        [SerializeField] SurfaceAudioMap SurfaceAudio;
+
         [SerializeField] float footstepTimer = 0f;
+        Collider lastWallRunCollider;
 
 
         private void Start()
@@ -40,6 +53,16 @@ namespace Hermes
                 SlideAudioSource.loop = true;
             }
 
+            if (WallRunAudioSource == null)
+            {
+                var go = new GameObject("WallRunAudioSource");
+                go.transform.SetParent(Controller.transform, false);
+                WallRunAudioSource = go.AddComponent<AudioSource>();
+                WallRunAudioSource.spatialBlend = 0.0f;
+                WallRunAudioSource.playOnAwake = false;
+                WallRunAudioSource.loop = true;
+            }
+
             // Listen to activity start/stop to trigger slide loop
             if (Controller.ActivityManager != null)
             {
@@ -51,8 +74,16 @@ namespace Hermes
                     }
                     else if (activity.GetType() == typeof(FPWallJump))
                     {
-                        // play a wall-jump one-shot
                         PlaySound(WallJumpSounds, Preset.JumpSoundVolume);
+                    }
+                    else if (activity.GetType() == typeof(FPWallRun))
+                    {
+                        var wr = Controller.ActivityManager.GetActivity<FPWallRun>();
+                        lastWallRunCollider = wr != null ? wr.WallCollider : null;
+
+                        var startClips = GetSurfaceClips(lastWallRunCollider, s => s.WallRunStart) ?? WallRunStartSounds;
+                        PlaySound(startClips, WallRunVolume);
+                        StartWallRunLoop(lastWallRunCollider);
                     }
                 });
 
@@ -62,6 +93,10 @@ namespace Hermes
                     {
                         StopSlideLoop();
                     }
+                    else if (activity.GetType() == typeof(FPWallRun))
+                    {
+                        StopWallRunLoop();
+                    }
                 });
             }
         }
@@ -70,6 +105,7 @@ namespace Hermes
         void Update()
         {
             UpdateFootstepSounds();
+            UpdateWallRunSurface();
         }
 
 
@@ -103,10 +139,10 @@ namespace Hermes
             {
                 GetFootstepIntervalAndVolume(out float interval, out float volume);
 
-
                 if (Time.time >= footstepTimer)
                 {
-                    PlaySound(FootstepSounds, volume);
+                    var clips = GetSurfaceClips(Controller.GroundCollider, s => s.Footsteps) ?? FootstepSounds;
+                    PlaySound(clips, volume);
 
                     footstepTimer = Time.time + interval;
                 }
@@ -118,8 +154,6 @@ namespace Hermes
 
         void OnLanded()
         {
-            //Debug.Log($"Velocity: {Controller.VerticalVelocity}");
-
             if (Controller.VerticalSpeed >= -Preset.LandVelocityThreshold)
             {
                 return;
@@ -129,7 +163,8 @@ namespace Hermes
 
             scale *= Preset.MaxLandSoundVolume;
 
-            PlaySound(LandSounds, scale);
+            var clips = GetSurfaceClips(Controller.GroundCollider, s => s.Land) ?? LandSounds;
+            PlaySound(clips, scale);
         }
 
 
@@ -139,7 +174,7 @@ namespace Hermes
             {
                 if (clips == null || clips.Length == 0 || AudioSource == null) return;
 
-                int index = Random.Range(0, clips.Length);
+                int index = UnityEngine.Random.Range(0, clips.Length);
 
                 AudioClip clip = clips[index];
 
@@ -167,7 +202,7 @@ namespace Hermes
 
             if (SlideAudioSource.isPlaying)
             {
-                // already playing — ensure correct clip/volume
+                // already playing ï¿½ ensure correct clip/volume
                 if (SlideAudioSource.clip != SlideLoopClip)
                 {
                     SlideAudioSource.clip = SlideLoopClip;
@@ -190,6 +225,82 @@ namespace Hermes
             {
                 SlideAudioSource.Stop();
             }
+        }
+
+
+        // Wall run loop control
+
+        void StartWallRunLoop(Collider wallCol)
+        {
+            if (WallRunAudioSource == null) return;
+
+            AudioClip loopClip = GetSurfaceClip(wallCol, s => s.WallRunLoop) ?? WallRunLoopClip;
+            if (loopClip == null) return;
+
+            if (WallRunAudioSource.isPlaying && WallRunAudioSource.clip == loopClip)
+            {
+                WallRunAudioSource.volume = WallRunVolume;
+                return;
+            }
+
+            WallRunAudioSource.clip = loopClip;
+            WallRunAudioSource.loop = true;
+            WallRunAudioSource.volume = WallRunVolume;
+            WallRunAudioSource.Play();
+        }
+
+        void StopWallRunLoop()
+        {
+            if (WallRunAudioSource == null) return;
+
+            if (WallRunAudioSource.isPlaying)
+            {
+                WallRunAudioSource.Stop();
+            }
+
+            lastWallRunCollider = null;
+        }
+
+        void UpdateWallRunSurface()
+        {
+            if (WallRunAudioSource == null || !WallRunAudioSource.isPlaying) return;
+
+            var wr = Controller.ActivityManager != null ? Controller.ActivityManager.GetActivity<FPWallRun>() : null;
+            if (wr == null || !wr.Active) return;
+
+            Collider currentCol = wr.WallCollider;
+            if (currentCol == lastWallRunCollider) return;
+
+            lastWallRunCollider = currentCol;
+            StartWallRunLoop(currentCol);
+        }
+
+
+        // Surface helpers
+
+        ESurfaceType GetSurfaceType(Collider col)
+        {
+            if (col == null) return ESurfaceType.Default;
+            var surface = col.GetComponentInParent<SurfaceType>();
+            return surface != null ? surface.Type : ESurfaceType.Default;
+        }
+
+        AudioClip[] GetSurfaceClips(Collider col, Func<SurfaceAudioMap.SurfaceClipSet, AudioClip[]> selector)
+        {
+            if (SurfaceAudio == null) return null;
+            var type = GetSurfaceType(col);
+            var clipSet = SurfaceAudio.GetClipSet(type);
+            if (clipSet == null) return null;
+            var clips = selector(clipSet);
+            return clips != null && clips.Length > 0 ? clips : null;
+        }
+
+        AudioClip GetSurfaceClip(Collider col, Func<SurfaceAudioMap.SurfaceClipSet, AudioClip> selector)
+        {
+            if (SurfaceAudio == null) return null;
+            var type = GetSurfaceType(col);
+            var clipSet = SurfaceAudio.GetClipSet(type);
+            return clipSet != null ? selector(clipSet) : null;
         }
     }
 }
