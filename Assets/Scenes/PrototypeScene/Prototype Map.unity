@@ -755,7 +755,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 263192938444325681, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
       propertyPath: m_Name
-      value: YBotPlayer
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4889173079886533915, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
       propertyPath: m_LocalPosition.x
@@ -867,6 +867,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6110542657466097997, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
       propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147721294712696311, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.027
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147721294712696311, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8158058045137897479, guid: d3dda3399c48abb4facf812a40d2e771, type: 3}
