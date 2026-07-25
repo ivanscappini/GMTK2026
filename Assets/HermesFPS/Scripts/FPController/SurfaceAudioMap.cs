@@ -14,7 +14,7 @@ namespace Hermes
             public AudioClip[] Land;
             public AudioClip[] Slide;
             public AudioClip[] WallRunStart;
-            public AudioClip WallRunLoop;
+            public AudioClip[] WallRunLoop;
         }
 
         public SurfaceClipSet[] Surfaces;

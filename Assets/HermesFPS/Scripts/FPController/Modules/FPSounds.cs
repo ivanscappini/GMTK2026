@@ -22,7 +22,7 @@ namespace Hermes
         // Wall run sounds
         [SerializeField] AudioClip[] WallRunStartSounds;
         [SerializeField] AudioSource WallRunAudioSource;
-        [SerializeField] AudioClip WallRunLoopClip;
+        [SerializeField] AudioClip[] WallRunLoopClips;
         [SerializeField, Range(0f, 1f)] float WallRunVolume = 0.6f;
 
         [Header("Surface Audio")]
@@ -76,13 +76,21 @@ namespace Hermes
                     {
                         PlaySound(WallJumpSounds, Preset.JumpSoundVolume);
                     }
-                    else if (activity.GetType() == typeof(FPWallRun))
+            else if (activity.GetType() == typeof(FPWallRun))
                     {
                         var wr = Controller.ActivityManager.GetActivity<FPWallRun>();
                         lastWallRunCollider = wr != null ? wr.WallCollider : null;
 
                         var startClips = GetSurfaceClips(lastWallRunCollider, s => s.WallRunStart) ?? WallRunStartSounds;
                         PlaySound(startClips, WallRunVolume);
+                        // Play an initial one-shot loop clip by selecting a random clip and playing as one-shot
+                        var loopClips = GetSurfaceClips(lastWallRunCollider, s => s.WallRunLoop) ?? WallRunLoopClips;
+                        if (loopClips != null && loopClips.Length > 0)
+                        {
+                            // choose a random loop clip and play once as a one-shot; we'll then schedule repeats on interval
+                            AudioClip chosen = loopClips[UnityEngine.Random.Range(0, loopClips.Length)];
+                            PlaySound(new AudioClip[] { chosen }, WallRunVolume);
+                        }
                         StartWallRunLoop(lastWallRunCollider);
                     }
                 });
@@ -230,49 +238,43 @@ namespace Hermes
 
         // Wall run loop control
 
+        // Instead of a continuous loop AudioSource, play per-interval one-shot clips similar to footsteps.
+        [SerializeField, Min(0f)] float WallRunSoundInterval = 0.25f;
+        float wallRunTimer = 0f;
+
         void StartWallRunLoop(Collider wallCol)
         {
-            if (WallRunAudioSource == null) return;
-
-            AudioClip loopClip = GetSurfaceClip(wallCol, s => s.WallRunLoop) ?? WallRunLoopClip;
-            if (loopClip == null) return;
-
-            if (WallRunAudioSource.isPlaying && WallRunAudioSource.clip == loopClip)
-            {
-                WallRunAudioSource.volume = WallRunVolume;
-                return;
-            }
-
-            WallRunAudioSource.clip = loopClip;
-            WallRunAudioSource.loop = true;
-            WallRunAudioSource.volume = WallRunVolume;
-            WallRunAudioSource.Play();
+            // reset timer so first repeat occurs after full interval
+            wallRunTimer = Time.time + WallRunSoundInterval;
+            lastWallRunCollider = wallCol;
         }
 
         void StopWallRunLoop()
         {
-            if (WallRunAudioSource == null) return;
-
-            if (WallRunAudioSource.isPlaying)
-            {
-                WallRunAudioSource.Stop();
-            }
-
             lastWallRunCollider = null;
         }
 
         void UpdateWallRunSurface()
         {
-            if (WallRunAudioSource == null || !WallRunAudioSource.isPlaying) return;
+            if (lastWallRunCollider == null) return;
 
             var wr = Controller.ActivityManager != null ? Controller.ActivityManager.GetActivity<FPWallRun>() : null;
-            if (wr == null || !wr.Active) return;
+            if (wr == null || !wr.Active)
+            {
+                lastWallRunCollider = null;
+                return;
+            }
 
-            Collider currentCol = wr.WallCollider;
-            if (currentCol == lastWallRunCollider) return;
+            if (Time.time >= wallRunTimer)
+            {
+                var loopClips = GetSurfaceClips(lastWallRunCollider, s => s.WallRunLoop) ?? WallRunLoopClips;
+                if (loopClips != null && loopClips.Length > 0)
+                {
+                    PlaySound(loopClips, WallRunVolume);
+                }
 
-            lastWallRunCollider = currentCol;
-            StartWallRunLoop(currentCol);
+                wallRunTimer = Time.time + WallRunSoundInterval;
+            }
         }
 
 
