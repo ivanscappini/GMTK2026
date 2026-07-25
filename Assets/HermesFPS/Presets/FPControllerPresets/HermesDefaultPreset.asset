@@ -67,7 +67,7 @@ MonoBehaviour:
   GravityScale: 1.4
   ObstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 1
   GroundSensor: {fileID: 11400000, guid: a8c06ee15d747684fb310b532dfaabc0, type: 2}
   FootstepWalkInterval: 0.55
   FootstepCrouchInterval: 0.4
