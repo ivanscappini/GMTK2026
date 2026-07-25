@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Assets_Objects_Alberto
-    second: {fileID: 2100000, guid: 5b2e20dd269a6fb42b5ed8edd5213c48, type: 2}
+    second: {fileID: 2100000, guid: d38314e888ee4dd4e9ef0d6e0c144010, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
