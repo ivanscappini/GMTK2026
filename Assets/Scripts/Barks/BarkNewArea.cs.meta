@@ -1,2 +1,16 @@
 fileFormatVersion: 2
 guid: a0b14436fef5ceb4da760577d0ac34a8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - barkTextDialogueFirst: {instanceID: 0}
+  - barkTextDialogueSecond: {instanceID: 0}
+  - barkFontMonster: {fileID: 11400000, guid: 8965042acce532f40b40d9f802ef4503, type: 2}
+  - barkFontVector: {fileID: 11400000, guid: 2ba348c6b838c394fbeaf159eb70df06, type: 2}
+  - barkFontHQ: {fileID: 11400000, guid: be7cff1750d03214f80b07e9f75a1e5f, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

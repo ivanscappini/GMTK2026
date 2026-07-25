@@ -18,14 +18,20 @@ public class BarksManager : MonoBehaviour
     [SerializeField] private float delayBetweenCharacters = 0.1f;
     [SerializeField] private float delayBeforeCharactersVanish = 1.2f;
     [SerializeField] private float delayBeforeCanBarkAgain = 5f;
+    [SerializeField] private float delayBetweenShakes = 0.08f;
+    [SerializeField] private float deltaX = 10f;
+    [SerializeField] private float deltaY = 10f;
 
     [Header("Barks UI in play")]
-    [SerializeField] private TMP_Text barkTextCharGameplay;
     [SerializeField] private TMP_Text barkTextDialogueGameplay;
 
     [Header("Barks UI in pause")]
-    [SerializeField] private TMP_Text barkTextCharPause;
     [SerializeField] private TMP_Text barkTextDialoguePause;
+    private Coroutine barkPauseCoroutine;
+
+    [Header("Barks fonts")]
+    [SerializeField] private TMP_FontAsset barkFontMonster;
+    [SerializeField] private TMP_FontAsset barkFontVector;
 
     public static BarksManager Instance { get; private set; }
 
@@ -50,9 +56,7 @@ public class BarksManager : MonoBehaviour
             Instance = this;
         }
 
-        barkTextCharGameplay.text = string.Empty;
         barkTextDialogueGameplay.text = string.Empty;
-        barkTextCharPause.text = string.Empty;
         barkTextDialoguePause.text = string.Empty;
     }
 
@@ -75,19 +79,28 @@ public class BarksManager : MonoBehaviour
     {
         if (dialogues == null || dialogues.Length == 0) return;
 
-        //StopAllCoroutines();
+        if (barkPauseCoroutine != null)
+        {
+            StopCoroutine(barkPauseCoroutine);
+        }
 
-        barkTextDialogueGameplay.text = string.Empty;
-        barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, 1f);
-        barkTextCharGameplay.text = string.Empty;
-        barkTextCharGameplay.color = new Color(barkTextCharGameplay.color.r, barkTextCharGameplay.color.g, barkTextCharGameplay.color.b, 1f);
+        //HO PROVATO A COMMENTARE PER PROVA SO IDK
+        //barkTextDialogueGameplay.text = string.Empty;
+        //barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, 1f);
 
-        barkTextCharPause.text = string.Empty;
-        barkTextCharPause.color = new Color(barkTextCharPause.color.r, barkTextCharPause.color.g, barkTextCharPause.color.b, 1f);
         barkTextDialoguePause.text = string.Empty;
         barkTextDialoguePause.color = new Color(barkTextDialoguePause.color.r, barkTextDialoguePause.color.g, barkTextDialoguePause.color.b, 1f);
 
         int randomIndex = UnityEngine.Random.Range(0, dialogues.Length);
+
+        if (dialogues[randomIndex].character.ToString() == "Monster")
+        {
+            barkTextDialoguePause.font = barkFontMonster;
+        }
+        else
+        {
+            barkTextDialoguePause.font = barkFontVector;
+        }
 
         string dialogue = dialogues[randomIndex].dialogue;
 
@@ -98,9 +111,15 @@ public class BarksManager : MonoBehaviour
             dialogueCharacter[i] = dialogue[i];
         }
 
-        barkTextCharPause.text = dialogues[randomIndex].character.ToString() + ":";
+        barkPauseCoroutine = StartCoroutine(PlayCharacterPause(dialogueCharacter));
 
-        StartCoroutine(PlayCharacterPause(dialogueCharacter));
+        if (dialogues[randomIndex].character.ToString() == "Monster")
+        {
+            StartCoroutine(ShakeText(barkTextDialoguePause.rectTransform.position,
+                                    (dialogueCharacter.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
+                                     barkTextDialoguePause,
+                                     true));
+        }
     }
 
     private void PlayBarkGameplay(DialogueClass[] dialogues, bool timeDialogue)
@@ -109,14 +128,23 @@ public class BarksManager : MonoBehaviour
 
         if (Barking && !timeDialogue) return;
 
+        StopCoroutine(PlayCharacterGameplay(new char[0]));
+
         Barking = true;
 
-        barkTextCharGameplay.text = string.Empty;
-        barkTextCharGameplay.color = new Color(barkTextCharGameplay.color.r, barkTextCharGameplay.color.g, barkTextCharGameplay.color.b, 1f);
         barkTextDialogueGameplay.text = string.Empty;
         barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, 1f);
 
         int randomIndex = UnityEngine.Random.Range(0, dialogues.Length);
+
+        if (dialogues[randomIndex].character.ToString() == "Monster")
+        {
+            barkTextDialogueGameplay.font = barkFontMonster;
+        }
+        else
+        {
+            barkTextDialogueGameplay.font = barkFontVector;
+        }
 
         string dialogue = dialogues[randomIndex].dialogue;
 
@@ -127,9 +155,15 @@ public class BarksManager : MonoBehaviour
             dialogueCharacter[i] = dialogue[i];
         }
 
-        barkTextCharGameplay.text = dialogues[randomIndex].character.ToString() + ":";
-
         StartCoroutine(PlayCharacterGameplay(dialogueCharacter));
+
+        if (dialogues[randomIndex].character.ToString() == "Monster")
+        {
+            StartCoroutine(ShakeText(barkTextDialogueGameplay.rectTransform.position,
+                                    (dialogueCharacter.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
+                                     barkTextDialogueGameplay,
+                                     false));
+        }
     }
 
     IEnumerator PlayCharacterGameplay(char[] characters)
@@ -150,7 +184,6 @@ public class BarksManager : MonoBehaviour
         while (barkTextDialogueGameplay.color.a >= 0f)
         {
             barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, barkTextDialogueGameplay.color.a - Time.deltaTime / 2);
-            barkTextCharGameplay.color = new Color(barkTextCharGameplay.color.r, barkTextCharGameplay.color.g, barkTextCharGameplay.color.b, barkTextCharGameplay.color.a - Time.deltaTime / 2);
             yield return null;
         }
 
@@ -177,11 +210,40 @@ public class BarksManager : MonoBehaviour
         while (barkTextDialoguePause.color.a >= 0f)
         {
             barkTextDialoguePause.color = new Color(barkTextDialoguePause.color.r, barkTextDialoguePause.color.g, barkTextDialoguePause.color.b, barkTextDialoguePause.color.a - Time.deltaTime / 2);
-            barkTextCharPause.color = new Color(barkTextCharPause.color.r, barkTextCharPause.color.g, barkTextCharPause.color.b, barkTextCharPause.color.a - Time.deltaTime / 2);
             yield return null;
         }
 
-        Barking = false;
+        yield return null;
+    }
+
+    IEnumerator ShakeText(Vector2 initialPosition, float shakeDuration, TMP_Text textComponent, bool isThisPauseBark)
+    {
+        float timerDuration = 0f;
+        float timerBetweenShakes = 0f;
+
+        while (timerDuration < shakeDuration)
+        {
+            if (timerBetweenShakes >= delayBetweenShakes)
+            {
+                textComponent.rectTransform.position = new Vector2(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
+                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1));
+                timerBetweenShakes = 0f;
+            }
+
+            if (isThisPauseBark)
+            {
+                timerDuration += Time.unscaledDeltaTime;
+                timerBetweenShakes += Time.unscaledDeltaTime;
+            }
+            else
+            {
+                timerDuration += Time.deltaTime;
+                timerBetweenShakes += Time.deltaTime;
+            }
+
+        }
+
+        textComponent.rectTransform.position = initialPosition;
 
         yield return null;
     }
