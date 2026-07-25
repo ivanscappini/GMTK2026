@@ -12,4 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b2c0d6e1f4ca141852525b5f887eca, type: 3}
   m_Name: HermesAudioMap
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.SurfaceAudioMap
-  Surfaces: []
+  Surfaces:
+  - SurfaceType: 1
+    Footsteps: []
+    Land: []
+    Slide: []
+    WallRunStart: []
+    WallRunLoop: {fileID: 0}
+  - SurfaceType: 2
+    Footsteps: []
+    Land: []
+    Slide: []
+    WallRunStart: []
+    WallRunLoop: {fileID: 0}
+  - SurfaceType: 3
+    Footsteps: []
+    Land: []
+    Slide: []
+    WallRunStart: []
+    WallRunLoop: {fileID: 0}
