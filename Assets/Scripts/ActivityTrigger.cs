@@ -9,7 +9,7 @@ public class ActivityTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        
+
         ActivityManager manager =
             other.GetComponentInParent<ActivityManager>();
 
@@ -19,6 +19,7 @@ public class ActivityTrigger : MonoBehaviour
         if (activity != null)
         {
             manager.SetEnabled(activity, true);
+            //dialogueBox.SetActive(true);
         }
         else
         {

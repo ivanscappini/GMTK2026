@@ -11,13 +11,19 @@ public class Timer : MonoBehaviour
 
     [SerializeField] private float timerStartTime = 10f;
     [SerializeField] private float playbackSpeed = 1f;
+
+    [Tooltip("Time in seconds before the signal for the bark is sent")]
+    [SerializeField] private float timerForMessage = 5f;
+
     [HideInInspector] public UnityEvent<float> timerEvent;
     [HideInInspector] public UnityEvent countdownEnd;
     [HideInInspector] public UnityEvent countdownStart;
     [HideInInspector] public event Action OnTimerChanged;
+
     public event Action OnMoving;
     public event Action OnStoppedMoving;
-    
+    public event Action OnTimerAlmostOver;
+
     public float TimerStartTime
     {
         get => timerStartTime;
@@ -89,6 +95,12 @@ public class Timer : MonoBehaviour
         while (TheTime > 0f)
         {
             TheTime -= Time.deltaTime * PlaybackSpeed;
+
+            if (TheTime > timerForMessage - 0.005 && TheTime < timerForMessage + 0.005)
+            {
+                OnTimerAlmostOver?.Invoke();
+            }
+
             yield return null;
         }
         StopCountdown();

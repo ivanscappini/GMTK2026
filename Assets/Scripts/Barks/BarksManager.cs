@@ -1,6 +1,8 @@
 using Hermes;
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
@@ -8,28 +10,50 @@ using UnityEngine.UIElements.Experimental;
 public class BarksManager : MonoBehaviour
 {
     [Header("Barks dialogues")]
-    //[SerializeField] private string[] barksGameOver;
-    [SerializeField] private string[] barksNewArea;
-    [SerializeField] private string[] barksCountdownAlmostOver;
-    [SerializeField] private string[] barksStandingStill;
-    [SerializeField] private string[] barksPausingGame;
+    [SerializeField] private DialogueClass[] barksCountdownAlmostOver;
+    [SerializeField] private DialogueClass[] barksStandingStill;
+    [SerializeField] private DialogueClass[] barksPausingGame;
 
+    [Header("Barks settings")]
     [SerializeField] private float delayBetweenCharacters = 0.1f;
     [SerializeField] private float delayBeforeCharactersVanish = 1.2f;
     [SerializeField] private float delayBeforeCanBarkAgain = 5f;
 
-    [SerializeField] private TMP_Text barkTextGameplay;
-    [SerializeField] private TMP_Text barkTextPause;
+    [Header("Barks UI in play")]
+    [SerializeField] private TMP_Text barkTextCharGameplay;
+    [SerializeField] private TMP_Text barkTextDialogueGameplay;
 
-    private bool barking = false;
+    [Header("Barks UI in pause")]
+    [SerializeField] private TMP_Text barkTextCharPause;
+    [SerializeField] private TMP_Text barkTextDialoguePause;
+
+    public static BarksManager Instance { get; private set; }
+
+    public bool Barking = false;
+
     private bool startTimer = false;
 
     private float timer = 0f;
 
     private void Start()
     {
-        // Here we should subscribe to the events for every occasion
-        FPMovement.Instance.OnStationary += () => PlayBarkGameplay(barksStandingStill);
+        Timer.Instance.OnTimerAlmostOver += () => PlayBarkGameplay(barksCountdownAlmostOver, true);
+        FPMovement.Instance.OnStationary += () => PlayBarkGameplay(barksStandingStill, false);
+        PauseController.Instance.OnPauseStarted += () => PlayBarkPause(barksPausingGame);
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        barkTextCharGameplay.text = string.Empty;
+        barkTextDialogueGameplay.text = string.Empty;
+        barkTextCharPause.text = string.Empty;
+        barkTextDialoguePause.text = string.Empty;
     }
 
     private void Update()
@@ -40,72 +64,82 @@ public class BarksManager : MonoBehaviour
 
             if (timer >= delayBeforeCanBarkAgain)
             {
-                barking = false;
+                Barking = false;
                 startTimer = false;
                 timer = 0f;
             }
         }
     }
 
-    private void PlayBarkPause(string[] barks)
+    private void PlayBarkPause(DialogueClass[] dialogues)
     {
-        if (barks == null || barks.Length == 0) return;
+        if (dialogues == null || dialogues.Length == 0) return;
 
-        //if (barking) return;
+        //StopAllCoroutines();
 
-        barking = true;
+        barkTextDialogueGameplay.text = string.Empty;
+        barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, 1f);
+        barkTextCharGameplay.text = string.Empty;
+        barkTextCharGameplay.color = new Color(barkTextCharGameplay.color.r, barkTextCharGameplay.color.g, barkTextCharGameplay.color.b, 1f);
 
-        StopCoroutine(PlayCharacter(new char[0])); // Stop any ongoing bark coroutine
+        barkTextCharPause.text = string.Empty;
+        barkTextCharPause.color = new Color(barkTextCharPause.color.r, barkTextCharPause.color.g, barkTextCharPause.color.b, 1f);
+        barkTextDialoguePause.text = string.Empty;
+        barkTextDialoguePause.color = new Color(barkTextDialoguePause.color.r, barkTextDialoguePause.color.g, barkTextDialoguePause.color.b, 1f);
 
-        barkTextGameplay.text = string.Empty;
-        barkTextGameplay.color = new Color(barkTextGameplay.color.r, barkTextGameplay.color.g, barkTextGameplay.color.b, 1f);
+        int randomIndex = UnityEngine.Random.Range(0, dialogues.Length);
 
-        barkTextPause.text = string.Empty;
-        barkTextPause.color = new Color(barkTextPause.color.r, barkTextPause.color.g, barkTextPause.color.b, 1f);
+        string dialogue = dialogues[randomIndex].dialogue;
 
-        string bark = barks[UnityEngine.Random.Range(0, barks.Length)];
+        char[] dialogueCharacter = new char[dialogue.Length];
 
-        char[] barkCharacter = new char[bark.Length];
-
-        for (int i = 0; i < bark.Length; i++)
+        for (int i = 0; i < dialogue.Length; i++)
         {
-            barkCharacter[i] = bark[i];
+            dialogueCharacter[i] = dialogue[i];
         }
 
-        StartCoroutine(PlayCharacter(barkCharacter));
+        barkTextCharPause.text = dialogues[randomIndex].character.ToString() + ":";
+
+        StartCoroutine(PlayCharacterPause(dialogueCharacter));
     }
 
-    private void PlayBarkGameplay(string[] barks)
+    private void PlayBarkGameplay(DialogueClass[] dialogues, bool timeDialogue)
     {
-        if (barks == null || barks.Length == 0) return;
+        if (dialogues == null || dialogues.Length == 0) return;
 
-        if (barking) return;
+        if (Barking && !timeDialogue) return;
 
-        barking = true;
+        Barking = true;
 
-        barkTextGameplay.text = string.Empty;
-        barkTextGameplay.color = new Color(barkTextGameplay.color.r, barkTextGameplay.color.g, barkTextGameplay.color.b, 1f);
+        barkTextCharGameplay.text = string.Empty;
+        barkTextCharGameplay.color = new Color(barkTextCharGameplay.color.r, barkTextCharGameplay.color.g, barkTextCharGameplay.color.b, 1f);
+        barkTextDialogueGameplay.text = string.Empty;
+        barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, 1f);
 
-        string bark = barks[UnityEngine.Random.Range(0, barks.Length)];
+        int randomIndex = UnityEngine.Random.Range(0, dialogues.Length);
 
-        char[] barkCharacter = new char[bark.Length];
+        string dialogue = dialogues[randomIndex].dialogue;
 
-        for (int i = 0; i < bark.Length; i++)
+        char[] dialogueCharacter = new char[dialogue.Length];
+
+        for (int i = 0; i < dialogue.Length; i++)
         {
-            barkCharacter[i] = bark[i];
+            dialogueCharacter[i] = dialogue[i];
         }
 
-        StartCoroutine(PlayCharacter(barkCharacter));
+        barkTextCharGameplay.text = dialogues[randomIndex].character.ToString() + ":";
+
+        StartCoroutine(PlayCharacterGameplay(dialogueCharacter));
     }
 
-    IEnumerator PlayCharacter(char[] characters)
+    IEnumerator PlayCharacterGameplay(char[] characters)
     {
         int index = 0;
 
         while (index < characters.Length)
         {
             // Display the character at the current index
-            barkTextGameplay.text += characters[index];
+            barkTextDialogueGameplay.text += characters[index];
             // Wait for the specified delay before displaying the next character
             yield return new WaitForSeconds(delayBetweenCharacters);
             index++;
@@ -113,13 +147,41 @@ public class BarksManager : MonoBehaviour
 
         yield return new WaitForSeconds(delayBeforeCharactersVanish);
 
-        while (barkTextGameplay.color.a >= 0f)
+        while (barkTextDialogueGameplay.color.a >= 0f)
         {
-            barkTextGameplay.color = new Color(barkTextGameplay.color.r, barkTextGameplay.color.g, barkTextGameplay.color.b, barkTextGameplay.color.a - Time.deltaTime / 2);
+            barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, barkTextDialogueGameplay.color.a - Time.deltaTime / 2);
+            barkTextCharGameplay.color = new Color(barkTextCharGameplay.color.r, barkTextCharGameplay.color.g, barkTextCharGameplay.color.b, barkTextCharGameplay.color.a - Time.deltaTime / 2);
             yield return null;
         }
 
         startTimer = true;
+
+        yield return null;
+    }
+
+    IEnumerator PlayCharacterPause(char[] characters)
+    {
+        int index = 0;
+
+        while (index < characters.Length)
+        {
+            // Display the character at the current index
+            barkTextDialoguePause.text += characters[index];
+            // Wait for the specified delay before displaying the next character
+            yield return new WaitForSecondsRealtime(delayBetweenCharacters);
+            index++;
+        }
+
+        yield return new WaitForSecondsRealtime(delayBeforeCharactersVanish);
+
+        while (barkTextDialoguePause.color.a >= 0f)
+        {
+            barkTextDialoguePause.color = new Color(barkTextDialoguePause.color.r, barkTextDialoguePause.color.g, barkTextDialoguePause.color.b, barkTextDialoguePause.color.a - Time.deltaTime / 2);
+            barkTextCharPause.color = new Color(barkTextCharPause.color.r, barkTextCharPause.color.g, barkTextCharPause.color.b, barkTextCharPause.color.a - Time.deltaTime / 2);
+            yield return null;
+        }
+
+        Barking = false;
 
         yield return null;
     }
