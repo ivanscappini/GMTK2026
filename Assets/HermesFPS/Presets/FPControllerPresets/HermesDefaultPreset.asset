@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPControllerPreset
   StandHeight: 1.7
   CrouchHeight: 1.5
-  ProneHeight: 0.5
+  SlideHeight: 0.5
   Acceleration: 25
   Deceleration: 20
   StrafeAcceleration: 20
@@ -31,6 +31,18 @@ MonoBehaviour:
   JumpHeight: 2
   CanDoubleJump: 1
   CoyoteTime: 0.2
+  BoostAmount: 4
+  Friction: 1.5
+  MinStartSpeed: 6
+  StopSpeedThreshold: 3
+  MaxSlideDuration: 1.6
+  MinSlideTime: 1
+  SlideExitBlendTime: 0.15
+  SlideCancelMomentum: 0.75
+  SlideCooldown: 0.25
+  SlidePerfectJumpStart: 0.65
+  SlidePerfectJumpEnd: 0.3
+  SlidePerfectJumpBoost: 1.4
   LandVelocityThreshold: 7
   LookSensitivity: {x: 0.08, y: 0.08}
   PitchLimit: 85
@@ -52,10 +64,10 @@ MonoBehaviour:
     Frequency: 8.5
     NoiseScale: 0.7
     MaxRotation: 1
-  GravityScale: 2
+  GravityScale: 1.4
   ObstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 193
   GroundSensor: {fileID: 11400000, guid: a8c06ee15d747684fb310b532dfaabc0, type: 2}
   FootstepWalkInterval: 0.55
   FootstepCrouchInterval: 0.4
@@ -68,3 +80,21 @@ MonoBehaviour:
   AnimationLengthClimb: 1.3
   AnimationLengthVault: 1.3
   AnimationLengthStep: 1.3
+  WallCheckDistance: 2
+  WallAwayVelocity: 6
+  WallUpVelocityMultiplier: 0.5
+  WallCameraPush: 3
+  WallMaxVerticalOffset: 1.2
+  WallCameraDistanceWeight: 0.25
+  WallJumpCooldown: 0.25
+  WallMinSpeed: 3
+  WallAwayWeight: 0.3
+  WallCamWeight: 0.7
+  WallRunSpeed: 10
+  WallRunLiftRate: 3
+  WallRunMaxDuration: 2
+  WallRunAllowedTag: RunnableWall
+  WallRunBlend: 10
+  WallRunCameraYawLimit: 45
+  WallRunCameraBlend: 5
+  WallRunReattachDelay: 0.25

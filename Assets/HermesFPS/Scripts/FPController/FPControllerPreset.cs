@@ -11,7 +11,7 @@ namespace Hermes
         [Header("Character Dimensions")]
         public float StandHeight = 1.75f;
         public float CrouchHeight = 1.5f;
-        public float ProneHeight = 0.5f;
+        public float SlideHeight = 0.5f;
 
 
         [Header("Movement Parameters")]
@@ -50,6 +50,42 @@ namespace Hermes
 
         public bool CanDoubleJump = true;
         public float CoyoteTime = 0.3f;
+
+        [Header("Slide Parameters")]
+        [Header("Tuning")]
+        public float BoostAmount = 4f;
+        public float Friction = 8f;
+        public float MinStartSpeed = 6f;
+        public float StopSpeedThreshold = 3f;
+        public float MaxSlideDuration = 1.6f;
+        public float MinSlideTime = 0.5f;
+
+        [Header("Behaviour")]
+        [Tooltip("Time (seconds) to blend movement out when slide is cancelled so animation can transition smoothly.")]
+        [Min(0f)]
+        public float SlideExitBlendTime = 0.5f;
+
+        [Tooltip("Fraction of forward momentum preserved when cancelling the slide (0..1). 1 = keep full speed, 0 = hard stop.")]
+        [Range(0f, 1f)]
+        public float SlideCancelMomentum = 0.5f;
+
+        [Tooltip("Cooldown (seconds) after finishing a slide before another slide can start")]
+        [Min(0f)]
+        public float SlideCooldown = 0.25f;
+
+        [Header("Slide Boost")]
+        [Tooltip("Perfect window opens when speed drops below this ratio of initial slide speed (0..1). e.g. 0.65 = below 65%")]
+        [Range(0f, 1f)]
+        public float SlidePerfectJumpStart = 0.65f;
+
+        [Tooltip("Perfect window closes when speed drops below this ratio (0..1). e.g. 0.3 = below 30%")]
+        [Range(0f, 1f)]
+        public float SlidePerfectJumpEnd = 0.3f;
+
+        [Tooltip("Speed multiplier applied to exit velocity when jumping in the perfect window")]
+        [Min(1f)]
+        public float SlidePerfectJumpBoost = 1.4f;
+
 
         [Tooltip("The Landed event is only triggered when vertical velocity is above minus this value.")]
         [Min(0.001f)]
@@ -97,6 +133,61 @@ namespace Hermes
         public float AnimationLengthClimb = 1.3f;
         public float AnimationLengthVault = 1.3f;
         public float AnimationLengthStep = 1.3f;
+
+        [Header("Wall Jump Parameters")]
+        [Tooltip("How far from a wall the player can register a wall jump")]
+        public float WallCheckDistance = 1.0f;
+
+        [Tooltip("Horizontal impulse applied away from the wall")]
+        public float WallAwayVelocity = 6f;
+
+        [Tooltip("Multiplier applied to base jump vertical velocity for wall jumps")]
+        public float WallUpVelocityMultiplier = 1f;
+
+        [Tooltip("Additional small push in camera forward direction when wall jumping")]
+        public float WallCameraPush = 2f;
+
+        [Tooltip("Max vertical difference (meters) between player chest and wall hit to consider a valid wall")]
+        public float WallMaxVerticalOffset = 1.2f;
+
+        [Tooltip("Weight applied to camera distance when choosing which hit to use")]
+        [Range(0f, 1f)] public float WallCameraDistanceWeight = 0.25f;
+
+        [Tooltip("Cooldown after a wall jump before another can be performed")]
+        public float WallJumpCooldown = 0.25f;
+
+        [Tooltip("Minimum horizontal speed after a wall jump to avoid feeling stuck")]
+        public float WallMinSpeed = 3f;
+
+        [Tooltip("Weight of away direction when mixing impulse direction (0..1)")]
+        [Range(0f, 1f)] public float WallAwayWeight = 0.85f;
+
+        [Tooltip("Weight of camera forward when mixing impulse direction (0..1)")]
+        [Range(0f, 1f)] public float WallCamWeight = 0.15f;
+
+        [Header("Wall Run Parameters")]
+        [Tooltip("Speed along the wall while wall running")]
+        public float WallRunSpeed = 10f;
+
+        [Tooltip("Vertical lift added per second while wall running")]
+        public float WallRunLiftRate = 3f;
+
+        [Tooltip("Maximum duration of a wall run in seconds")]
+        public float WallRunMaxDuration = 2.0f;
+
+        [Tooltip("If set, only colliders with this tag will allow wall running. Empty = any wall allowed.")]
+        public string WallRunAllowedTag = "";
+        
+        [Tooltip("Blend speed used when applying wall-run horizontal velocity (higher = snappier)")]
+        public float WallRunBlend = 10f;
+
+        [Tooltip("Maximum camera yaw offset (degrees) allowed while wall running")]
+        public float WallRunCameraYawLimit = 45f;
+        [Tooltip("Blend speed for camera alignment while wall running (higher = faster)")]
+        public float WallRunCameraBlend = 5f;
+
+        [Tooltip("Delay after kick-off before wall-run can reattach")]
+        public float WallRunReattachDelay = 0.25f;
 
     }
 }

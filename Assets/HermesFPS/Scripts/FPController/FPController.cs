@@ -20,6 +20,10 @@ namespace Hermes
 
         public bool LedgeClimbing => ActivityManager.IsActive<FPLedgeClimb>();
 
+        public bool Sliding => ActivityManager.IsActive<FPSlide>();
+
+        public bool WallRunning => ActivityManager.IsActive<FPWallRun>();
+
         #endregion
 
 
@@ -71,6 +75,10 @@ namespace Hermes
         public Vector2 MoveInput;
         public Vector2 LookInput;
         public bool SprintInput;
+        // added: store current crouch input state so activities can query hold/release reliably
+        public bool CrouchInput;
+        // added: store current jump input hold state
+        public bool JumpInput;
 
 
         [Header("Components")]
@@ -94,6 +102,11 @@ namespace Hermes
 
 
         public UnityAction TryJump;
+        // When true, the next TryJump should be consumed by a special jump (e.g. wall-jump)
+        public bool JumpConsumed { get; set; } = false;
+
+        // Prevents TryJump from being invoked more than once per frame
+        public int LastTryJumpFrame { get; set; } = -1;
 
         // Invoked when movement was enabled or disabled
         public UnityAction<bool> MovementToggled;
@@ -141,7 +154,13 @@ namespace Hermes
 
         void UpdateCharacterHeight()
         {
-            if (Crouching)
+            // Slide takes precedence over crouch so the hitbox becomes the slide height while sliding.
+            if (Sliding)
+            {
+                characterController.height = Preset.SlideHeight;
+                characterController.center = Vector3.up * Preset.SlideHeight * 0.5f;
+            }
+            else if (Crouching)
             {
                 characterController.height = Preset.CrouchHeight;
                 characterController.center = Vector3.up * Preset.CrouchHeight * 0.5f;
@@ -185,21 +204,12 @@ namespace Hermes
 
         void CameraUpdate()
         {
+            float speedRatio = Mathf.Clamp01(
+                (HorizontalSpeed - Preset.WalkSpeed) / (Preset.SprintSpeed - Preset.WalkSpeed));
+            float targetFOV = Mathf.Lerp(Preset.CameraNormalFOV, Preset.CameraSprintFOV, speedRatio);
 
-            float targetFOV = Preset.CameraNormalFOV;
-
-            if (Sprinting)
-            {
-                float speedRatio = HorizontalSpeed / Preset.SprintSpeed;
-
-                targetFOV = Mathf.Lerp(Preset.CameraNormalFOV, Preset.CameraSprintFOV, speedRatio);
-            }
-
-
-            fpCamera.Lens.FieldOfView = Mathf.Lerp(fpCamera.Lens.FieldOfView, targetFOV, Preset.CameraFOVSmoothing * Time.deltaTime);
-
-
-            //fpCamera.transform.localPosition = CurrentCameraPosition + CameraPositionOffset;
+            fpCamera.Lens.FieldOfView = Mathf.Lerp(
+                fpCamera.Lens.FieldOfView, targetFOV, Preset.CameraFOVSmoothing * Time.deltaTime);
         }
 
 

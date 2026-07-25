@@ -6,8 +6,6 @@ namespace Hermes
 {
     public class FPJump : FPActivity
     {
-        [SerializeField] bool hasDoubleJumped = false;
-
         [SerializeField] float coyoteTimer = 0f;
 
 
@@ -24,7 +22,7 @@ namespace Hermes
 
         public override void OnActivityStopped()
         {
-            hasDoubleJumped = false;
+            base.OnActivityStopped();
         }
 
 
@@ -72,13 +70,23 @@ namespace Hermes
 
         void OnTryJump()
         {
-            if (Active && Preset.CanDoubleJump && !hasDoubleJumped)
+            // If another activity (e.g. wall-jump) consumed this jump, clear the flag and skip.
+            if (Controller.JumpConsumed)
+            {
+                Controller.JumpConsumed = false;
+                return;
+            }
+
+            // Try primary jump (coyote)
+            if (coyoteTimer <= Preset.CoyoteTime && !HasObstaclesAbove())
             {
                 Jump();
-                hasDoubleJumped = true;
 
-                Controller.DoubleJumped?.Invoke();
+                Controller.Jumped?.Invoke();
+                return;
             }
+
+            // otherwise, don't handle double jump here; FPDoubleJump activity will handle it when enabled
         }
 
         void Jump()

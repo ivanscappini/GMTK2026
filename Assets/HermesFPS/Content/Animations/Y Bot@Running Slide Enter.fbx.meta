@@ -1,7 +1,7 @@
 fileFormatVersion: 2
-guid: fd657637e4c26534888b3d26abdceff8
+guid: 2ab64bd39fd2a704ebdf53db4f5bca25
 ModelImporter:
-  serializedVersion: 24200
+  serializedVersion: 24300
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -9,6 +9,7 @@ ModelImporter:
     materialName: 0
     materialSearch: 1
     materialLocation: 1
+    searchTexturesGlobally: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -31,11 +32,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Wall Run
+      name: Running Slide Enter
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 55
+      lastFrame: 28
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

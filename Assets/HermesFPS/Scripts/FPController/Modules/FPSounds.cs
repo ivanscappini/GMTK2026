@@ -6,12 +6,16 @@ namespace Hermes
     {
         [SerializeField] AudioSource AudioSource;
 
-
         [SerializeField] AudioClip[] FootstepSounds;
         [SerializeField] AudioClip[] LandSounds;
+        [SerializeField] AudioClip[] WallJumpSounds;
         [SerializeField] AudioClip[] JumpSounds;
         [SerializeField] AudioClip[] DoubleJumpSounds;
 
+        // Slide loop sound
+        [SerializeField] AudioSource SlideAudioSource;
+        [SerializeField] AudioClip SlideLoopClip;
+        [SerializeField, Range(0f, 1f)] float SlideVolume = 0.6f;
 
         [SerializeField] float footstepTimer = 0f;
 
@@ -21,6 +25,45 @@ namespace Hermes
             Controller.Jumped.AddListener(PlayJumpSound);
             Controller.DoubleJumped.AddListener(PlayDoubleJumpSound);
             Controller.Landed.AddListener(OnLanded);
+
+            // Ensure we have a dedicated AudioSource for slide looping.
+            if (SlideAudioSource == null)
+            {
+                // try to use a separate child AudioSource so PlayOneShot on the main source isn't affected
+                var go = new GameObject("SlideAudioSource");
+                go.transform.SetParent(Controller.transform, false);
+                SlideAudioSource = go.AddComponent<AudioSource>();
+
+                // basic 3D setup consistent with first-person sounds
+                SlideAudioSource.spatialBlend = 0.0f; // 2D by default; change to >0 for 3D
+                SlideAudioSource.playOnAwake = false;
+                SlideAudioSource.loop = true;
+            }
+
+            // Listen to activity start/stop to trigger slide loop
+            if (Controller.ActivityManager != null)
+            {
+                Controller.ActivityManager.ActivityStarted.AddListener((activity) =>
+                {
+                    if (activity.GetType() == typeof(FPSlide))
+                    {
+                        StartSlideLoop();
+                    }
+                    else if (activity.GetType() == typeof(FPWallJump))
+                    {
+                        // play a wall-jump one-shot
+                        PlaySound(WallJumpSounds, Preset.JumpSoundVolume);
+                    }
+                });
+
+                Controller.ActivityManager.ActivityStopped.AddListener((activity) =>
+                {
+                    if (activity.GetType() == typeof(FPSlide))
+                    {
+                        StopSlideLoop();
+                    }
+                });
+            }
         }
 
 
@@ -94,6 +137,8 @@ namespace Hermes
         {
             try
             {
+                if (clips == null || clips.Length == 0 || AudioSource == null) return;
+
                 int index = Random.Range(0, clips.Length);
 
                 AudioClip clip = clips[index];
@@ -103,7 +148,6 @@ namespace Hermes
             catch { }
         }
 
-
         void PlayJumpSound()
         {
             PlaySound(JumpSounds, Preset.JumpSoundVolume);
@@ -112,6 +156,40 @@ namespace Hermes
         void PlayDoubleJumpSound()
         {
             PlaySound(DoubleJumpSounds, Preset.JumpSoundVolume);
+        }
+
+
+        // Slide loop control
+
+        void StartSlideLoop()
+        {
+            if (SlideLoopClip == null || SlideAudioSource == null) return;
+
+            if (SlideAudioSource.isPlaying)
+            {
+                // already playing — ensure correct clip/volume
+                if (SlideAudioSource.clip != SlideLoopClip)
+                {
+                    SlideAudioSource.clip = SlideLoopClip;
+                }
+                SlideAudioSource.volume = SlideVolume;
+                return;
+            }
+
+            SlideAudioSource.clip = SlideLoopClip;
+            SlideAudioSource.loop = true;
+            SlideAudioSource.volume = SlideVolume;
+            SlideAudioSource.Play();
+        }
+
+        void StopSlideLoop()
+        {
+            if (SlideAudioSource == null) return;
+
+            if (SlideAudioSource.isPlaying)
+            {
+                SlideAudioSource.Stop();
+            }
         }
     }
 }

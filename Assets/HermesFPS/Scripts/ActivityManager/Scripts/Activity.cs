@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Hermes {
     public abstract class Activity : MonoBehaviour
     {
-        public bool Active => Manager.IsActive(this);
+        public bool Active => Manager != null && Manager.IsActive(this);
 
         public ActivityManager Manager { get; internal set; }
 
