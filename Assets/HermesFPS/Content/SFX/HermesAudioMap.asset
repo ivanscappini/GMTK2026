@@ -14,20 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.SurfaceAudioMap
   Surfaces:
   - SurfaceType: 1
-    Footsteps: []
+    Footsteps:
+    - {fileID: 8300000, guid: b7f47ecfac641b4f096d0d8cf6118c22, type: 3}
+    - {fileID: 8300000, guid: ade1294e4939b6a9f90b344d1d08266b, type: 3}
+    - {fileID: 8300000, guid: 90c3272c0e0e3440fb96b4dcf0c1d8f6, type: 3}
+    - {fileID: 8300000, guid: 387fc4c3a0453172681c581bd5edfe6b, type: 3}
     Land: []
     Slide: []
     WallRunStart: []
-    WallRunLoop: {fileID: 0}
+    WallRunLoop: []
   - SurfaceType: 2
-    Footsteps: []
+    Footsteps:
+    - {fileID: 8300000, guid: ce7d44dea4d7a4054bb085fc4393d870, type: 3}
+    - {fileID: 8300000, guid: e957dbcce61ee1fc2965410cd339e3ea, type: 3}
+    - {fileID: 8300000, guid: 1e218098f378521bf87f7e3d5713a198, type: 3}
+    - {fileID: 8300000, guid: da5ac4044eecdcddd970c713e5905b96, type: 3}
     Land: []
     Slide: []
     WallRunStart: []
-    WallRunLoop: {fileID: 0}
+    WallRunLoop: []
   - SurfaceType: 3
-    Footsteps: []
+    Footsteps:
+    - {fileID: 8300000, guid: 032b32e7d436aadce987aeb81bbdcc39, type: 3}
+    - {fileID: 8300000, guid: ac94d10ff8ce33e6f9341c6b5e715234, type: 3}
+    - {fileID: 8300000, guid: 2555c69546d9ac8a99ce9a4165b485f7, type: 3}
+    - {fileID: 8300000, guid: a2745a44763d878b5992ae3e58cc55e5, type: 3}
+    - {fileID: 8300000, guid: 27c47a03ae24a3e49ba682cfd10a9ec0, type: 3}
     Land: []
     Slide: []
     WallRunStart: []
-    WallRunLoop: {fileID: 0}
+    WallRunLoop: []
