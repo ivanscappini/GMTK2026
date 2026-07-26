@@ -126,4 +126,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimePickup
   changeType: 0
-  timeChange: 8
+  timeChange: 6
