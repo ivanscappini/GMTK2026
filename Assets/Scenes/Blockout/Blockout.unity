@@ -9824,6 +9824,10 @@ PrefabInstance:
       propertyPath: dialogueBoxController
       value: 
       objectReference: {fileID: 1445212517}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: safeZoneSetTimer
+      value: 120
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11198,6 +11202,10 @@ PrefabInstance:
       propertyPath: gameTimerText
       value: 
       objectReference: {fileID: 1160744766}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: safeZoneSetTimer
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 6976319454961637972, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_Layer
       value: 2
@@ -23299,6 +23307,10 @@ PrefabInstance:
       propertyPath: gameTimerText
       value: 
       objectReference: {fileID: 1160744766}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: safeZoneSetTimer
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: safeZonetimerOnScreen
       value: 
