@@ -111,13 +111,13 @@ public class BarkGameOver : MonoBehaviour
         // Only the Monster's line gets the shake effect.
         if (firstCharacter == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueFirst.rectTransform.position,
+            StartCoroutine(ShakeText(barkTextDialogueFirst.rectTransform.anchoredPosition,
                                      (dialogueFirst.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
                                      barkTextDialogueFirst));
         }
         else if (secondCharacter == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueSecond.rectTransform.position,
+            StartCoroutine(ShakeText(barkTextDialogueSecond.rectTransform.anchoredPosition,
                                      (dialogueFirst.Length * delayBetweenCharacters) + (dialogueSecond.Length * delayBetweenCharacters) + delayBeforeCharactersVanish * 2,
                                      barkTextDialogueSecond));
         }
@@ -164,7 +164,7 @@ public class BarkGameOver : MonoBehaviour
     /// Randomly jitters the text's position for "shakeDuration" seconds, then
     /// snaps it back to where it started.
     /// </summary>
-    IEnumerator ShakeText(Vector3 initialPosition, float shakeDuration, TMP_Text textComponent)
+    IEnumerator ShakeText(Vector3 initialAnchoredPosition, float shakeDuration, TMP_Text textComponent)
     {
         float timerDuration = 0f;
         float timerBetweenShakes = 0f;
@@ -173,9 +173,9 @@ public class BarkGameOver : MonoBehaviour
         {
             if (timerBetweenShakes >= delayBetweenShakes)
             {
-                textComponent.rectTransform.position = new Vector3(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
-                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1),
-                                                                   initialPosition.z);
+                textComponent.rectTransform.anchoredPosition = new Vector3(initialAnchoredPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
+                                                                   initialAnchoredPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1),
+                                                                   initialAnchoredPosition.z);
                 timerBetweenShakes = 0f;
             }
 
@@ -190,6 +190,6 @@ public class BarkGameOver : MonoBehaviour
             yield return null;
         }
 
-        textComponent.rectTransform.position = initialPosition;
+        textComponent.rectTransform.anchoredPosition = initialAnchoredPosition;
     }
 }
