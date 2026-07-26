@@ -51,17 +51,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alphaclip: 0.4
-    - _FogAlpha: 1
-    - _FogDistortScale: 3
-    - _FogPower: 0.4
-    - _FogScale: 3
+    - _Alphaclip: 0.3
+    - _FogAlpha: 0.3
+    - _FogDistortScale: 0.5
+    - _FogPower: 1
+    - _FogScale: 0.98
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _VertexOffset: 0.5
+    - _VertexOffset: 5.29
     m_Colors:
-    - _Color: {r: 0.76557493, g: 0.8679245, b: 0.81783855, a: 1}
+    - _Color: {r: 0.21106264, g: 0.2924528, b: 0.25447074, a: 1}
     - _FogDistortSpeed: {r: -0.1, g: -0.1, b: 0, a: 0}
-    - _FogSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _FogSpeed: {r: 1, g: 0.1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
