@@ -136,7 +136,7 @@ public class BarksManager : MonoBehaviour
 
         if (chosen.character == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialoguePause.rectTransform.position,
+            StartCoroutine(ShakeText(barkTextDialoguePause.rectTransform.anchoredPosition,
                                     (dialogueCharacter.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
                                      barkTextDialoguePause,
                                      true));
@@ -171,7 +171,7 @@ public class BarksManager : MonoBehaviour
 
         if (chosen.character == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueGameplay.rectTransform.position,
+            StartCoroutine(ShakeText(barkTextDialogueGameplay.rectTransform.anchoredPosition,
                                     (dialogueCharacter.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
                                      barkTextDialogueGameplay,
                                      false));
@@ -218,7 +218,7 @@ public class BarksManager : MonoBehaviour
         }
     }
 
-    IEnumerator ShakeText(Vector3 initialPosition, float shakeDuration, TMP_Text textComponent, bool isThisPauseBark)
+    IEnumerator ShakeText(Vector2 initialAnchoredPosition, float shakeDuration, TMP_Text textComponent, bool isThisPauseBark)
     {
         float timerDuration = 0f;
         float timerBetweenShakes = 0f;
@@ -227,9 +227,8 @@ public class BarksManager : MonoBehaviour
         {
             if (timerBetweenShakes >= delayBetweenShakes)
             {
-                textComponent.rectTransform.position = new Vector3(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
-                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1),
-                                                                   0);
+                textComponent.rectTransform.anchoredPosition = new Vector2(initialAnchoredPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
+                                                                           initialAnchoredPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1));
                 timerBetweenShakes = 0f;
             }
 
@@ -247,10 +246,10 @@ public class BarksManager : MonoBehaviour
             // IMPORTANT FIX: this yield was missing in the original. Without it, the
             // whole shake duration is consumed synchronously within a single frame -
             // the shake never actually renders, it just freezes for one tick and
-            // immediately snaps back to initialPosition.
+            // immediately snaps back to initial position.
             yield return null;
         }
 
-        textComponent.rectTransform.position = initialPosition;
+        textComponent.rectTransform.anchoredPosition = initialAnchoredPosition;
     }
 }
