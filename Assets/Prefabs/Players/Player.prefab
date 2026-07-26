@@ -3144,6 +3144,10 @@ PrefabInstance:
       propertyPath: 'interruptList.Array.data[0]'
       value: 
       objectReference: {fileID: 9205212792897393245}
+    - target: {fileID: 7043672249546462230, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: e02fb9a42fc7e214db9e01498906d9bc, type: 2}
     - target: {fileID: 8306580865397970330, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.023

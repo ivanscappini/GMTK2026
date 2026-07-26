@@ -710,6 +710,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 75d9ac78d3ab7cc4e957c3deeea29fb2, type: 3}
   m_PrefabInstance: {fileID: 1309841808}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &1397324181 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 7471460746824653647, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+  m_PrefabInstance: {fileID: 1760207406}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1636149986
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -931,6 +936,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: defc1df140c853647bee83ace77b51bd, type: 3}
   m_PrefabInstance: {fileID: 1681087881}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1686432258 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8075973938020474027, guid: c7c5d4ecf8e817348a950f0c11dda4bf, type: 3}
+  m_PrefabInstance: {fileID: 4620737453764673939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1760207406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -987,6 +997,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: AudioSource
+      value: 
+      objectReference: {fileID: 1397324181}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1455,7 +1469,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7229999444329227472, guid: c7c5d4ecf8e817348a950f0c11dda4bf, type: 3}
       insertIndex: 27
       addedObject: {fileID: 398837931}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8075973938020474027, guid: c7c5d4ecf8e817348a950f0c11dda4bf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4620737453764673942}
   m_SourcePrefab: {fileID: 100100000, guid: c7c5d4ecf8e817348a950f0c11dda4bf, type: 3}
 --- !u!4 &4620737453764673940 stripped
 Transform:
@@ -1467,6 +1484,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7229999444329227472, guid: c7c5d4ecf8e817348a950f0c11dda4bf, type: 3}
   m_PrefabInstance: {fileID: 4620737453764673939}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4620737453764673942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686432258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ecfa9a0beb185b49a35b99ef9259381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hermes.SurfaceType
+  Type: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
