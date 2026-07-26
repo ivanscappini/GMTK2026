@@ -20,6 +20,7 @@ public class BarkMainMenu : MonoBehaviour
     [SerializeField] private float delayBetweenShakes = 0.08f;
     [SerializeField] private float deltaX = 0.7f;
     [SerializeField] private float deltaY = 0.7f;
+    [SerializeField] private AudioSource audio;
 
     [Header("Barks fonts")]
     [SerializeField] private TMP_FontAsset barkFontMonster;
@@ -66,6 +67,7 @@ public class BarkMainMenu : MonoBehaviour
     {
         isBarking = true;
 
+
         if (dialogueIndex != 0)
         {
             while (barkTextDialogue.color.a > 0)
@@ -96,8 +98,10 @@ public class BarkMainMenu : MonoBehaviour
 
         if (dialogues[dialogueIndex].character.ToString() == "Monster")
         {
-            StartCoroutine(ShakeText(barkTextDialogue.rectTransform.position, dialogues[dialogueIndex].dialogue.Length * delayBetweenCharacters, barkTextDialogue));
+            StartCoroutine(ShakeText(barkTextDialogue.rectTransform.anchoredPosition, dialogues[dialogueIndex].dialogue.Length * delayBetweenCharacters, barkTextDialogue));
         }
+
+        audio.Play();
 
         while (index < dialogues[dialogueIndex].dialogue.Length)
         {
@@ -132,7 +136,7 @@ public class BarkMainMenu : MonoBehaviour
         {
             if (timerBetweenShakes >= delayBetweenShakes)
             {
-                textComponent.rectTransform.position = new Vector3(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
+                textComponent.rectTransform.anchoredPosition = new Vector3(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
                                                                    initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1),
                                                                    initialPosition.z);
                 timerBetweenShakes = 0f;
@@ -149,7 +153,7 @@ public class BarkMainMenu : MonoBehaviour
             yield return null;
         }
 
-        textComponent.rectTransform.position = initialPosition;
+        textComponent.rectTransform.anchoredPosition = initialPosition;
     }
 
     private void SetIsBarking()

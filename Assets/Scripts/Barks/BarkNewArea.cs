@@ -112,13 +112,13 @@ public class BarkNewArea : MonoBehaviour
 
         if (firstCharacter == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueFirst.rectTransform.position,
+            StartCoroutine(ShakeText(barkTextDialogueFirst.rectTransform.anchoredPosition,
                                      (dialogueFirst.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
                                      barkTextDialogueFirst));
         }
         else if (secondCharacter == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueSecond.rectTransform.position,
+            StartCoroutine(ShakeText(barkTextDialogueSecond.rectTransform.anchoredPosition,
                                      (dialogueFirst.Length * delayBetweenCharacters) + (dialogueSecond.Length * delayBetweenCharacters) + delayBeforeCharactersVanish * 2,
                                      barkTextDialogueSecond));
         }
@@ -169,8 +169,8 @@ public class BarkNewArea : MonoBehaviour
         {
             if (timerBetweenShakes >= delayBetweenShakes)
             {
-                textComponent.rectTransform.position = new Vector2(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
-                                                                   initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1));
+                textComponent.rectTransform.anchoredPosition = new Vector2(initialPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
+                                                                           initialPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1));
                 timerBetweenShakes = 0f;
             }
 
