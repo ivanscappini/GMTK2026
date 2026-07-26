@@ -9,6 +9,7 @@ public class DialogueBoxController : MonoBehaviour
     public void Button_GoOn()
     {
         pauseMenuPanel.SetActive(false);
+        PauseController.Instance.PlaySelectSound();
         PauseController.Instance.ResumeGame();
     }
 
