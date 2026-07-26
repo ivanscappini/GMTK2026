@@ -398,6 +398,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &261335320 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7886732071803728335, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+  m_PrefabInstance: {fileID: 1596126426}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e26600bc405dc4092e5e0ed19b6128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPSlide
+--- !u!114 &261335327 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1131451204189148652, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+  m_PrefabInstance: {fileID: 1596126426}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b703b4e967c083340a24663fa98eeafb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPDoubleJump
 --- !u!1001 &344547054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -477,13 +499,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 861026200113365532, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 361208786}
   m_SourcePrefab: {fileID: 100100000, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
 --- !u!4 &344547055 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
   m_PrefabInstance: {fileID: 344547054}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &361208784 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 861026200113365532, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+  m_PrefabInstance: {fileID: 344547054}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &361208786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361208784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea30d942421ac745a8a8433ad47f8f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActivityTrigger
+  dialogueBoxController: {fileID: 1265801136}
+  unlockTitle: Double Jump
+  unlockDescription: Agent Vector's been hitting the gym. He can now double jump.
+  activity: {fileID: 261335327}
 --- !u!114 &553006459 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4048631862370831030, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
@@ -495,6 +541,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
+--- !u!114 &628561967 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1099209572466331068, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+  m_PrefabInstance: {fileID: 6923266419420255853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &659730815
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,12 +664,26 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 861026200113365532, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1578087911}
+    - targetCorrespondingSourceObject: {fileID: 861026200113365532, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1578087912}
   m_SourcePrefab: {fileID: 100100000, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
 --- !u!4 &695658392 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
   m_PrefabInstance: {fileID: 695658391}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &741049103 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1022447900800902928, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+  m_PrefabInstance: {fileID: 6923266419420255853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &819640789 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7725550455073907413, guid: fc5a676d2c90b3d4f8a22e369c35950d, type: 3}
@@ -700,6 +771,17 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 9070343936430133588, guid: be3ed9816d019ff4a85901f7a3aae376, type: 3}
+--- !u!114 &1265801136 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8746528589203485208, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+  m_PrefabInstance: {fileID: 6923266419420255853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50ae6453a3558fc4bb5a41daa47bb4bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1311142826
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,6 +954,22 @@ MonoBehaviour:
   barkFontMonster: {fileID: 0}
   barkFontVector: {fileID: 0}
   barkFontHQ: {fileID: 0}
+--- !u!114 &1578087912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578087906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea30d942421ac745a8a8433ad47f8f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActivityTrigger
+  dialogueBoxController: {fileID: 1265801136}
+  unlockTitle: Slide
+  unlockDescription: Hold [C] to slide under obstacles.
+  activity: {fileID: 261335320}
 --- !u!1001 &1596126426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -923,6 +1021,14 @@ PrefabInstance:
     - target: {fileID: 1116590920191749899, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
       propertyPath: m_RenderPostProcessing
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1239077500620420593, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'activitiesEnabledInternal.Array.data[6]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1239077500620420593, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'activitiesEnabledInternal.Array.data[9]'
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5097770772480401886, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
       propertyPath: m_Name
@@ -1274,9 +1380,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1022447900800902928, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_margin.w
+      value: -68.885284
+      objectReference: {fileID: 0}
+    - target: {fileID: 1022447900800902928, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_margin.x
+      value: -599.5267
+      objectReference: {fileID: 0}
+    - target: {fileID: 1022447900800902928, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_margin.y
+      value: -137.10158
+      objectReference: {fileID: 0}
+    - target: {fileID: 1022447900800902928, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_margin.z
+      value: -598.4312
+      objectReference: {fileID: 0}
+    - target: {fileID: 1022447900800902928, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 1022447900800902928, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099209572466331068, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_margin.z
+      value: -992.1721
+      objectReference: {fileID: 0}
+    - target: {fileID: 3015530144025551661, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_Name
+      value: Title
+      objectReference: {fileID: 0}
     - target: {fileID: 3400313272574008686, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: m_Name
       value: PlayerHUD
+      objectReference: {fileID: 0}
+    - target: {fileID: 3938967924637034456, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_Name
+      value: Description
       objectReference: {fileID: 0}
     - target: {fileID: 5899570050580750645, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: CountdownTimer
@@ -1370,6 +1512,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8746528589203485208, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: titleText
+      value: 
+      objectReference: {fileID: 628561967}
+    - target: {fileID: 8746528589203485208, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: descriptionText
+      value: 
+      objectReference: {fileID: 741049103}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

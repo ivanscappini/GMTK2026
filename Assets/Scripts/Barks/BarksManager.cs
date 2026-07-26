@@ -30,6 +30,10 @@ public class BarksManager : MonoBehaviour
     [Header("Barks UI in pause")]
     [SerializeField] private TMP_Text barkTextDialoguePause;
     private Coroutine barkPauseCoroutine;
+    // When a gameplay bark is interrupted (e.g. by tutorial/dialog), this
+    // coroutine fades the partially-typed gameplay text using unscaled time
+    // so it still animates while the game is paused.
+    private Coroutine gameplayInterruptCoroutine;
 
     // Tracks the currently-running gameplay typing/fade coroutine so a new bark can
     // actually cancel the previous one. StopCoroutine needs a reference to the exact
@@ -215,6 +219,54 @@ public class BarksManager : MonoBehaviour
         {
             barkTextDialoguePause.color = new Color(barkTextDialoguePause.color.r, barkTextDialoguePause.color.g, barkTextDialoguePause.color.b, barkTextDialoguePause.color.a - Time.deltaTime / 2);
             yield return null;
+        }
+    }
+
+    /// <summary>
+    /// Fade out a partially-typed gameplay bark while the game is paused.
+    /// Uses unscaled time so it progresses with Time.timeScale == 0.
+    /// </summary>
+    IEnumerator InterruptGameplayAndFade(TMP_Text textComponent, float visibleDuration, float fadeDuration)
+    {
+        // Keep the current text visible for a short unscaled duration
+        float t = 0f;
+        while (t < visibleDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // Then fade its alpha out over fadeDuration using unscaled time
+        float startAlpha = textComponent.color.a;
+        float elapsed = 0f;
+        while (elapsed < fadeDuration && textComponent.color.a > 0f)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float a = Mathf.Lerp(startAlpha, 0f, Mathf.Clamp01(elapsed / fadeDuration));
+            textComponent.color = new Color(textComponent.color.r, textComponent.color.g, textComponent.color.b, a);
+            yield return null;
+        }
+
+        textComponent.color = new Color(textComponent.color.r, textComponent.color.g, textComponent.color.b, 0f);
+        gameplayInterruptCoroutine = null;
+    }
+
+    /// <summary>
+    /// Public helper to immediately interrupt any active gameplay bark and
+    /// start the unscaled fade. Safe to call from other systems (tutorial)
+    /// to ensure a partial line fades out when the game is paused.
+    /// </summary>
+    public void FadeActiveGameplayBark(float visibleDuration = 0.25f, float fadeDuration = 0.6f)
+    {
+        if (barkGameplayCoroutine != null)
+        {
+            StopCoroutine(barkGameplayCoroutine);
+            barkGameplayCoroutine = null;
+
+            if (gameplayInterruptCoroutine != null)
+                StopCoroutine(gameplayInterruptCoroutine);
+
+            gameplayInterruptCoroutine = StartCoroutine(InterruptGameplayAndFade(barkTextDialogueGameplay, visibleDuration, fadeDuration));
         }
     }
 

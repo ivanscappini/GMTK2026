@@ -19,7 +19,8 @@ public class DialogueControllerEditor: Editor
             
             if (GUILayout.Button("Show Dialogue Box", GUILayout.Height(30)))
             {
-                dbc.ShowDialogueBox();
+                // provide sample title/description for the debug call
+                dbc.ShowDialogueBox("DEBUG: Ability Unlocked", "This is a debug description shown from the editor.");
             }
 
             EditorGUILayout.EndHorizontal();
