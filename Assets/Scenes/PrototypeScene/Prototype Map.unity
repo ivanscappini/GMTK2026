@@ -695,6 +695,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!82 &776938036 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 7471460746824653647, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+  m_PrefabInstance: {fileID: 1596126426}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &805666401 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3474666647992293927, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
@@ -1063,10 +1068,106 @@ PrefabInstance:
       propertyPath: 'activitiesEnabledInternal.Array.data[9]'
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1284903837025354658, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.022998998
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284903837025354658, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.539
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284903837025354658, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.19200018
+      objectReference: {fileID: 0}
     - target: {fileID: 5097770772480401886, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: SlideLoopClip
+      value: 
+      objectReference: {fileID: 8300000, guid: bac6ffc48cb38fd15b776bad1446a92d, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: SlideAudioSource
+      value: 
+      objectReference: {fileID: 776938036}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: WallRunAudioSource
+      value: 
+      objectReference: {fileID: 776938036}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: JumpSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: LandSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'JumpSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fe6f44a351354706f81e2cd9cd02550e, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'LandSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 77843a8d8e4952fb28c52da028b4c0e1, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: FootstepSounds.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: DoubleJumpSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: WallRunLoopClips.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b7f47ecfac641b4f096d0d8cf6118c22, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ade1294e4939b6a9f90b344d1d08266b, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 90c3272c0e0e3440fb96b4dcf0c1d8f6, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 387fc4c3a0453172681c581bd5edfe6b, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: WallRunStartSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'DoubleJumpSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: e0f94463a7819a211adf6aac310aae82, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b7f47ecfac641b4f096d0d8cf6118c22, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ade1294e4939b6a9f90b344d1d08266b, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 90c3272c0e0e3440fb96b4dcf0c1d8f6, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 387fc4c3a0453172681c581bd5edfe6b, type: 3}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: 'WallRunStartSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 3dc0f14a178d9d208a13926489ea44d4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

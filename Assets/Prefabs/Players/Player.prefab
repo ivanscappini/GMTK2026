@@ -2910,15 +2910,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 489.52
+      value: 4.53576
       objectReference: {fileID: 0}
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.17
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.82
+      value: -75.49191
       objectReference: {fileID: 0}
     - target: {fileID: 49506015447349421, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2950,6 +2950,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 468085735905644749, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: AlwaysRun
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 653372585467764818, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: m_RenderPostProcessing
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1412884544647274130, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
@@ -3034,7 +3038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1683718496306133672, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: 'activitiesEnabledInternal.Array.data[6]'
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1683718496306133672, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: 'activitiesEnabledInternal.Array.data[7]'
@@ -3046,19 +3050,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1683718496306133672, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: 'activitiesEnabledInternal.Array.data[9]'
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.4206562
+      value: 0.022998998
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.97206
+      value: 1.539
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -494.50754
+      value: 0.19200018
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3132,6 +3136,90 @@ PrefabInstance:
       propertyPath: SurfaceAudio
       value: 
       objectReference: {fileID: 11400000, guid: 14a42ddf3c391ed44ab7d4c1d311501a, type: 2}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: SlideLoopClip
+      value: 
+      objectReference: {fileID: 8300000, guid: bac6ffc48cb38fd15b776bad1446a92d, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: SlideAudioSource
+      value: 
+      objectReference: {fileID: 7471460746824653647}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: WallRunAudioSource
+      value: 
+      objectReference: {fileID: 7471460746824653647}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: JumpSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: LandSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'JumpSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fe6f44a351354706f81e2cd9cd02550e, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'LandSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 77843a8d8e4952fb28c52da028b4c0e1, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: FootstepSounds.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: DoubleJumpSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: WallRunLoopClips.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b7f47ecfac641b4f096d0d8cf6118c22, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ade1294e4939b6a9f90b344d1d08266b, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 90c3272c0e0e3440fb96b4dcf0c1d8f6, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'FootstepSounds.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 387fc4c3a0453172681c581bd5edfe6b, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: WallRunStartSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'DoubleJumpSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: e0f94463a7819a211adf6aac310aae82, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b7f47ecfac641b4f096d0d8cf6118c22, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ade1294e4939b6a9f90b344d1d08266b, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 90c3272c0e0e3440fb96b4dcf0c1d8f6, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'WallRunLoopClips.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 387fc4c3a0453172681c581bd5edfe6b, type: 3}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: 'WallRunStartSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 3dc0f14a178d9d208a13926489ea44d4, type: 3}
     - target: {fileID: 6306589897995858299, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: blockedByList.Array.size
       value: 2
