@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Mainmenufade : MonoBehaviour
 {
+    public static Mainmenufade Instance { get; private set; }
+
     [SerializeField] GameObject verticalContainer;
 
     [SerializeField] GameObject imageContainer;
@@ -15,13 +17,17 @@ public class Mainmenufade : MonoBehaviour
     [SerializeField] Color colorToFade = Color.black;
     [SerializeField] float WaitTimeBeforeLerpColor = 10f;
     [SerializeField] float fadeMultiplier = 0.2f;
+    [SerializeField] float WaitTimeBeforeSendEvent = 15;
 
     public event Action onFinished;
 
     private void Awake()
     {
+        Instance = this;
+
         StartCoroutine(MakeItBig());
         Invoke("LerpColor", WaitTimeBeforeLerpColor);
+        Invoke("SendEvent", WaitTimeBeforeSendEvent);
     }
 
     IEnumerator MakeItBig()
@@ -51,6 +57,10 @@ public class Mainmenufade : MonoBehaviour
             image.color = Color.Lerp(image.color, colorToFade, timer);
             yield return null;
         }
+    }
 
+    private void SendEvent()
+    {
+        onFinished?.Invoke();
     }
 }
