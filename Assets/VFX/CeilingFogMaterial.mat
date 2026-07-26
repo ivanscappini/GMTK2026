@@ -53,14 +53,14 @@ Material:
     m_Floats:
     - _Alphaclip: 0.3
     - _FogAlpha: 0.3
-    - _FogDistortScale: 5.97
+    - _FogDistortScale: 1.66
     - _FogPower: 1
-    - _FogScale: 4.18
+    - _FogScale: 1.26
     - _QueueControl: 0
     - _QueueOffset: 0
     - _VertexOffset: 5.29
     m_Colors:
-    - _Color: {r: 0.21106264, g: 0.2924528, b: 0.25447074, a: 1}
+    - _Color: {r: 0.010457456, g: 0.44339618, b: 0.34901962, a: 1}
     - _FogDistortSpeed: {r: -0.1, g: -0.1, b: 0, a: 0}
     - _FogSpeed: {r: 1, g: 0.1, b: 0, a: 0}
   m_BuildTextureStacks: []
