@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
     [SerializeField] GameObject Player;
+    GameObject[] Monster;
+
     CharacterController cc;
     private Vector3 respawnLocation;
     private Quaternion respawnRotation;
@@ -59,7 +62,7 @@ public class PlayerRespawn : MonoBehaviour
     /// Record a respawn point (checkpoint). The checkpoint is used by the
     /// Rewind feature; death still returns the player to the level start.
     /// </summary>
-    public void setRespawnLocation(GameObject target, float checkpointTime)
+    public void setRespawnLocation(GameObject target, float checkpointTime, GameObject[] monsters = null)
     {
         if (target == null) return;
 
@@ -67,6 +70,8 @@ public class PlayerRespawn : MonoBehaviour
         checkpointRotation = target.transform.rotation;
         savedTimeAtCheckpoint = checkpointTime;
         Debug.Log($"Checkpoint recorded at {checkpointLocation} with time {savedTimeAtCheckpoint}");
+        
+        Monster = monsters;
     }
 
     /// <summary>
@@ -82,6 +87,12 @@ public class PlayerRespawn : MonoBehaviour
         if (Timer.Instance != null)
         {
             Timer.Instance.SetTime(savedTimeAtCheckpoint);
+        }
+        
+        //activate monster at respawn
+        foreach (var Mon in Monster)
+        {
+            Mon.SetActive(true);
         }
     }
 }

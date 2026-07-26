@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class SafeZoneScripts : MonoBehaviour
 {
     [SerializeField] GameObject safeZoneSpawnPoint;
-
+    [SerializeField] GameObject[] monsters;
     //How long the safe zone is considered safe
     [SerializeField] float safeZoneSetTimer = 20.0f;
 
@@ -25,7 +26,12 @@ public class SafeZoneScripts : MonoBehaviour
     {
         if (other.gameObject.Equals(playerRef))
         {
-            playerRef.GetComponent<PlayerRespawn>().setRespawnLocation(safeZoneSpawnPoint, safeZoneSetTimer);
+            playerRef.GetComponent<PlayerRespawn>().setRespawnLocation(safeZoneSpawnPoint, safeZoneSetTimer, monsters);
+
+            foreach (var m in monsters)
+            {
+                m.SetActive(true);
+            }
         }
     }
 }
