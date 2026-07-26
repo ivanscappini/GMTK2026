@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8579939427475989167}
   - component: {fileID: 1806670969273884324}
   - component: {fileID: 4821836692444728900}
+  - component: {fileID: 1229348873768559969}
   - component: {fileID: 4552737206788049569}
   m_Layer: 0
   m_Name: SafeZone
@@ -114,6 +115,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1229348873768559969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861026200113365532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea30d942421ac745a8a8433ad47f8f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActivityTrigger
+  dialogueBoxController: {fileID: 0}
+  unlockTitle: Double Jump
+  unlockDescription: Agent Vector's been hitting the gym. He can now double jump.
+  activity: {fileID: 0}
 --- !u!114 &4552737206788049569
 MonoBehaviour:
   m_ObjectHideFlags: 0
