@@ -22,6 +22,8 @@ namespace Hermes
 
 		public Vector3 GroundNormal { get; private set; }
 
+		public Collider GroundCollider { get; private set; }
+
 
 		private void TryDrawGroundSensorGizmos()
 		{
@@ -93,10 +95,11 @@ namespace Hermes
 
 
 			// Scanning the ground
-			Preset.GroundSensor.ScanGround(transform.position, out float distance, out Vector3 normal);
+			Preset.GroundSensor.ScanGround(transform.position, out float distance, out Vector3 normal, out Collider groundCol);
 
 			GroundDistance = distance;
 			GroundNormal = normal;
+			GroundCollider = groundCol;
 
 			if (!wasGrounded && Grounded)
 			{

@@ -3050,15 +3050,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.022999952
+      value: 1.4206562
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5389996
+      value: 19.97206
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.19200064
+      value: -494.50754
       objectReference: {fileID: 0}
     - target: {fileID: 1710020245098499323, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3124,6 +3124,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: AudioSource
+      value: 
+      objectReference: {fileID: 7471460746824653647}
+    - target: {fileID: 5356280174475551656, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: SurfaceAudio
+      value: 
+      objectReference: {fileID: 11400000, guid: 14a42ddf3c391ed44ab7d4c1d311501a, type: 2}
     - target: {fileID: 6306589897995858299, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: blockedByList.Array.size
       value: 2
@@ -3144,6 +3152,10 @@ PrefabInstance:
       propertyPath: 'interruptList.Array.data[0]'
       value: 
       objectReference: {fileID: 9205212792897393245}
+    - target: {fileID: 7043672249546462230, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: e02fb9a42fc7e214db9e01498906d9bc, type: 2}
     - target: {fileID: 8306580865397970330, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.023
@@ -3395,6 +3407,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b130e745cab1d54e8f57ebdda0852d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.FPSprint
+--- !u!82 &7471460746824653647 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 7043672249546462230, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}
+  m_PrefabInstance: {fileID: 463821701209935705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7640273601763495458 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7811607066846691707, guid: 1d7fc2fc48c448e449a178e1dc532162, type: 3}

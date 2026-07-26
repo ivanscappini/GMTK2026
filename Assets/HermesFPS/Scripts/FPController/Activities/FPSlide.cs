@@ -29,6 +29,12 @@ namespace Hermes
         // cooldown tracking
         float lastSlideEndTime = -999f;
 
+        // when cancel is attempted but there's an obstacle overhead, push forward until clear
+        bool pushingOut = false;
+        float pushOutSpeed = 0f;
+        float pushOutTimer = 0f;
+        bool cancelRequestedDuringPush = false;
+
         public bool InPerfectWindow
         {
             get
@@ -90,6 +96,27 @@ namespace Hermes
 
             if (Active)
             {
+                // if we're pushing the player out from under a ceiling, override normal slide velocity
+                if (pushingOut)
+                {
+                    pushOutTimer += Time.deltaTime;
+
+                    // drive forward while pushing out
+                    pendingForwardVelocity = Controller.transform.forward * pushOutSpeed;
+
+                    // if cleared or timeout, attempt cancel
+                    if (!IsCeilingAbove() || pushOutTimer >= Preset.SlidePushOutMaxDuration)
+                    {
+                        pushingOut = false;
+                        pushOutTimer = 0f;
+
+                        // proceed with cancellation now that we're clear (or timed out)
+                        RequestCancel();
+                    }
+
+                    return;
+                }
+
                 slideTimer += Time.deltaTime;
 
                 slideSpeed *= Mathf.Exp(-Preset.Friction * Time.deltaTime);
@@ -163,6 +190,19 @@ namespace Hermes
         {
             if (cancelling) return;
 
+            // if there's an obstacle above the player's head, start pushing them forward until clear
+            if (IsCeilingAbove())
+            {
+                // begin push-out behavior
+                pushingOut = true;
+                pushOutTimer = 0f;
+                // push speed equals current forward speed or a configured minimum
+                pushOutSpeed = Mathf.Max(Controller.ForwardVelocity.magnitude, Preset.SlidePushOutMinSpeed);
+                // remember that a cancel was requested so we cancel after push
+                cancelRequestedDuringPush = true;
+                return;
+            }
+
             cancelling = true;
             cancelTimer = 0f;
             cancelDuration = Mathf.Max(0.01f, Preset.SlideExitBlendTime);
@@ -223,6 +263,17 @@ namespace Hermes
             }
 
             lastSlideEndTime = Time.time;
+            // if we were pushing out and a cancel was requested during that, ensure we cancel now
+            if (pushOutTimer > 0f && cancelRequestedDuringPush)
+            {
+                cancelRequestedDuringPush = false;
+                // start normal cancelling blend
+                cancelling = true;
+                cancelTimer = 0f;
+                cancelDuration = Mathf.Max(0.01f, Preset.SlideExitBlendTime);
+                cancelStartVelocity = Controller.ForwardVelocity;
+                cancelTargetVelocity = cancelStartVelocity * Preset.SlideCancelMomentum;
+            }
         }
 
         void OnLanded()
@@ -245,6 +296,17 @@ namespace Hermes
         public void CancelQueued()
         {
             queued = false;
+        }
+
+        bool IsCeilingAbove()
+        {
+            // cast from the camera position (approx head) upward to check for obstacles up to standing height
+            Vector3 origin = Controller.CameraTransform.position;
+            float standingHeight = Preset.StandHeight;
+            float currentHeadLocalY = Controller.CameraTransform.localPosition.y;
+            float rayDistance = Mathf.Max(0f, standingHeight - currentHeadLocalY);
+
+            return Physics.Raycast(origin, Vector3.up, rayDistance, Preset.ObstacleLayerMask);
         }
     }
 }
