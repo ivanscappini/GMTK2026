@@ -993,6 +993,18 @@ PrefabInstance:
       propertyPath: 'activitiesEnabledInternal.Array.data[2]'
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1284903837025354658, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.023000011
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284903837025354658, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.539
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284903837025354658, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.19200017
+      objectReference: {fileID: 0}
     - target: {fileID: 5097770772480401886, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1001,6 +1013,14 @@ PrefabInstance:
       propertyPath: AudioSource
       value: 
       objectReference: {fileID: 1397324181}
+    - target: {fileID: 5492851205412056305, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: SurfaceAudio
+      value: 
+      objectReference: {fileID: 11400000, guid: 14a42ddf3c391ed44ab7d4c1d311501a, type: 2}
+    - target: {fileID: 7471460746824653647, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -5716535641315336069, guid: e02fb9a42fc7e214db9e01498906d9bc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
