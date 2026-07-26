@@ -29,7 +29,7 @@ public class BarkMainMenu : MonoBehaviour
 
     [SerializeField] private float lastDialogueFontSize = 400f;
 
-    [SerializeField] private UnityEditor.SceneAsset gameplaySene;
+    //[SerializeField] private UnityEditor.SceneAsset gameplaySene;
 
     private bool isBarking = true;
     private int dialogueIndex = 0;
@@ -59,7 +59,7 @@ public class BarkMainMenu : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(gameplaySene.name);
+            SceneManager.LoadScene("Blockout");
         }
     }
 

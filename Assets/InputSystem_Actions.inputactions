@@ -1022,7 +1022,7 @@
                 {
                     "name": "",
                     "id": "c0fe4306-d282-43e1-818c-5c8070e967cb",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/escape",
                     "interactions": "Press",
                     "processors": "",
                     "groups": "",
