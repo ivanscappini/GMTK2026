@@ -225,4 +225,27 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
+    // Called by the Rewind button in the pause menu: respawn player to last
+    // checkpoint and restore the timer value recorded when the checkpoint was hit.
+    public void Button_RewindToLastCheckpoint()
+    {
+        // play select feedback
+        PlaySelectSound();
+
+        // attempt to find the player respawn component in scene
+        var player = FindObjectOfType<PlayerRespawn>();
+        if (player == null)
+        {
+            Debug.LogWarning("No PlayerRespawn found for rewind.");
+            return;
+        }
+
+        // PlayerRespawn stores a separate checkpoint. Use RespawnToCheckpoint
+        // so rewind moves the player to the last safe area and restores time.
+        player.RespawnToCheckpoint();
+
+        // unpause the game after rewinding
+        ResumeGame();
+    }
+
 }
