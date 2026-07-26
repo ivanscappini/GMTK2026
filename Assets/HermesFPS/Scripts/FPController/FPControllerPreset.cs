@@ -60,6 +60,13 @@ namespace Hermes
         public float MaxSlideDuration = 1.6f;
         public float MinSlideTime = 0.5f;
 
+        [Header("Slide Pushout")]
+        [Tooltip("Maximum time (seconds) to push the player forward when attempting to cancel a slide while blocked by a ceiling")]
+        public float SlidePushOutMaxDuration = 2.0f;
+
+        [Tooltip("Minimum forward speed (m/s) to use when pushing the player out from under a ceiling")]
+        public float SlidePushOutMinSpeed = 3.0f;
+
         [Header("Behaviour")]
         [Tooltip("Time (seconds) to blend movement out when slide is cancelled so animation can transition smoothly.")]
         [Min(0f)]
