@@ -23,7 +23,14 @@ public class HintDialogue : MonoBehaviour
 
     private void Start()
     {
-        DisappearingText.Instance.onVanishingDialoguesFinished += StartAppearing;
+        if (DisappearingText.Instance != null)
+        {
+            DisappearingText.Instance.onVanishingDialoguesFinished += StartAppearing;
+        }
+        else
+        {
+            FadeImage.Instance.OnFadeComplete += StartAppearing;
+        }
     }
 
     private void StartAppearing()
@@ -38,7 +45,7 @@ public class HintDialogue : MonoBehaviour
             hintText.color = new Color(hintText.color.r,
                                        hintText.color.g,
                                        hintText.color.b,
-                                       hintText.color.a + Time.deltaTime);
+                                       hintText.color.a + Time.unscaledDeltaTime);
             yield return null;
         }
 
