@@ -21,7 +21,7 @@ namespace Hermes
 
 
 
-		public void ScanGround(Vector3 characterPosition, out float GroundDistance, out Vector3 GroundNormal)
+		public void ScanGround(Vector3 characterPosition, out float GroundDistance, out Vector3 GroundNormal, out Collider GroundCollider)
 		{
 			Ray ray = new Ray(characterPosition + Vector3.up * SensorHeight, Vector3.down);
 
@@ -33,6 +33,7 @@ namespace Hermes
 			{
 
 				GroundDistance = Mathf.Max(thickHit.distance - SensorHeight, 0f);
+				GroundCollider = thickHit.collider;
 
 				if (Physics.Raycast(ray, out RaycastHit hit, SensorHeight * 2f, GroundLayerMask))
 				{
@@ -48,6 +49,7 @@ namespace Hermes
 			{
 				GroundNormal = Vector3.up;
 				GroundDistance = Mathf.Infinity;
+				GroundCollider = null;
 			}
 		}
 
