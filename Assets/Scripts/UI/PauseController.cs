@@ -16,6 +16,7 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
 
     [Header("UI Reference")]
     [SerializeField] private GameObject pauseMenuPanel;
+
     [SerializeField] private TMP_Text playText;
     [SerializeField] private Image playPauseButtonImage;
     [SerializeField] private Sprite playSprite;
@@ -52,6 +53,15 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
     private void Awake()
     {
         Instance = this;
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+                audioSource.playOnAwake = false;
+            }
+        }
     }
 
     private void Start()
@@ -215,6 +225,15 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
                 playerInput.currentActionMap.Enable();
             }
         }
+
+            // play pause/unpause sounds
+            if (audioSource != null)
+            {
+                if (IsPaused && pauseClip != null)
+                    audioSource.PlayOneShot(pauseClip);
+                else if (!IsPaused && unpauseClip != null)
+                    audioSource.PlayOneShot(unpauseClip);
+            }
     }
 
     public void ResumeGame()
