@@ -12,6 +12,8 @@ public class DisappearingText : MonoBehaviour
 
     [SerializeField] TMP_Text dialoguesText;
 
+    [SerializeField] AudioSource textAudio;
+
     [Header("Dialogues settings")]
     [SerializeField] private float delayBetweenCharacters = 0.1f;
     [SerializeField] private float delayBetweenDialogues = 1f;
@@ -45,6 +47,8 @@ public class DisappearingText : MonoBehaviour
 
         while (index < dialogues.Length)
         {
+            textAudio.Play();
+
             while (indexChar < dialogues[index].dialogue.Length)
             {
                 dialoguesText.text += dialogues[index].dialogue[indexChar];
