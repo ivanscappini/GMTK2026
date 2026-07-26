@@ -53,9 +53,9 @@ Material:
     m_Floats:
     - _Alphaclip: 0.3
     - _FogAlpha: 0.3
-    - _FogDistortScale: 0.5
+    - _FogDistortScale: 5.97
     - _FogPower: 1
-    - _FogScale: 0.98
+    - _FogScale: 4.18
     - _QueueControl: 0
     - _QueueOffset: 0
     - _VertexOffset: 5.29
