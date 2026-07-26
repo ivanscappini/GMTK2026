@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 5967784858551382334}
   - component: {fileID: 543745495796150926}
   - component: {fileID: 1805348490564768253}
+  - component: {fileID: 3177230158524759493}
   m_Layer: 5
   m_Name: Bark
   m_TagString: Untagged
@@ -330,6 +331,7 @@ MonoBehaviour:
   delayBetweenShakes: 0.08
   deltaX: 0.7
   deltaY: 0.7
+  audio: {fileID: 3177230158524759493}
   barkFontMonster: {fileID: 11400000, guid: 8965042acce532f40b40d9f802ef4503, type: 2}
   barkFontVector: {fileID: 11400000, guid: 2ba348c6b838c394fbeaf159eb70df06, type: 2}
   barkFontHQ: {fileID: 11400000, guid: be7cff1750d03214f80b07e9f75a1e5f, type: 2}
@@ -352,6 +354,103 @@ MonoBehaviour:
       m_Action: Interact
       m_Flags: 0
     m_Flags: 0
+--- !u!82 &3177230158524759493
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068351564309617096}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -3330978227708399953, guid: e02fb9a42fc7e214db9e01498906d9bc, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 07a76f4eae11e6c0ca7a1ec1ea4b494a, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1943932276041484127
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,8 +584,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.4379, y: 3.44525, z: -71.231}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 12.3, y: 12.3, z: 12.3}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6562568790520844957}
   m_Father: {fileID: 0}
@@ -625,3 +724,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeImage
   image: {fileID: 7144088966959645369}
   fadeMultiplier: 0.45
+  audioToFade: {fileID: 0}
