@@ -12438,34 +12438,14 @@ PrefabInstance:
       propertyPath: canvasToHide
       value: 
       objectReference: {fileID: 1471702335}
-    - target: {fileID: 1015066463933170321, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1015066463933170321, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1015066463933170321, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
-      propertyPath: m_Size.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3565914617056347246, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
       propertyPath: m_Name
       value: Cube Ending Game
       objectReference: {fileID: 0}
-    - target: {fileID: 8253799178483736295, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 12.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8253799178483736295, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 12.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8253799178483736295, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 12.3
-      objectReference: {fileID: 0}
+    - target: {fileID: 6632488744041727408, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
+      propertyPath: audioToFade
+      value: 
+      objectReference: {fileID: 1331277987}
     - target: {fileID: 8253799178483736295, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 899
@@ -12505,10 +12485,6 @@ PrefabInstance:
     - target: {fileID: 8253799178483736295, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.269
-      objectReference: {fileID: 0}
-    - target: {fileID: 8253799178483736295, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

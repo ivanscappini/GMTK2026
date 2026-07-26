@@ -9,6 +9,7 @@ public class FadeImage : MonoBehaviour
 
     [SerializeField] Image image;
     [SerializeField] float fadeMultiplier = 0.2f;
+    [SerializeField] AudioSource audioToFade;
 
     public event Action OnFadeComplete;
 
@@ -30,8 +31,11 @@ public class FadeImage : MonoBehaviour
                                     image.color.g,
                                     image.color.b,
                                     image.color.a + Time.unscaledDeltaTime * fadeMultiplier);
+
+            audioToFade.volume -= Time.unscaledDeltaTime * fadeMultiplier;
             yield return null;
         }
+        audioToFade.volume = 0;
         OnFadeComplete?.Invoke();
     }
 }
