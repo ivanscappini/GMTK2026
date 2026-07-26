@@ -18,6 +18,7 @@ public class TimePickup : MonoBehaviour
         //check if the colliding object is the player
         if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log(other.name);
             if (changeType == TimeChangeType.Add)
             {
                 Timer.Instance.AddTime(timeChange);
