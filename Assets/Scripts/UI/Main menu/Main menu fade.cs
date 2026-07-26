@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class Mainmenufade : MonoBehaviour
     public static Mainmenufade Instance { get; private set; }
 
     [SerializeField] GameObject verticalContainer;
+    private AudioSource audio;
 
     [SerializeField] GameObject imageContainer;
     [SerializeField] Image image;
@@ -25,6 +27,8 @@ public class Mainmenufade : MonoBehaviour
     {
         Instance = this;
 
+        audio = verticalContainer.GetComponent<AudioSource>();
+
         StartCoroutine(MakeItBig());
         Invoke("LerpColor", WaitTimeBeforeLerpColor);
         Invoke("SendEvent", WaitTimeBeforeSendEvent);
@@ -37,6 +41,12 @@ public class Mainmenufade : MonoBehaviour
             imageContainer.transform.localScale = new Vector3(imageContainer.transform.localScale.x + (Time.deltaTime * scaleVelocity),
                                                               imageContainer.transform.localScale.y + (Time.deltaTime * scaleVelocity),
                                                               imageContainer.transform.localScale.y + (Time.deltaTime * scaleVelocity));
+
+            if (audio.volume > 0)
+            {
+                audio.volume -= Time.deltaTime * 0.2f;
+            }
+
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
