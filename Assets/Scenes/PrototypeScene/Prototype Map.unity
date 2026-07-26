@@ -398,6 +398,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &238735588 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3486787579478768646, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+  m_PrefabInstance: {fileID: 6923266419420255853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &261335320 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7886732071803728335, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
@@ -684,6 +695,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &805666401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3474666647992293927, guid: ad45104b0c73b2d4fb0589c7737f8819, type: 3}
+  m_PrefabInstance: {fileID: 1596126426}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
 --- !u!1 &819640789 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7725550455073907413, guid: fc5a676d2c90b3d4f8a22e369c35950d, type: 3}
@@ -850,6 +872,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1317785598 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7623108616953917418, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+  m_PrefabInstance: {fileID: 6923266419420255853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &1448546636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -943,17 +976,17 @@ MonoBehaviour:
   - character: 0
     dialogue: "IT\u2019S THE ENTITY! I DON\u2019T KNOW HOW IT\u2019S DOING IT!"
     dialogueIndex: 2
-  barkTextDialogueFirst: {fileID: 0}
-  barkTextDialogueSecond: {fileID: 0}
+  barkTextDialogueFirst: {fileID: 238735588}
+  barkTextDialogueSecond: {fileID: 1317785598}
   delayBetweenCharacters: 0.1
   delayBetweenDialogues: 1
   delayBeforeCharactersVanish: 1.2
   delayBetweenShakes: 0.08
   deltaX: 10
   deltaY: 10
-  barkFontMonster: {fileID: 0}
-  barkFontVector: {fileID: 0}
-  barkFontHQ: {fileID: 0}
+  barkFontMonster: {fileID: 11400000, guid: 8965042acce532f40b40d9f802ef4503, type: 2}
+  barkFontVector: {fileID: 11400000, guid: 2ba348c6b838c394fbeaf159eb70df06, type: 2}
+  barkFontHQ: {fileID: 11400000, guid: be7cff1750d03214f80b07e9f75a1e5f, type: 2}
 --- !u!114 &1578087912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1412,6 +1445,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Title
       objectReference: {fileID: 0}
+    - target: {fileID: 3263100056556411522, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: playerInput
+      value: 
+      objectReference: {fileID: 805666401}
     - target: {fileID: 3400313272574008686, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: m_Name
       value: PlayerHUD
@@ -1503,6 +1540,10 @@ PrefabInstance:
     - target: {fileID: 8129371729807036096, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8593650448692663269, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_UIInputModule
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8640907955790558527, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: m_Camera
