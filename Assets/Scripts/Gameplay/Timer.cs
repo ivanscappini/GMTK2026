@@ -24,6 +24,8 @@ public class Timer : MonoBehaviour
     public event Action OnStoppedMoving;
     public event Action OnTimerAlmostOver;
 
+    public bool messageSent = false;
+
     public float TimerStartTime
     {
         get => timerStartTime;
@@ -96,9 +98,10 @@ public class Timer : MonoBehaviour
         {
             TheTime -= Time.deltaTime * PlaybackSpeed;
 
-            if (TheTime > timerForMessage - 0.005 && TheTime < timerForMessage + 0.005)
+            if (TheTime < timerForMessage && !messageSent)
             {
                 OnTimerAlmostOver?.Invoke();
+                messageSent = true;
             }
 
             yield return null;

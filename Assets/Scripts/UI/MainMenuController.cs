@@ -25,6 +25,8 @@ public class MainMenuController : MonoBehaviour, ISerializationCallbackReceiver
             return;
         }
 
+        
+
         Debug.Log($"Starting Game: {gameplaySceneName}");
         SceneManager.LoadScene(gameplaySceneName);
     }

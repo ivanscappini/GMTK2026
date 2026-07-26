@@ -8,6 +8,16 @@ public class PlayerHUDController : MonoBehaviour
 
     private void Update()
     {
-        timerText.text = CountdownTimer.TheTime.ToString("00.00");
+        if (CountdownTimer == null || timerText == null) return;
+
+        float t = Mathf.Max(0f, CountdownTimer.TheTime);
+
+        int totalSeconds = Mathf.FloorToInt(t);
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        int centis = Mathf.FloorToInt((t - totalSeconds) * 100f);
+
+        // Always show mm:ss:cc for clarity (00:00:00)
+        timerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centis);
     }
 }

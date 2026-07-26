@@ -8,9 +8,11 @@ namespace Hermes
         float runTimer = 0f;
         Vector3 wallNormal = Vector3.zero;
         Vector3 wallForward = Vector3.zero;
+        Collider wallCollider = null;
         // expose read-only access for animation/code
         public Vector3 WallNormal => wallNormal;
         public Vector3 WallForward => wallForward;
+        public Collider WallCollider => wallCollider;
         float lastKickTime = -999f;
         Quaternion cameraInitialLocalRot = Quaternion.identity;
         Quaternion cameraParentStartRot = Quaternion.identity;
@@ -133,6 +135,7 @@ namespace Hermes
             }
 
             wallNormal = hit.normal;
+            wallCollider = hit.collider;
             wallForward = Vector3.Cross(wallNormal, Vector3.up).normalized;
 
             // align forward with camera direction if needed
@@ -224,6 +227,7 @@ namespace Hermes
             }
 
             wallNormal = hitNow.normal;
+            wallCollider = hitNow.collider;
             wallForward = Vector3.Cross(wallNormal, Vector3.up).normalized;
             if (Vector3.Dot(wallForward, Controller.CameraTransform.forward) < 0f) wallForward = -wallForward;
 
@@ -261,6 +265,7 @@ namespace Hermes
             runTimer = 0f;
             wallNormal = Vector3.zero;
             wallForward = Vector3.zero;
+            wallCollider = null;
             pendingStart = false;
         }
 
