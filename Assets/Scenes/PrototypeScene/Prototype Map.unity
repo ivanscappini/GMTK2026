@@ -1863,15 +1863,11 @@ PrefabInstance:
       objectReference: {fileID: 1596126427}
     - target: {fileID: 8640907955790558527, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: m_RenderMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640907955790558527, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: m_PlaneDistance
       value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640907955790558527, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
-      propertyPath: m_UpdateRectTransformForStandalone
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8647581343867702837, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: deltaX
