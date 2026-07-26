@@ -58,7 +58,7 @@ public class DisappearingText : MonoBehaviour
                 dialoguesText.color = new Color(dialoguesText.color.r,
                                                 dialoguesText.color.g,
                                                 dialoguesText.color.b,
-                                                dialoguesText.color.a - Time.deltaTime);
+                                                dialoguesText.color.a - Time.unscaledDeltaTime);
                 yield return null;
             }
 

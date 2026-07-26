@@ -73,7 +73,7 @@ public class BarkMainMenu : MonoBehaviour
                 barkTextDialogue.color = new Color(barkTextDialogue.color.r,
                                                    barkTextDialogue.color.g,
                                                    barkTextDialogue.color.b,
-                                                   barkTextDialogue.color.a - Time.deltaTime);
+                                                   barkTextDialogue.color.a - Time.unscaledDeltaTime);
                 yield return null;
             }
 
@@ -103,7 +103,7 @@ public class BarkMainMenu : MonoBehaviour
         {
             barkTextDialogue.text += dialogues[dialogueIndex].dialogue[index];
             index++;
-            yield return new WaitForSeconds(delayBetweenCharacters);
+            yield return new WaitForSecondsRealtime(delayBetweenCharacters);
         }
 
         dialogueIndex++;
@@ -138,8 +138,8 @@ public class BarkMainMenu : MonoBehaviour
                 timerBetweenShakes = 0f;
             }
 
-            timerDuration += Time.deltaTime;
-            timerBetweenShakes += Time.deltaTime;
+            timerDuration += Time.unscaledDeltaTime;
+            timerBetweenShakes += Time.unscaledDeltaTime;
 
             // IMPORTANT FIX: this yield was missing in the original. Without it, the
             // while loop never hands control back to Unity between iterations, so the

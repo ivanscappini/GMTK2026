@@ -1278,6 +1278,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerHUD
       objectReference: {fileID: 0}
+    - target: {fileID: 3400313272574008686, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5899570050580750645, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: CountdownTimer
       value: 
@@ -1369,6 +1373,10 @@ PrefabInstance:
     - target: {fileID: 8703028385809031249, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8841352413056391095, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
