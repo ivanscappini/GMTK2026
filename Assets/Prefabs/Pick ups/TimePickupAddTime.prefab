@@ -127,3 +127,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TimePickup
   changeType: 0
   timeChange: 6
+  pickupSound: {fileID: 8300000, guid: 5a3d30486b9eafd49b2bbe6584fa188e, type: 3}
+  childAudioSource: {fileID: 0}
