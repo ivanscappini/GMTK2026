@@ -172,6 +172,8 @@ namespace Hermes
 
         void ComputeForwardVelocity()
         {
+            if (Controller.Sliding || Controller.WallRunning) return;
+
             Vector3 motion = transform.forward * MoveInput.y;
             motion.y = 0f;
             motion.Normalize();
@@ -206,6 +208,12 @@ namespace Hermes
 
         void ComputeRightVelocity()
         {
+            if (Controller.Sliding || Controller.WallRunning)
+            {
+                rightVelocity = Vector3.MoveTowards(rightVelocity, Vector3.zero, Preset.Deceleration * Time.deltaTime);
+                return;
+            }
+
             Vector3 motion = transform.right * MoveInput.x;
             motion.y = 0f;
             motion.Normalize();
@@ -246,7 +254,11 @@ namespace Hermes
             HorizontalVelocity = forwardVelocity + rightVelocity;
 
 
-            if (Grounded && VerticalSpeed <= 0.01f)
+            if (Controller.WallRunning)
+            {
+                // Wall run manages its own vertical speed
+            }
+            else if (Grounded && VerticalSpeed <= 0.01f)
             {
                 VerticalSpeed = -3f;
             }

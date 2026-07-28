@@ -32,17 +32,23 @@ MonoBehaviour:
   CanDoubleJump: 1
   CoyoteTime: 0.2
   BoostAmount: 4
-  Friction: 1.5
+  Friction: 1.2
   MinStartSpeed: 6
   StopSpeedThreshold: 3
   MaxSlideDuration: 1.6
-  MinSlideTime: 1
+  MinSlideTime: 0.25
+  SlidePushOutMaxDuration: 2
+  SlidePushOutMinSpeed: 3
   SlideExitBlendTime: 0.15
   SlideCancelMomentum: 0.75
   SlideCooldown: 0.25
-  SlidePerfectJumpStart: 0.65
-  SlidePerfectJumpEnd: 0.3
-  SlidePerfectJumpBoost: 1.4
+  SlideSteerRate: 45
+  SlideSlopeAcceleration: 15
+  SlideCameraDropOffset: -0.5
+  SlidePerfectJumpStart: 0.4
+  SlidePerfectJumpEnd: 0.15
+  SlidePerfectJumpBoost: 1.6
+  SlidePerfectJumpVerticalBoost: 3
   LandVelocityThreshold: 7
   LookSensitivity: {x: 0.08, y: 0.08}
   PitchLimit: 85
@@ -91,10 +97,12 @@ MonoBehaviour:
   WallAwayWeight: 0.3
   WallCamWeight: 0.7
   WallRunSpeed: 10
-  WallRunLiftRate: 3
   WallRunMaxDuration: 2
   WallRunAllowedTag: RunnableWall
   WallRunBlend: 10
-  WallRunCameraYawLimit: 45
-  WallRunCameraBlend: 5
   WallRunReattachDelay: 0.25
+  WallRunMinAlignment: 0.3
+  WallRunGravityScale: 0.1
+  WallRunCameraTilt: 12
+  WallRunCameraTiltSpeed: 80
+  WallRunMinNormalDot: 0.5

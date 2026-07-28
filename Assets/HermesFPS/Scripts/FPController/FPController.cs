@@ -154,22 +154,33 @@ namespace Hermes
 
         void UpdateCharacterHeight()
         {
-            // Slide takes precedence over crouch so the hitbox becomes the slide height while sliding.
+            float targetHeight;
             if (Sliding)
-            {
-                characterController.height = Preset.SlideHeight;
-                characterController.center = Vector3.up * Preset.SlideHeight * 0.5f;
-            }
+                targetHeight = Preset.SlideHeight;
             else if (Crouching)
+                targetHeight = Preset.CrouchHeight;
+            else
+                targetHeight = Preset.StandHeight;
+
+            if (targetHeight > characterController.height + 0.01f)
             {
-                characterController.height = Preset.CrouchHeight;
-                characterController.center = Vector3.up * Preset.CrouchHeight * 0.5f;
+                float growAmount = targetHeight - characterController.height;
+                Vector3 castOrigin = transform.position + Vector3.up * characterController.height;
+
+                if (Physics.Raycast(castOrigin, Vector3.up, out RaycastHit hit, growAmount + 0.05f, Preset.ObstacleLayerMask))
+                {
+                    float clearance = Mathf.Max(0f, hit.distance - 0.05f);
+                    targetHeight = Mathf.Max(characterController.height + clearance, Preset.SlideHeight);
+                }
+
+                characterController.height = Mathf.MoveTowards(characterController.height, targetHeight, 10f * Time.deltaTime);
             }
             else
             {
-                characterController.height = Preset.StandHeight;
-                characterController.center = Vector3.up * Preset.StandHeight * 0.5f;
+                characterController.height = targetHeight;
             }
+
+            characterController.center = Vector3.up * characterController.height * 0.5f;
         }
 
 		

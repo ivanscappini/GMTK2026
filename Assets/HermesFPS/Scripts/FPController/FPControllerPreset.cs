@@ -54,11 +54,11 @@ namespace Hermes
         [Header("Slide Parameters")]
         [Header("Tuning")]
         public float BoostAmount = 4f;
-        public float Friction = 8f;
+        public float Friction = 1.2f;
         public float MinStartSpeed = 6f;
         public float StopSpeedThreshold = 3f;
         public float MaxSlideDuration = 1.6f;
-        public float MinSlideTime = 0.5f;
+        public float MinSlideTime = 0.25f;
 
         [Header("Slide Pushout")]
         [Tooltip("Maximum time (seconds) to push the player forward when attempting to cancel a slide while blocked by a ceiling")]
@@ -74,24 +74,36 @@ namespace Hermes
 
         [Tooltip("Fraction of forward momentum preserved when cancelling the slide (0..1). 1 = keep full speed, 0 = hard stop.")]
         [Range(0f, 1f)]
-        public float SlideCancelMomentum = 0.5f;
+        public float SlideCancelMomentum = 0.75f;
 
         [Tooltip("Cooldown (seconds) after finishing a slide before another slide can start")]
         [Min(0f)]
         public float SlideCooldown = 0.25f;
 
-        [Header("Slide Boost")]
-        [Tooltip("Perfect window opens when speed drops below this ratio of initial slide speed (0..1). e.g. 0.65 = below 65%")]
-        [Range(0f, 1f)]
-        public float SlidePerfectJumpStart = 0.65f;
+        [Tooltip("Maximum degrees per second the slide direction adjusts toward the camera look direction (0 = locked direction)")]
+        public float SlideSteerRate = 45f;
 
-        [Tooltip("Perfect window closes when speed drops below this ratio (0..1). e.g. 0.3 = below 30%")]
+        [Tooltip("Acceleration (m/s²) applied by slope steepness. Positive = faster downhill, slower uphill.")]
+        public float SlideSlopeAcceleration = 15f;
+
+        [Tooltip("Camera Y offset during slide (negative = lower). Drives how far the camera drops from standing height.")]
+        public float SlideCameraDropOffset = -0.85f;
+
+        [Header("Slide Boost")]
+        [Tooltip("Perfect window opens when speed drops below this ratio of initial slide speed (0..1). e.g. 0.4 = below 40%")]
         [Range(0f, 1f)]
-        public float SlidePerfectJumpEnd = 0.3f;
+        public float SlidePerfectJumpStart = 0.4f;
+
+        [Tooltip("Perfect window closes when speed drops below this ratio (0..1). e.g. 0.15 = below 15%")]
+        [Range(0f, 1f)]
+        public float SlidePerfectJumpEnd = 0.15f;
 
         [Tooltip("Speed multiplier applied to exit velocity when jumping in the perfect window")]
         [Min(1f)]
-        public float SlidePerfectJumpBoost = 1.4f;
+        public float SlidePerfectJumpBoost = 1.6f;
+
+        [Tooltip("Extra vertical velocity added on a perfect jump for a bigger leap")]
+        public float SlidePerfectJumpVerticalBoost = 3f;
 
 
         [Tooltip("The Landed event is only triggered when vertical velocity is above minus this value.")]
@@ -176,25 +188,38 @@ namespace Hermes
         [Tooltip("Speed along the wall while wall running")]
         public float WallRunSpeed = 10f;
 
-        [Tooltip("Vertical lift added per second while wall running")]
-        public float WallRunLiftRate = 3f;
-
         [Tooltip("Maximum duration of a wall run in seconds")]
         public float WallRunMaxDuration = 2.0f;
 
         [Tooltip("If set, only colliders with this tag will allow wall running. Empty = any wall allowed.")]
         public string WallRunAllowedTag = "";
-        
+
         [Tooltip("Blend speed used when applying wall-run horizontal velocity (higher = snappier)")]
         public float WallRunBlend = 10f;
 
-        [Tooltip("Maximum camera yaw offset (degrees) allowed while wall running")]
-        public float WallRunCameraYawLimit = 45f;
-        [Tooltip("Blend speed for camera alignment while wall running (higher = faster)")]
-        public float WallRunCameraBlend = 5f;
-
         [Tooltip("Delay after kick-off before wall-run can reattach")]
         public float WallRunReattachDelay = 0.25f;
+
+        [Tooltip("Minimum alignment (0..1) between velocity and wall to start a run. Prevents sticking when hitting walls head-on.")]
+        [Range(0f, 1f)] public float WallRunMinAlignment = 0.3f;
+
+        [Tooltip("Gravity multiplier during wall run (0 = float, 1 = full gravity). Controls the gliding feel.")]
+        [Range(0f, 1f)] public float WallRunGravityScale = 0.1f;
+
+        [Tooltip("Upward speed (m/s) applied during wall run. Positive = lift, 0 = neutral float, negative = sink.")]
+        public float WallRunLiftSpeed = 2f;
+
+        [Tooltip("Upward velocity (m/s) applied when kicking off a wall. 0 = no vertical boost.")]
+        public float WallRunKickOffVerticalSpeed = 5f;
+
+        [Tooltip("Camera Z-axis tilt angle (degrees) while wall running")]
+        public float WallRunCameraTilt = 12f;
+
+        [Tooltip("Speed (degrees/sec) at which camera tilt blends in and out")]
+        public float WallRunCameraTiltSpeed = 80f;
+
+        [Tooltip("Minimum dot product between old and new wall normals. Below this the wall run ends (corner detection).")]
+        [Range(0f, 1f)] public float WallRunMinNormalDot = 0.5f;
 
     }
 }

@@ -19,6 +19,7 @@ namespace Hermes
 
         // runtime hook to the Input System action for crouch (if PlayerInput is present)
         InputAction crouchAction;
+        InputAction jumpAction;
 
 
         public void SetAlwaysRun(bool alwaysRun)
@@ -34,11 +35,9 @@ namespace Hermes
 
         void OnEnable()
         {
-            // If a PlayerInput component exists, subscribe to the Crouch action performed/canceled events.
             var pi = GetComponent<PlayerInput>();
             if (pi != null && pi.actions != null)
             {
-                // InputActionAsset doesn't have TryGetAction in all versions; use FindAction which is available.
                 var action = pi.actions.FindAction("Crouch", true);
                 if (action != null)
                 {
@@ -46,10 +45,8 @@ namespace Hermes
                     crouchAction.performed += OnCrouchPerformed;
                     crouchAction.canceled += OnCrouchCanceled;
                 }
-                else
-                {
-                    Debug.LogWarning("[Player] PlayerInput found but action 'Crouch' not present in asset.");
-                }
+
+                jumpAction = pi.actions.FindAction("Jump");
             }
         }
 
@@ -61,6 +58,7 @@ namespace Hermes
                 crouchAction.canceled -= OnCrouchCanceled;
                 crouchAction = null;
             }
+            jumpAction = null;
         }
 
 
@@ -125,8 +123,8 @@ namespace Hermes
                 }
 
                 // Airborne and no ground jump: fire TryJump on press for double jump.
-                // Skip if near a wall — FPWallRun handles the hold/tap detection there.
-                if (!FPController.Grounded && !IsNearRunnableWall())
+                // Skip if near a wall and wall run can actually attach — otherwise allow double jump.
+                if (!FPController.Grounded && !CanWallRunAttach())
                 {
                     FPController.LastTryJumpFrame = Time.frameCount;
                     FPController.TryJump?.Invoke();
@@ -145,7 +143,7 @@ namespace Hermes
                 {
                     shouldTryJump = true;
                 }
-                else if (!FPController.Grounded && IsNearRunnableWall() && !FPController.WallRunning)
+                else if (!FPController.Grounded && CanWallRunAttach() && !FPController.WallRunning)
                 {
                     // Wall run isn't active — either disabled or didn't attach.
                     // Use a generous tap threshold so wall jump can still trigger.
@@ -161,6 +159,16 @@ namespace Hermes
                     FPController.TryJump?.Invoke();
                 }
             }
+        }
+
+        bool CanWallRunAttach()
+        {
+            var wallRun = ActivityManager.GetActivity<FPWallRun>();
+            if (wallRun == null || !wallRun.enabled || !ActivityManager.IsEnabled<FPWallRun>())
+                return false;
+            if (wallRun.RequiresRepress)
+                return false;
+            return IsNearRunnableWall();
         }
 
         bool IsNearRunnableWall()
@@ -326,8 +334,8 @@ namespace Hermes
 
         private void Update()
         {
-            //Time.timeScale = 0.1f;
-
+            if (jumpAction != null)
+                FPController.JumpInput = jumpAction.IsPressed();
 
             if (AlwaysRun)
             {

@@ -2,25 +2,27 @@ using UnityEngine;
 
 namespace Hermes
 {
-    // Wall run activity: hold-to-run along a vertical wall. Starts when player is near an allowed wall and holds jump.
     public class FPWallRun : FPActivity
     {
         float runTimer = 0f;
         Vector3 wallNormal = Vector3.zero;
         Vector3 wallForward = Vector3.zero;
         Collider wallCollider = null;
-        // expose read-only access for animation/code
+
         public Vector3 WallNormal => wallNormal;
         public Vector3 WallForward => wallForward;
         public Collider WallCollider => wallCollider;
-        float lastKickTime = -999f;
-        Quaternion cameraInitialLocalRot = Quaternion.identity;
-        Quaternion cameraParentStartRot = Quaternion.identity;
-        float cameraAlignTimer = 0f;
-        float cameraAlignDuration = 0.15f;
+
+        float lastDetachTime = -999f;
+        bool requireRepress = false;
+        public bool RequiresRepress => requireRepress;
+
+        float currentTilt = 0f;
+        float wallSide = 0f;
+
         [Header("Input")]
-        [Tooltip("Time (seconds) the jump must be held before attaching to a wall-run. Short taps will perform a wall-jump instead.")]
-        [SerializeField] float HoldToWallRunThreshold = 0.35f;
+        [Tooltip("Time (seconds) the jump must be held before attaching to a wall-run. Short taps trigger a wall-jump instead.")]
+        [SerializeField] float HoldToWallRunThreshold = 0.1f;
 
         bool pendingStart = false;
         float pendingStartTimer = 0f;
@@ -28,9 +30,13 @@ namespace Hermes
         protected override void Awake()
         {
             base.Awake();
+            Controller.RequestCameraOffset += ApplyCameraTilt;
+        }
 
-            // listen for jump attempts / releases
-            Controller.TryJump += OnTryJump;
+        void OnDestroy()
+        {
+            if (Controller != null)
+                Controller.RequestCameraOffset -= ApplyCameraTilt;
         }
 
         private void Start()
@@ -44,9 +50,11 @@ namespace Hermes
             }
         }
 
-        bool IsWallValid(out RaycastHit hit, bool requireTag = true)
+        bool IsWallValid(out RaycastHit hit, Vector3 preferNormal = default)
         {
             hit = default;
+            float bestScore = float.MinValue;
+            bool found = false;
 
             Vector3 origin = Controller.transform.position + Vector3.up * 1f;
             float dist = Preset.WallCheckDistance;
@@ -66,68 +74,91 @@ namespace Hermes
             {
                 if (Physics.SphereCast(origin, sphereRadius, dir, out var h, dist - sphereRadius, ~0, QueryTriggerInteraction.Ignore))
                 {
-                    if (ValidateWallHit(h, origin, dir, requireTag))
+                    if (ValidateWallHit(h))
                     {
-                        hit = h;
-                        return true;
+                        float score = ScoreHit(h, preferNormal);
+                        if (score > bestScore)
+                        {
+                            bestScore = score;
+                            hit = h;
+                            found = true;
+                        }
                     }
                 }
 
                 var rayHits = Physics.RaycastAll(origin, dir, dist, ~0, QueryTriggerInteraction.Ignore);
                 foreach (var rh in rayHits)
                 {
-                    if (ValidateWallHit(rh, origin, dir, requireTag))
+                    if (ValidateWallHit(rh))
                     {
-                        hit = rh;
-                        return true;
+                        float score = ScoreHit(rh, preferNormal);
+                        if (score > bestScore)
+                        {
+                            bestScore = score;
+                            hit = rh;
+                            found = true;
+                        }
                     }
                 }
             }
 
-            return false;
+            return found;
         }
 
-        bool ValidateWallHit(RaycastHit h, Vector3 origin, Vector3 dir, bool requireTag = true)
+        float ScoreHit(RaycastHit h, Vector3 preferNormal)
         {
-            if (h.collider == null)
-                return false;
+            float score = -h.distance;
+            if (preferNormal.sqrMagnitude > 0.01f)
+                score += Vector3.Dot(h.normal, preferNormal) * 2f;
+            return score;
+        }
+
+        bool ValidateWallHit(RaycastHit h)
+        {
+            if (h.collider == null) return false;
             if (h.collider.transform.IsChildOf(Controller.transform) || h.collider.gameObject == Controller.gameObject)
                 return false;
-            if (h.distance < 0.01f)
-                return false;
+            if (h.distance < 0.01f) return false;
 
             float upDot = Mathf.Abs(Vector3.Dot(h.normal.normalized, Vector3.up));
-            if (upDot > 0.3f)
-                return false;
+            if (upDot > 0.3f) return false;
 
-            if (requireTag && !string.IsNullOrEmpty(Preset.WallRunAllowedTag) && !h.collider.gameObject.CompareTag(Preset.WallRunAllowedTag))
+            if (!string.IsNullOrEmpty(Preset.WallRunAllowedTag) && !h.collider.gameObject.CompareTag(Preset.WallRunAllowedTag))
                 return false;
 
             return true;
         }
 
-        void OnTryJump()
+        bool IsAlignedWithWall(Vector3 normal)
         {
-            // not used: wall-run is started/stopped by checking Controller.JumpInput in Update (hold behavior)
+            Vector3 wf = Vector3.Cross(normal, Vector3.up).normalized;
+
+            Vector3 horizVel = Controller.ForwardVelocity;
+            horizVel.y = 0f;
+
+            if (horizVel.sqrMagnitude < 0.1f)
+            {
+                Vector3 camFwd = Vector3.ProjectOnPlane(Controller.CameraTransform.forward, Vector3.up).normalized;
+                return Mathf.Abs(Vector3.Dot(camFwd, wf)) >= Preset.WallRunMinAlignment;
+            }
+
+            return Mathf.Abs(Vector3.Dot(horizVel.normalized, wf)) >= Preset.WallRunMinAlignment;
         }
 
         public override bool CanStartActivity()
         {
-            // can start in air only
             if (Controller.Grounded) return false;
-
+            if (Time.time - lastDetachTime < Preset.WallRunReattachDelay) return false;
             if (!IsWallValid(out var hit)) return false;
-
+            if (!IsAlignedWithWall(hit.normal)) return false;
             return true;
         }
 
         public override void OnActivityStarted()
         {
             base.OnActivityStarted();
-
             runTimer = 0f;
 
-            // determine wall direction
             if (!IsWallValid(out var hit))
             {
                 Manager.ForceStop(this);
@@ -137,32 +168,41 @@ namespace Hermes
             wallNormal = hit.normal;
             wallCollider = hit.collider;
             wallForward = Vector3.Cross(wallNormal, Vector3.up).normalized;
+            if (Vector3.Dot(wallForward, Controller.CameraTransform.forward) < 0f)
+                wallForward = -wallForward;
 
-            // align forward with camera direction if needed
-            if (Vector3.Dot(wallForward, Controller.CameraTransform.forward) < 0f) wallForward = -wallForward;
+            wallSide = Vector3.Dot(Controller.transform.right, -wallNormal) > 0f ? 1f : -1f;
 
-            // lock body's forward to wallForward while allowing limited camera yaw
-            Controller.ForwardVelocity = wallForward * Preset.WallRunSpeed;
+            Vector3 currentHoriz = Controller.ForwardVelocity;
+            currentHoriz.y = 0f;
+            Vector3 projected = currentHoriz - Vector3.Dot(currentHoriz, wallNormal) * wallNormal;
 
-            // store camera local rotation so we can smoothly clamp relative yaw
-            cameraInitialLocalRot = Controller.CameraTransform.localRotation;
-            // prepare smooth alignment: capture starting parent rotation and reset timer
-            cameraParentStartRot = Controller.CameraTransform.parent.rotation;
-            cameraAlignTimer = 0f;
+            float speed = Mathf.Max(projected.magnitude, Preset.WallRunSpeed);
+            Controller.ForwardVelocity = projected.normalized * speed;
+            Controller.VerticalSpeed = 0f;
         }
 
         private void Update()
         {
+            float targetTilt = Active ? Preset.WallRunCameraTilt * wallSide : 0f;
+            currentTilt = Mathf.MoveTowards(currentTilt, targetTilt, Preset.WallRunCameraTiltSpeed * Time.deltaTime);
+
             bool holding = Controller.JumpInput;
 
             if (!Active)
             {
-                // Cancel pending if landed or not holding
+                if (requireRepress)
+                {
+                    if (!holding)
+                        requireRepress = false;
+                    pendingStart = false;
+                    return;
+                }
+
                 if (Controller.Grounded || !holding)
                 {
                     if (pendingStart && !holding)
                     {
-                        // Released during pending → tap → fire wall-jump
                         pendingStart = false;
                         if (Time.frameCount != Controller.LastTryJumpFrame)
                         {
@@ -174,10 +214,9 @@ namespace Hermes
                     return;
                 }
 
-                // Airborne and holding jump: start pending near runnable walls only
                 if (!pendingStart)
                 {
-                    if (IsWallValid(out _))
+                    if (IsWallValid(out var hit) && IsAlignedWithWall(hit.normal))
                     {
                         pendingStart = true;
                         pendingStartTimer = 0f;
@@ -185,17 +224,14 @@ namespace Hermes
                     return;
                 }
 
-                // Pending active: only accumulate timer toward wall-run on runnable walls
-                if (IsWallValid(out _))
+                if (IsWallValid(out var h2) && IsAlignedWithWall(h2.normal))
                 {
                     pendingStartTimer += Time.deltaTime;
                     if (pendingStartTimer >= HoldToWallRunThreshold
-                        && Time.time - lastKickTime >= Preset.WallRunReattachDelay)
+                        && Time.time - lastDetachTime >= Preset.WallRunReattachDelay)
                     {
                         if (Manager.TryStart(this))
-                        {
                             pendingStart = false;
-                        }
                     }
                 }
 
@@ -207,109 +243,109 @@ namespace Hermes
 
             if (runTimer >= Preset.WallRunMaxDuration)
             {
-                Manager.ForceStop(this);
+                Detach();
                 return;
             }
 
             if (!holding)
             {
-                KickOff(default);
-                lastKickTime = Time.time;
+                KickOff();
                 return;
             }
 
-            RaycastHit hitNow;
-            if (!IsWallValid(out hitNow))
+            if (!IsWallValid(out var hitNow, wallNormal))
             {
-                KickOff(hitNow);
-                lastKickTime = Time.time;
+                KickOff();
                 return;
+            }
+
+            float normalDot = Vector3.Dot(wallNormal, hitNow.normal);
+            if (normalDot < Preset.WallRunMinNormalDot)
+            {
+                KickOff();
+                return;
+            }
+
+            Vector3 rayOrigin = Controller.transform.position + Vector3.up * 1f;
+            if (Physics.Raycast(rayOrigin, wallForward, out RaycastHit forwardHit, 0.8f, ~0, QueryTriggerInteraction.Ignore))
+            {
+                if (!forwardHit.collider.transform.IsChildOf(Controller.transform)
+                    && forwardHit.collider.gameObject != Controller.gameObject)
+                {
+                    float upDot = Mathf.Abs(Vector3.Dot(forwardHit.normal, Vector3.up));
+                    float normalSimilarity = Vector3.Dot(forwardHit.normal, wallNormal);
+                    if (upDot < 0.3f && normalSimilarity < 0.7f)
+                    {
+                        KickOff();
+                        return;
+                    }
+                }
             }
 
             wallNormal = hitNow.normal;
             wallCollider = hitNow.collider;
             wallForward = Vector3.Cross(wallNormal, Vector3.up).normalized;
-            if (Vector3.Dot(wallForward, Controller.CameraTransform.forward) < 0f) wallForward = -wallForward;
+            if (Vector3.Dot(wallForward, Controller.CameraTransform.forward) < 0f)
+                wallForward = -wallForward;
 
-            Vector3 targetHoriz = wallForward * Preset.WallRunSpeed;
-            Vector3 current = Controller.ForwardVelocity;
-            Vector3 blended = Vector3.Lerp(current, targetHoriz, Mathf.Clamp01(Preset.WallRunBlend * Time.deltaTime));
+            Vector3 currentHoriz = Controller.ForwardVelocity;
+            currentHoriz.y = 0f;
+            Vector3 projected = currentHoriz - Vector3.Dot(currentHoriz, wallNormal) * wallNormal;
 
-            Controller.ForwardVelocity = blended;
-            Controller.VerticalSpeed = Mathf.Lerp(Controller.VerticalSpeed, Preset.WallRunLiftRate, Mathf.Clamp01(Preset.WallRunBlend * Time.deltaTime));
+            Vector3 target = wallForward * Preset.WallRunSpeed;
+            Controller.ForwardVelocity = Vector3.Lerp(projected, target, Preset.WallRunBlend * Time.deltaTime);
+            Controller.VerticalSpeed += Physics.gravity.y * Preset.GravityScale * Preset.WallRunGravityScale * Time.deltaTime;
+            if (Preset.WallRunLiftSpeed != 0f)
+                Controller.VerticalSpeed = Mathf.MoveTowards(Controller.VerticalSpeed, Preset.WallRunLiftSpeed, Mathf.Abs(Preset.WallRunLiftSpeed) * 3f * Time.deltaTime);
+        }
 
-            float maxYaw = Preset.WallRunCameraYawLimit;
-            var camParent = Controller.CameraTransform.parent;
-            Vector3 flatForward = Vector3.ProjectOnPlane(camParent.forward, Vector3.up).normalized;
-            float angle = Vector3.SignedAngle(wallForward, flatForward, Vector3.up);
+        void ApplyCameraTilt()
+        {
+            if (Mathf.Abs(currentTilt) > 0.01f)
+                Controller.CameraRotationOffset *= Quaternion.Euler(0f, 0f, currentTilt);
+        }
 
-            float clamped = Mathf.Clamp(angle, -maxYaw, maxYaw);
-            Quaternion targetParentRot = Quaternion.LookRotation(Quaternion.Euler(0f, clamped, 0f) * wallForward, Vector3.up);
+        void Detach()
+        {
+            requireRepress = true;
+            lastDetachTime = Time.time;
+            Manager.ForceStop(this);
+        }
 
-            if (cameraAlignTimer < cameraAlignDuration)
-            {
-                cameraAlignTimer += Time.deltaTime;
-                float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(cameraAlignTimer / cameraAlignDuration));
-                camParent.rotation = Quaternion.Slerp(cameraParentStartRot, targetParentRot, t);
-            }
-            else
-            {
-                camParent.rotation = Quaternion.Slerp(camParent.rotation, targetParentRot, Preset.WallRunCameraBlend * Time.deltaTime);
-            }
+        void KickOff()
+        {
+            Controller.VerticalSpeed = Preset.WallRunKickOffVerticalSpeed;
+
+            Vector3 camFwd = Vector3.ProjectOnPlane(Controller.CameraTransform.forward, Vector3.up).normalized;
+            Vector3 away = Vector3.ProjectOnPlane(wallNormal, Vector3.up).normalized;
+
+            Vector3 kickDir = (away * Preset.WallAwayWeight + camFwd * Preset.WallCamWeight).normalized;
+
+            Vector3 currentHoriz = Vector3.ProjectOnPlane(Controller.ForwardVelocity, Vector3.up);
+            Vector3 newHoriz = currentHoriz + kickDir * Preset.WallAwayVelocity + camFwd * Preset.WallCameraPush;
+
+            float maxHoriz = Preset.SprintSpeed * 1.5f;
+            if (newHoriz.magnitude > maxHoriz)
+                newHoriz = newHoriz.normalized * maxHoriz;
+            if (newHoriz.magnitude < Preset.WallMinSpeed)
+                newHoriz = newHoriz.normalized * Preset.WallMinSpeed;
+
+            Controller.ForwardVelocity = newHoriz;
+
+            requireRepress = true;
+            lastDetachTime = Time.time;
+            Manager.ForceStop(this);
         }
 
         public override void OnActivityStopped()
         {
             base.OnActivityStopped();
-
+            requireRepress = true;
             runTimer = 0f;
             wallNormal = Vector3.zero;
             wallForward = Vector3.zero;
             wallCollider = null;
             pendingStart = false;
-        }
-
-        void KickOff(RaycastHit hit)
-        {
-            // compute vertical jump velocity from preset jump height and gravity (reduced to avoid excessive loft)
-            float baseJumpV = Mathf.Sqrt(Mathf.Max(0f, Preset.JumpHeight) * -2f * Physics.gravity.y * Preset.GravityScale);
-            Controller.VerticalSpeed = baseJumpV * (Preset.WallUpVelocityMultiplier * 0.75f);
-
-            // compute horizontal kick direction: favor away-from-wall more strongly, with camera as secondary
-            Vector3 away = Vector3.zero;
-            if (hit.collider != null)
-            {
-                away = Vector3.ProjectOnPlane(-hit.normal, Vector3.up).normalized;
-            }
-
-            Vector3 camFwd = Controller.CameraTransform.forward;
-            camFwd = Vector3.ProjectOnPlane(camFwd, Vector3.up).normalized;
-
-            Vector3 kickDir;
-            if (away.sqrMagnitude > 0.0001f)
-            {
-                // favor camera-forward more strongly than away from wall
-                kickDir = (away * 0.3f + camFwd * 0.7f).normalized;
-            }
-            else
-            {
-                kickDir = camFwd;
-            }
-
-            float kickSpeed = Preset.WallAwayVelocity * 1.3f;
-
-            // preserve some existing horizontal momentum and add the kick
-            Vector3 currentHoriz = Vector3.ProjectOnPlane(Controller.ForwardVelocity, Vector3.up);
-            Vector3 newHoriz = currentHoriz + kickDir * kickSpeed;
-
-            // clamp horizontal magnitude
-            float maxHoriz = Preset.SprintSpeed * 1.5f;
-            if (newHoriz.magnitude > maxHoriz) newHoriz = newHoriz.normalized * maxHoriz;
-
-            Controller.ForwardVelocity = newHoriz;
-
-            // stop the activity immediately
-            Manager.ForceStop(this);
         }
     }
 }

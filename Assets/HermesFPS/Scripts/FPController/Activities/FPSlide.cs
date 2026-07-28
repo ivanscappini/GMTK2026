@@ -35,6 +35,10 @@ namespace Hermes
         float pushOutTimer = 0f;
         bool cancelRequestedDuringPush = false;
 
+        // camera drop during slide
+        float currentCameraYOffset = 0f;
+        float slideCameraVelocity = 0f;
+
         public bool InPerfectWindow
         {
             get
@@ -77,6 +81,7 @@ namespace Hermes
             {
                 Controller.Landed.AddListener(OnLanded);
                 Controller.Jumped.AddListener(OnJumped);
+                Controller.RequestCameraOffset += ApplySlideCameraOffset;
             }
         }
 
@@ -85,6 +90,9 @@ namespace Hermes
             if (!Active) return;
 
             perfectJumpExit = InPerfectWindow;
+
+            if (perfectJumpExit && Preset.SlidePerfectJumpVerticalBoost > 0f)
+                Controller.VerticalSpeed += Preset.SlidePerfectJumpVerticalBoost;
 
             Manager.ForceStop(this);
         }
@@ -121,8 +129,28 @@ namespace Hermes
 
                 slideSpeed *= Mathf.Exp(-Preset.Friction * Time.deltaTime);
 
-                Vector3 horizVel = slideDirection * slideSpeed;
-                pendingForwardVelocity = Controller.transform.forward * Vector3.Dot(horizVel, Controller.transform.forward);
+                if (Controller.Grounded && Controller.GroundNormal.y < 0.99f)
+                {
+                    Vector3 downhill = Vector3.ProjectOnPlane(Vector3.down, Controller.GroundNormal).normalized;
+                    float slopeFactor = Vector3.Dot(slideDirection, downhill);
+                    slideSpeed += slopeFactor * Preset.SlideSlopeAcceleration * Time.deltaTime;
+                }
+                slideSpeed = Mathf.Clamp(slideSpeed, 0f, Preset.SprintSpeed * 2f);
+
+                if (Preset.SlideSteerRate > 0f)
+                {
+                    Vector3 lookDir = Controller.transform.forward;
+                    lookDir.y = 0f;
+                    if (lookDir.sqrMagnitude > 0.01f)
+                    {
+                        lookDir.Normalize();
+                        slideDirection = Vector3.RotateTowards(slideDirection, lookDir, Preset.SlideSteerRate * Mathf.Deg2Rad * Time.deltaTime, 0f);
+                        slideDirection.y = 0f;
+                        slideDirection.Normalize();
+                    }
+                }
+
+                pendingForwardVelocity = slideDirection * slideSpeed;
 
                 if (!Controller.CrouchInput)
                 {
@@ -218,15 +246,17 @@ namespace Hermes
 
             Controller.ActivityManager.ForceStop<FPSprint>();
 
-            slideDirection = Controller.transform.forward.normalized;
+            Vector3 currentVel = Controller.ForwardVelocity;
+            currentVel.y = 0f;
+            slideDirection = currentVel.sqrMagnitude > 0.01f ? currentVel.normalized : Controller.transform.forward.normalized;
+
             slideSpeed = Mathf.Max(Controller.HorizontalSpeed + Preset.BoostAmount, 0f);
             initialSlideSpeed = slideSpeed;
             slideTimer = 0f;
             queued = false;
             perfectJumpExit = false;
 
-            Vector3 horizVel = slideDirection * slideSpeed;
-            pendingForwardVelocity = Controller.transform.forward * Vector3.Dot(horizVel, Controller.transform.forward);
+            pendingForwardVelocity = slideDirection * slideSpeed;
 
             cancelling = false;
             cancelTimer = 0f;
@@ -296,6 +326,19 @@ namespace Hermes
         public void CancelQueued()
         {
             queued = false;
+        }
+
+        void ApplySlideCameraOffset()
+        {
+            float maxDrop = Preset.StandHeight - Preset.SlideHeight;
+            float heightDelta = Preset.StandHeight - cc.height;
+            float ratio = maxDrop > 0.01f ? Mathf.Clamp01(heightDelta / maxDrop) : 0f;
+            float target = Preset.SlideCameraDropOffset * ratio;
+
+            currentCameraYOffset = Mathf.SmoothDamp(currentCameraYOffset, target, ref slideCameraVelocity, 0.12f);
+
+            if (Mathf.Abs(currentCameraYOffset) > 0.001f)
+                Controller.CameraPositionOffset += new Vector3(0f, currentCameraYOffset, 0f);
         }
 
         bool IsCeilingAbove()
