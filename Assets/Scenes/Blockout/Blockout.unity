@@ -6286,10 +6286,6 @@ PrefabInstance:
       value: TimePickupRemoveTime (6)
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 48164664}
@@ -10485,10 +10481,6 @@ PrefabInstance:
       value: TimePickupRemoveTime (4)
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 48164664}
@@ -10763,10 +10755,6 @@ PrefabInstance:
     - target: {fileID: 3977275307686804570, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: m_Name
       value: TimePickupRemoveTime (9)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
@@ -22504,10 +22492,6 @@ PrefabInstance:
       value: TimePickupRemoveTime (3)
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 48164664}
@@ -22897,10 +22881,6 @@ PrefabInstance:
     - target: {fileID: 3977275307686804570, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: m_Name
       value: TimePickupRemoveTime (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
@@ -24750,10 +24730,6 @@ PrefabInstance:
     - target: {fileID: 3977275307686804570, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: m_Name
       value: TimePickupRemoveTime
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
@@ -28772,10 +28748,6 @@ PrefabInstance:
     - target: {fileID: 3977275307686804570, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: m_Name
       value: TimePickupRemoveTime (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
@@ -38139,10 +38111,6 @@ PrefabInstance:
       value: TimePickupRemoveTime (7)
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 48164664}
@@ -38442,10 +38410,6 @@ PrefabInstance:
     - target: {fileID: 3977275307686804570, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: m_Name
       value: TimePickupRemoveTime (12)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
@@ -44813,10 +44777,6 @@ PrefabInstance:
     - target: {fileID: 3977275307686804570, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: m_Name
       value: TimePickupRemoveTime (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
@@ -53129,10 +53089,6 @@ PrefabInstance:
       value: TimePickupRemoveTime (2)
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 48164664}
@@ -60407,10 +60363,6 @@ PrefabInstance:
       value: TimePickupRemoveTime (11)
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 48164664}
@@ -67234,10 +67186,6 @@ PrefabInstance:
     - target: {fileID: 3977275307686804570, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: m_Name
       value: TimePickupRemoveTime (10)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
-      propertyPath: timeChange
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6530317119319123567, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
       propertyPath: audioSource
