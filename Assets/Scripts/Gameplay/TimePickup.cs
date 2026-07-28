@@ -13,26 +13,18 @@ public class TimePickup : MonoBehaviour
     //How much time is added or removed when triggered
     [SerializeField] float timeChange = 5;
     [SerializeField] AudioClip pickupSound;
-
-    public AudioSource childAudioSource;
-
-    void Awake()
-    {
-        // Find and assign the audio source on a child object. Include inactive children
-        childAudioSource = GetComponentInChildren<AudioSource>(true);
-
-        if (childAudioSource == null)
-        {
-            Debug.LogWarning($"No AudioSource found on any child of '{gameObject.name}'!");
-        }
-    }
+    [SerializeField] public AudioSource audioSource;
 
     private void OnTriggerEnter(Collider other)
     {
         //check if the colliding object is the player
         if (other.gameObject.CompareTag("Player"))
         {
-            if (pickupSound != null)
+            if (pickupSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(pickupSound);
+            }
+            else if (pickupSound != null && audioSource == null)
             {
                 var go = new GameObject("TempAudio");
                 var src = go.AddComponent<AudioSource>();
@@ -42,17 +34,23 @@ public class TimePickup : MonoBehaviour
                 Object.Destroy(go, pickupSound.length + 0.1f);
             }
 
-            Debug.Log(other.name);
             if (changeType == TimeChangeType.Add)
             {
-                Timer.Instance.AddTime(timeChange);
+                // show popup and apply the time change on impact
+                PlayerHUDController.Instance?.ShowTimeChangePopup(timeChange, transform.position, () =>
+                {
+                    Timer.Instance.AddTime(timeChange);
+                });
             }
             else
             {
                 //Needs to be one of two options:
                 //1-timechange is negative and nothing need to be changed
                 //2-timechange is a positive value and you need to remove timeChange and add -timeChange
-                Timer.Instance.AddTime(timeChange);
+                PlayerHUDController.Instance?.ShowTimeChangePopup(-timeChange, transform.position, () =>
+                {
+                    Timer.Instance.AddTime(-timeChange);
+                });
             }
             //After being triggered the game object is destroyed
             Destroy(this.gameObject);

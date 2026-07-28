@@ -310,9 +310,9 @@ RectTransform:
   - {fileID: 5952487150747459213}
   m_Father: {fileID: 9191781455102070906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 146.9, y: -159.875}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3051162181615379471
@@ -1475,9 +1475,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 9191781455102070906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 147.555, y: -60.925003}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 298.69, y: 45.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2856613014529233082
@@ -1766,6 +1766,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHUDController
   CountdownTimer: {fileID: 0}
   timerText: {fileID: 776261635166143312}
+  floatingTextPrefab: {fileID: 0}
+  addColor: {r: 0.19441736, g: 1, b: 0, a: 1}
+  removeColor: {r: 1, g: 0, b: 0, a: 1}
+  timerChangeSound: {fileID: 8300000, guid: 5a3d30486b9eafd49b2bbe6584fa188e, type: 3}
+  floatDuration: 0.8
+  floatDistance: 0.01
+  colorPulseDuration: 0.6
+  slamDistance: 40
+  slamDuration: 0.1
+  floatingStartOffset: 2
+  floatingFontSize: 48
+  timerScaleAmount: 1.4
+  timerScaleDuration: 0.22
+  floatingLingerDuration: 0.1
+  impactOffset: 5
 --- !u!114 &8746528589203485208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1817,9 +1832,9 @@ RectTransform:
   - {fileID: 3614319621430257000}
   m_Father: {fileID: 9191781455102070906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 148.89499, y: -285.92502}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 296.01, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &73853910161794983
@@ -2681,9 +2696,9 @@ RectTransform:
   - {fileID: 3085336564894753812}
   m_Father: {fileID: 9191781455102070906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 148.89499, y: -411.975}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 296.01, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4831836124950921408
