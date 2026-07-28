@@ -97,12 +97,14 @@ MonoBehaviour:
   WallAwayWeight: 0.3
   WallCamWeight: 0.7
   WallRunSpeed: 10
-  WallRunMaxDuration: 2
+  WallRunMaxDuration: 10
   WallRunAllowedTag: RunnableWall
   WallRunBlend: 10
   WallRunReattachDelay: 0.25
   WallRunMinAlignment: 0.3
   WallRunGravityScale: 0.1
+  WallRunLiftSpeed: 2
+  WallRunKickOffVerticalSpeed: 8
   WallRunCameraTilt: 12
   WallRunCameraTiltSpeed: 80
   WallRunMinNormalDot: 0.5
