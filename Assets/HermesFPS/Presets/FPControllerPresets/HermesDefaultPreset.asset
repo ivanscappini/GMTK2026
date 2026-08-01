@@ -18,7 +18,7 @@ MonoBehaviour:
   Acceleration: 25
   Deceleration: 20
   StrafeAcceleration: 20
-  StrafeSprintSpeed: 15
+  StrafeSprintSpeed: 10
   StrafeWalkSpeed: 3
   StrafeCrouchSpeed: 1.5
   CrouchSpeed: 2.5
