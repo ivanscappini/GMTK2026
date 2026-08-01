@@ -144,6 +144,27 @@ namespace Hermes
 
             UpdateCharacterHeight();
             UpdateGroundCheck();
+            // Watchdog: if FPJump is still active but the controller is grounded,
+            // force-stop the jump activity to avoid getting stuck in jump state.
+            if (ActivityManager != null)
+            {
+                var jumpActivity = ActivityManager.GetActivity<FPJump>();
+                if (jumpActivity != null && ActivityManager.IsActive(jumpActivity))
+                {
+                    bool physGrounded = characterController != null && characterController.isGrounded;
+                    float vertSpeed = 0f;
+                    if (Movement != null)
+                        vertSpeed = Movement.VerticalSpeed;
+                    else
+                        vertSpeed = VerticalSpeed;
+
+                    if (physGrounded && vertSpeed <= 0.1f)
+                    {
+                        Debug.Log("FPController: Grounded while FPJump active — forcing stop of jump activity.");
+                        ActivityManager.ForceStop(jumpActivity);
+                    }
+                }
+            }
         }
 
         #endregion

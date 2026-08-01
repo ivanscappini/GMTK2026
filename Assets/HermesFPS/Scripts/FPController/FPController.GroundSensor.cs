@@ -15,7 +15,19 @@ namespace Hermes
 
 		private bool wasGrounded = false;
 
-		public bool Grounded => GroundDistance <= Preset.GroundSensor.GroundedThreshold;
+		public bool Grounded
+		{
+			get
+			{
+				bool physGrounded = false;
+				if (characterController != null)
+				{
+					physGrounded = characterController.isGrounded;
+				}
+
+				return GroundDistance <= Preset.GroundSensor.GroundedThreshold || physGrounded;
+			}
+		}
 
 
 		public float GroundDistance { get; private set; }
@@ -101,12 +113,21 @@ namespace Hermes
 			GroundNormal = normal;
 			GroundCollider = groundCol;
 
-			if (!wasGrounded && Grounded)
+			// Also consider the CharacterController's built-in grounding as a fallback.
+			// In some tight geometry (low ceilings / slides) the spherecast-based sensor
+			// may be unreliable; the controller's isGrounded flag is a useful extra signal.
+			bool physGrounded = false;
+			if (characterController != null)
+			{
+				physGrounded = characterController.isGrounded;
+			}
+
+			if (!wasGrounded && (Grounded || physGrounded))
 			{
 				Landed?.Invoke();
 			}
 
-			wasGrounded = Grounded;
+			wasGrounded = (Grounded || physGrounded);
 		}
 
 	}
