@@ -7,6 +7,8 @@ namespace Hermes
     public class FPJump : FPActivity
     {
         [SerializeField] float coyoteTimer = 0f;
+        // local serialized fallback kept for compatibility (preset is preferred)
+        [SerializeField] private float JumpHorizontalBoost = 0f;
 
 
         public override bool CanStartActivity()
@@ -92,6 +94,30 @@ namespace Hermes
         void Jump()
         {
             Controller.VerticalSpeed = Mathf.Sqrt(Preset.JumpHeight * -2f * Physics.gravity.y * Preset.GravityScale);
+
+            // prefer preset value
+            float boost = 0f;
+            if (Preset != null)
+            {
+                // FPActivity.Preset is FPControllerPreset
+                try
+                {
+                    var p = Preset as FPControllerPreset;
+                    if (p != null) boost = p.JumpHorizontalBoost;
+                }
+                catch { }
+            }
+
+            if (boost == 0f)
+                boost = JumpHorizontalBoost;
+
+            if (boost != 0f)
+            {
+                Vector3 fwd = Controller.transform.forward;
+                fwd = Vector3.ProjectOnPlane(fwd, Vector3.up).normalized;
+                // preserve current forward momentum and add boost
+                Controller.ForwardVelocity = Controller.ForwardVelocity + fwd * boost;
+            }
         }
 
     }

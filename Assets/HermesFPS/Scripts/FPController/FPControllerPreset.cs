@@ -48,6 +48,9 @@ namespace Hermes
         [Tooltip("This is how high the character can jump.")]
         public float JumpHeight = 2f;
 
+        [Tooltip("Extra horizontal speed added on jump (m/s)")]
+        public float JumpHorizontalBoost = 1.5f;
+
         public bool CanDoubleJump = true;
         public float CoyoteTime = 0.3f;
 

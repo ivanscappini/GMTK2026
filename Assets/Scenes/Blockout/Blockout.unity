@@ -7727,6 +7727,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.SurfaceType
   Type: 1
+--- !u!4 &235471781 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+  m_PrefabInstance: {fileID: 686094103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &238410657
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10188,10 +10193,31 @@ PrefabInstance:
       value: 89.327
       objectReference: {fileID: 0}
     - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
-      propertyPath: safeZoneSetTimer
-      value: 120
+      propertyPath: unlockTitle
+      value: Wall Run
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: gameTimerText
+      value: 
+      objectReference: {fileID: 1160744766}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: activityToUnlock
+      value: 
+      objectReference: {fileID: 1243423134}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: safeZoneSetTimer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: unlockDescription
+      value: Hold [Space] against walls marked in blood to wall run.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: dialogueBoxController
+      value: 
+      objectReference: {fileID: 1445212517}
+    m_RemovedComponents:
+    - {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -11661,18 +11687,35 @@ PrefabInstance:
       value: -268.44
       objectReference: {fileID: 0}
     - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: unlockTitle
+      value: Slide
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: gameTimerText
       value: 
       objectReference: {fileID: 1160744766}
     - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: activityToUnlock
+      value: 
+      objectReference: {fileID: 1243423133}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: safeZoneSetTimer
-      value: 120
+      value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: unlockDescription
+      value: Hold [C] / [CTRL] to slide, allowing you to pass under obstacles.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: dialogueBoxController
+      value: 
+      objectReference: {fileID: 1445212517}
     - target: {fileID: 6976319454961637972, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_Layer
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -14588,6 +14631,10 @@ PrefabInstance:
     - target: {fileID: 5811410220701592472, guid: e38898362dcacec44b5a2a4963145e18, type: 3}
       propertyPath: m_Name
       value: ArtifactingOverlay
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811410220701592472, guid: e38898362dcacec44b5a2a4963145e18, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7113256223031402984, guid: e38898362dcacec44b5a2a4963145e18, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18649,7 +18696,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4271441918986570046, guid: f6a7ddeaecb91cb43a92937251db388d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21878,6 +21925,156 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 248441fc9c7564a418f0cd17e609d6ae, type: 3}
   m_PrefabInstance: {fileID: 1904612657}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &686094103
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1129750225}
+    m_Modifications:
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 11.327707
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 8.848572
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 8.899461
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 133.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.91383624
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.4060829
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 47.918
+      objectReference: {fileID: 0}
+    - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 861026200113365532, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_Name
+      value: DoubleJumpCheckpoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: activity
+      value: 
+      objectReference: {fileID: 1003363163}
+    - target: {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: unlockDescription
+      value: Press [Space] while in the air to double jump.
+      objectReference: {fileID: 0}
+    - target: {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: dialogueBoxController
+      value: 
+      objectReference: {fileID: 1445212517}
+    - target: {fileID: 1806670969273884324, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bda1820317384b54b892945deea7497e, type: 2}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.000000031242166
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.000000026944303
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.000000035909267
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9999127
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.013220847
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054096295920386672, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -1.515
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: unlockTitle
+      value: Double Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: gameTimerText
+      value: 
+      objectReference: {fileID: 1160744766}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: activityToUnlock
+      value: 
+      objectReference: {fileID: 1003363163}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: safeZoneSetTimer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: unlockDescription
+      value: Tap [Space] while in the air to Double Jump.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: dialogueBoxController
+      value: 
+      objectReference: {fileID: 1445212517}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: safeZonetimerOnScreen
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
 --- !u!1 &687907367 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5041794556438727575, guid: c7c5d4ecf8e817348a950f0c11dda4bf, type: 3}
@@ -23939,7 +24136,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalScale.x
-      value: 11.327707
+      value: 4.821412
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalScale.y
@@ -23951,31 +24148,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 133.69
+      value: -6.6800003
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.03
+      value: 2.0300002
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.31
+      value: -27.72
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.91383624
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.4060829
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -23983,7 +24180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 47.918
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -23991,7 +24188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 861026200113365532, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: m_Name
-      value: DoubleJumpCheckpoint
+      value: SkullsTutorial
       objectReference: {fileID: 0}
     - target: {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: activity
@@ -24050,14 +24247,28 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1160744766}
     - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: tutorialTitle
+      value: Skull Pickups
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: safeZoneSetTimer
-      value: 120
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: tutorialDescription
+      value: Skulls can be found throughout the level. Blue skulls will add time
+        to the timer, red skulls will deduct time.
       objectReference: {fileID: 0}
     - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
       propertyPath: safeZonetimerOnScreen
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4552737206788049569, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
+      propertyPath: tutorialDialogueController
+      value: 
+      objectReference: {fileID: 1445212517}
+    m_RemovedComponents:
+    - {fileID: 1229348873768559969, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -36336,6 +36547,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3400313272574008686, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1471702343}
     - targetCorrespondingSourceObject: {fileID: 4431969359039732837, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 954403225}
@@ -36739,6 +36953,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1077826931}
+  - {fileID: 235471781}
   - {fileID: 883061811}
   - {fileID: 322195994}
   m_Father: {fileID: 0}
@@ -49545,6 +49760,89 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3400313272574008686, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
   m_PrefabInstance: {fileID: 1119780385}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1471702343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471702335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4ea4480603a2c4783fbdd1d779a0ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DebugSpeedUI
+  speedText: {fileID: 2090255397}
+  useOnGUIIfNoText: 1
+  guiPosition: {x: 10, y: 10}
+  guiStyle:
+    m_Name: 
+    m_Normal:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Hover:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Active:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Focused:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnNormal:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnHover:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnActive:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnFocused:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Border:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Margin:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Padding:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Overflow:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Font: {fileID: 0}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_Alignment: 0
+    m_WordWrap: 0
+    m_RichText: 1
+    m_TextClipping: 0
+    m_ImagePosition: 0
+    m_ContentOffset: {x: 0, y: 0}
+    m_FixedWidth: 0
+    m_FixedHeight: 0
+    m_StretchWidth: 1
+    m_StretchHeight: 0
+    m_IsSDF: 0
 --- !u!1001 &1472948846
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -71215,6 +71513,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hermes.SurfaceType
   Type: 1
+--- !u!114 &2090255397 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3593557310612239845, guid: c5694db4ac1d6054e973845d9d4a74b8, type: 3}
+  m_PrefabInstance: {fileID: 1119780385}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &2091183821 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1100451099261150462, guid: c7c5d4ecf8e817348a950f0c11dda4bf, type: 3}

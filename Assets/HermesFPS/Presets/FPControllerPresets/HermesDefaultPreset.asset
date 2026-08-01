@@ -17,8 +17,8 @@ MonoBehaviour:
   SlideHeight: 0.5
   Acceleration: 25
   Deceleration: 20
-  StrafeAcceleration: 20
-  StrafeSprintSpeed: 10
+  StrafeAcceleration: 10
+  StrafeSprintSpeed: 8
   StrafeWalkSpeed: 3
   StrafeCrouchSpeed: 1.5
   CrouchSpeed: 2.5
@@ -29,6 +29,7 @@ MonoBehaviour:
   AirStrafeAccelerationMultiplier: 0.5
   AirStrafeSpeedMultiplier: 1
   JumpHeight: 2
+  JumpHorizontalBoost: 1.5
   CanDoubleJump: 1
   CoyoteTime: 0.2
   BoostAmount: 4
