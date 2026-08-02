@@ -23,7 +23,7 @@ public class MonsterBehaviour : MonoBehaviour
 
         Timer.Instance.OnMoving += ResetSpeed;
         Timer.Instance.OnStoppedMoving += DoubleSpeed;
-        Timer.Instance.OnTimerChanged += RecalculateElapsedTime;
+        //Timer.Instance.OnTimerChanged += RecalculateElapsedTime;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -9,7 +9,8 @@ public class SafeZoneScripts : MonoBehaviour
     private static System.Collections.Generic.HashSet<int> s_shownTutorials = new System.Collections.Generic.HashSet<int>();
 
     [SerializeField] GameObject safeZoneSpawnPoint;
-    [SerializeField] GameObject[] monsters;
+    [SerializeField] GameObject[] monstersToActivate;
+    [SerializeField] GameObject[] monstersToDeactivate;
     //How long the safe zone is considered safe
     [SerializeField] float safeZoneSetTimer = 20.0f;
 
@@ -49,11 +50,16 @@ public class SafeZoneScripts : MonoBehaviour
             if (respawn != null)
             {
                 float checkpointTime = Timer.Instance != null ? Timer.Instance.TheTime : 0f;
-                respawn.setRespawnLocation(safeZoneSpawnPoint, checkpointTime, monsters);
+                respawn.setRespawnLocation(safeZoneSpawnPoint, checkpointTime, monstersToActivate);
                 Debug.Log($"SafeZone: recorded checkpoint time {checkpointTime}");
             }
 
-            foreach (var m in monsters)
+            foreach (var m in monstersToDeactivate)
+            {
+                m.SetActive(false);
+            }
+
+            foreach (var m in monstersToActivate)
             {
                 m.SetActive(true);
             }
