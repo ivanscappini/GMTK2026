@@ -3,6 +3,18 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Plays a sequence of intro dialogues one after another (type out, hold, fade out, next line),
+/// then raises onVanishingDialoguesFinished. Part of the main-menu boot sequence, chained after
+/// Mainmenufade via that event.
+///
+/// The typing/fading logic now lives in the shared DialogueTyper utility (also used by
+/// BarksManager, BarkGameOver, BarkMainMenu and BarkNewArea) instead of being duplicated here.
+/// Unlike the bark scripts, this one doesn't do character-based font switching, but it does now
+/// pick up a line's optional color/size override if one is set (font override is not applied
+/// here, since the original never assigned a font at all - it relies on whatever font is set on
+/// the TMP_Text component in the Inspector).
+/// </summary>
 public class DisappearingText : MonoBehaviour
 {
     public static DisappearingText Instance { get; private set; }
@@ -43,34 +55,24 @@ public class DisappearingText : MonoBehaviour
 
     IEnumerator PlayDialogues(DialogueClass[] dialogues)
     {
-        int indexChar = 0;
-
         while (index < dialogues.Length)
         {
+            DialogueClass line = dialogues[index];
+
             textAudio.Play();
 
-            while (indexChar < dialogues[index].dialogue.Length)
-            {
-                dialoguesText.text += dialogues[index].dialogue[indexChar];
-                indexChar++;
-                yield return new WaitForSeconds(delayBetweenCharacters);
-            }
+            DialogueTyper.ApplyLineOverrides(dialoguesText, line);
+
+            yield return DialogueTyper.TypeText(dialoguesText, line.dialogue, delayBetweenCharacters, useUnscaledTime: false);
+
             yield return new WaitForSeconds(delayBeforeCharactersVanish);
 
-            while (dialoguesText.color.a > 0)
-            {
-                dialoguesText.color = new Color(dialoguesText.color.r,
-                                                dialoguesText.color.g,
-                                                dialoguesText.color.b,
-                                                dialoguesText.color.a - Time.unscaledDeltaTime);
-                yield return null;
-            }
+            yield return DialogueTyper.FadeOut(dialoguesText, fadeSpeed: 1f, useUnscaledTime: true);
 
             dialoguesText.text = string.Empty;
             dialoguesText.color = Color.white;
 
             index++;
-            indexChar = 0;
             yield return new WaitForSeconds(delayBetweenDialogues);
         }
     }

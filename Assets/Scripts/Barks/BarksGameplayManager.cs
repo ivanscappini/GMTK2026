@@ -8,8 +8,12 @@ using Hermes;
 /// Central manager for the recurring gameplay barks (countdown warning, standing
 /// still too long) and the bark shown while the game is paused. A singleton so other
 /// systems (Timer, FPMovement, PauseController) can trigger a bark by raising an event.
+///
+/// The actual typing/fading/shaking/font-lookup logic now lives in the shared DialogueTyper
+/// utility (also used by BarkGameOver, BarkMainMenu, BarkNewArea and DisappearingText) instead
+/// of being duplicated here.
 /// </summary>
-public class BarksManager : MonoBehaviour
+public class BarksGameplayManager : MonoBehaviour
 {
     [Header("Barks dialogues")]
     [SerializeField] private DialogueClass[] barksCountdownAlmostOver;
@@ -45,7 +49,7 @@ public class BarksManager : MonoBehaviour
     [SerializeField] private TMP_FontAsset barkFontMonster;
     [SerializeField] private TMP_FontAsset barkFontVector;
 
-    public static BarksManager Instance { get; private set; }
+    public static BarksGameplayManager Instance { get; private set; }
 
     public bool Barking = false;
 
@@ -107,16 +111,6 @@ public class BarksManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Font lookup for a speaking character. Note this manager only has two fonts
-    /// configured (Monster and Vector) - unlike BarkGameOver/BarkNewArea, there's no
-    /// separate HQ font here, so an HQ line falls back to the Vector font, same as the original.
-    /// </summary>
-    private TMP_FontAsset GetFontForCharacter(Character character)
-    {
-        return character == Character.Monster ? barkFontMonster : barkFontVector;
-    }
-
     private void PlayBarkPause(DialogueClass[] dialogues)
     {
         if (dialogues == null || dialogues.Length == 0) return;
@@ -132,18 +126,16 @@ public class BarksManager : MonoBehaviour
         int randomIndex = UnityEngine.Random.Range(0, dialogues.Length);
         DialogueClass chosen = dialogues[randomIndex];
 
-        barkTextDialoguePause.font = GetFontForCharacter(chosen.character);
+        barkTextDialoguePause.font = DialogueTyper.GetFontForLine(chosen, barkFontMonster, barkFontVector);
+        DialogueTyper.ApplyLineOverrides(barkTextDialoguePause, chosen);
 
-        char[] dialogueCharacter = chosen.dialogue.ToCharArray();
-
-        barkPauseCoroutine = StartCoroutine(PlayCharacterPause(dialogueCharacter));
+        barkPauseCoroutine = StartCoroutine(PlayCharacterPause(chosen));
 
         if (chosen.character == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialoguePause.rectTransform.anchoredPosition,
-                                    (dialogueCharacter.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
-                                     barkTextDialoguePause,
-                                     true));
+            StartCoroutine(DialogueTyper.Shake(barkTextDialoguePause, barkTextDialoguePause.rectTransform.anchoredPosition,
+                                    (chosen.dialogue.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
+                                     delayBetweenShakes, deltaX, deltaY, useUnscaledTime: true));
         }
     }
 
@@ -167,59 +159,43 @@ public class BarksManager : MonoBehaviour
         int randomIndex = UnityEngine.Random.Range(0, dialogues.Length);
         DialogueClass chosen = dialogues[randomIndex];
 
-        barkTextDialogueGameplay.font = GetFontForCharacter(chosen.character);
+        barkTextDialogueGameplay.font = DialogueTyper.GetFontForLine(chosen, barkFontMonster, barkFontVector);
+        DialogueTyper.ApplyLineOverrides(barkTextDialogueGameplay, chosen);
 
-        char[] dialogueCharacter = chosen.dialogue.ToCharArray();
-
-        barkGameplayCoroutine = StartCoroutine(PlayCharacterGameplay(dialogueCharacter));
+        barkGameplayCoroutine = StartCoroutine(PlayCharacterGameplay(chosen));
 
         if (chosen.character == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueGameplay.rectTransform.anchoredPosition,
-                                    (dialogueCharacter.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
-                                     barkTextDialogueGameplay,
-                                     false));
+            StartCoroutine(DialogueTyper.Shake(barkTextDialogueGameplay, barkTextDialogueGameplay.rectTransform.anchoredPosition,
+                                    (chosen.dialogue.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
+                                     delayBetweenShakes, deltaX, deltaY, useUnscaledTime: false));
         }
     }
 
-    IEnumerator PlayCharacterGameplay(char[] characters)
+    IEnumerator PlayCharacterGameplay(DialogueClass line)
     {
-        int index = 0;
-        while (index < characters.Length)
-        {
-            barkTextDialogueGameplay.text += characters[index];
-            yield return new WaitForSeconds(delayBetweenCharacters);
-            index++;
-        }
+        yield return DialogueTyper.TypeText(barkTextDialogueGameplay, line.dialogue, delayBetweenCharacters, useUnscaledTime: false);
 
         yield return new WaitForSeconds(delayBeforeCharactersVanish);
 
-        while (barkTextDialogueGameplay.color.a > 0f)
-        {
-            barkTextDialogueGameplay.color = new Color(barkTextDialogueGameplay.color.r, barkTextDialogueGameplay.color.g, barkTextDialogueGameplay.color.b, barkTextDialogueGameplay.color.a - Time.deltaTime / 2);
-            yield return null;
-        }
+        yield return DialogueTyper.FadeOut(barkTextDialogueGameplay, fadeSpeed: 0.5f, useUnscaledTime: false);
 
         startTimer = true;
     }
 
-    IEnumerator PlayCharacterPause(char[] characters)
+    IEnumerator PlayCharacterPause(DialogueClass line)
     {
-        int index = 0;
-        while (index < characters.Length)
-        {
-            barkTextDialoguePause.text += characters[index];
-            yield return new WaitForSecondsRealtime(delayBetweenCharacters);
-            index++;
-        }
+        yield return DialogueTyper.TypeText(barkTextDialoguePause, line.dialogue, delayBetweenCharacters, useUnscaledTime: true);
 
         yield return new WaitForSecondsRealtime(delayBeforeCharactersVanish);
 
-        while (barkTextDialoguePause.color.a > 0f)
-        {
-            barkTextDialoguePause.color = new Color(barkTextDialoguePause.color.r, barkTextDialoguePause.color.g, barkTextDialoguePause.color.b, barkTextDialoguePause.color.a - Time.deltaTime / 2);
-            yield return null;
-        }
+        // BUGFIX: this fade used to run on Time.deltaTime (scaled), which is 0 while the game
+        // is actually paused (Time.timeScale = 0) - so the pause bark would type out correctly
+        // but then just sit there at full opacity for as long as the game stayed paused, only
+        // actually fading once the player unpaused. Now uses unscaled time, like the rest of
+        // this coroutine (and like its own Shake call above already did), so it fades out while
+        // still paused, as intended.
+        yield return DialogueTyper.FadeOut(barkTextDialoguePause, fadeSpeed: 0.5f, useUnscaledTime: true);
     }
 
     /// <summary>
@@ -268,40 +244,5 @@ public class BarksManager : MonoBehaviour
 
             gameplayInterruptCoroutine = StartCoroutine(InterruptGameplayAndFade(barkTextDialogueGameplay, visibleDuration, fadeDuration));
         }
-    }
-
-    IEnumerator ShakeText(Vector2 initialAnchoredPosition, float shakeDuration, TMP_Text textComponent, bool isThisPauseBark)
-    {
-        float timerDuration = 0f;
-        float timerBetweenShakes = 0f;
-
-        while (timerDuration < shakeDuration)
-        {
-            if (timerBetweenShakes >= delayBetweenShakes)
-            {
-                textComponent.rectTransform.anchoredPosition = new Vector2(initialAnchoredPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
-                                                                           initialAnchoredPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1));
-                timerBetweenShakes = 0f;
-            }
-
-            if (isThisPauseBark)
-            {
-                timerDuration += Time.unscaledDeltaTime;
-                timerBetweenShakes += Time.unscaledDeltaTime;
-            }
-            else
-            {
-                timerDuration += Time.deltaTime;
-                timerBetweenShakes += Time.deltaTime;
-            }
-
-            // IMPORTANT FIX: this yield was missing in the original. Without it, the
-            // whole shake duration is consumed synchronously within a single frame -
-            // the shake never actually renders, it just freezes for one tick and
-            // immediately snaps back to initial position.
-            yield return null;
-        }
-
-        textComponent.rectTransform.anchoredPosition = initialAnchoredPosition;
     }
 }
