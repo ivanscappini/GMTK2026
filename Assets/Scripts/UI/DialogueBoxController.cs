@@ -47,9 +47,9 @@ public class DialogueBoxController : MonoBehaviour
         // Always pause the game when showing the dialogue box so the player
         // has time to read the message without the timer running.
         // Ensure any active gameplay bark is interrupted and fades while paused.
-        if (BarksManager.Instance != null)
+        if (BarksGameplayManager.Instance != null)
         {
-            BarksManager.Instance.FadeActiveGameplayBark();
+            BarksGameplayManager.Instance.FadeActiveGameplayBark();
         }
 
         if (PauseController.Instance != null && !PauseController.Instance.IsPaused)

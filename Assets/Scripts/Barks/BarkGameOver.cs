@@ -7,6 +7,10 @@ using UnityEngine;
 /// Picks a random exchange (a group of lines sharing the same dialogueIndex),
 /// types it out one character at a time, then fades both lines out.
 /// If "Monster" is one of the speakers, its line also shakes on screen while typing.
+///
+/// The typing/fading/shaking/font-lookup/exchange-picking logic now lives in the shared
+/// DialogueTyper utility (also used by BarksManager, BarkMainMenu, BarkNewArea and
+/// DisappearingText) instead of being duplicated here.
 /// </summary>
 public class BarkGameOver : MonoBehaviour
 {
@@ -40,86 +44,47 @@ public class BarkGameOver : MonoBehaviour
 
         // Pick a random exchange by looking at the highest dialogueIndex actually
         // present, instead of assuming it happens to sit in the last array slot.
-        int maxIndex = GetMaxDialogueIndex(dialoguesGameOver);
+        int maxIndex = DialogueTyper.GetMaxDialogueIndex(dialoguesGameOver);
         PlayDialogue(dialoguesGameOver, Random.Range(0, maxIndex + 1)); // +1: Random.Range's upper bound is exclusive
     }
 
     /// <summary>
-    /// Highest dialogueIndex used across the given lines - defines the valid
-    /// [0, max] range to randomize an exchange from.
-    /// </summary>
-    private int GetMaxDialogueIndex(DialogueClass[] dialogues)
-    {
-        int max = 0;
-        foreach (var d in dialogues)
-        {
-            if (d.dialogueIndex > max) max = d.dialogueIndex;
-        }
-        return max;
-    }
-
-    /// <summary>
-    /// Font lookup for a speaking character, centralised so it's only written once.
-    /// </summary>
-    private TMP_FontAsset GetFontForCharacter(Character character)
-    {
-        switch (character)
-        {
-            case Character.Monster: return barkFontMonster;
-            case Character.Vector: return barkFontVector;
-            default: return barkFontHQ;
-        }
-    }
-
-    /// <summary>
-    /// Finds the lines belonging to "index" (first match = first speaker,
-    /// second match = reply) and starts typing + shaking.
-    /// Note: only the first two matching lines are used - a third line sharing
-    /// the same index would be silently ignored, since there are only two text boxes.
+    /// Finds the exchange at "index" (first speaker, then reply) and starts typing + shaking.
+    /// Note: only the first two matching lines are used - a third line sharing the same index
+    /// would be silently ignored, since there are only two text boxes.
     /// </summary>
     private void PlayDialogue(DialogueClass[] barksToPlay, int index)
     {
         Debug.Log("Playing dialogue with index: " + index);
 
-        string dialogueFirst = "";
-        string dialogueSecond = "";
-        Character firstCharacter = default;
-        Character secondCharacter = default;
-        bool foundFirst = false;
+        DialogueTyper.FindExchange(barksToPlay, index, out var first, out var second);
 
-        foreach (var bark in barksToPlay)
+        if (first != null)
         {
-            if (bark.dialogueIndex != index) continue;
-
-            if (!foundFirst)
-            {
-                dialogueFirst = bark.dialogue;
-                firstCharacter = bark.character;
-                barkTextDialogueFirst.font = GetFontForCharacter(bark.character);
-                foundFirst = true;
-            }
-            else
-            {
-                dialogueSecond = bark.dialogue;
-                secondCharacter = bark.character;
-                barkTextDialogueSecond.font = GetFontForCharacter(bark.character);
-            }
+            barkTextDialogueFirst.font = DialogueTyper.GetFontForLine(first, barkFontMonster, barkFontVector, barkFontHQ);
+            DialogueTyper.ApplyLineOverrides(barkTextDialogueFirst, first);
+        }
+        if (second != null)
+        {
+            barkTextDialogueSecond.font = DialogueTyper.GetFontForLine(second, barkFontMonster, barkFontVector, barkFontHQ);
+            DialogueTyper.ApplyLineOverrides(barkTextDialogueSecond, second);
         }
 
-        StartCoroutine(PlayCharacter(dialogueFirst, dialogueSecond));
+        StartCoroutine(PlayCharacter(first?.dialogue ?? "", second?.dialogue ?? ""));
 
         // Only the Monster's line gets the shake effect.
-        if (firstCharacter == Character.Monster)
+        if (first != null && first.character == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueFirst.rectTransform.anchoredPosition,
-                                     (dialogueFirst.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
-                                     barkTextDialogueFirst));
+            StartCoroutine(DialogueTyper.Shake(barkTextDialogueFirst, barkTextDialogueFirst.rectTransform.anchoredPosition,
+                                               (first.dialogue.Length * delayBetweenCharacters) + delayBeforeCharactersVanish,
+                                               delayBetweenShakes, deltaX, deltaY, useUnscaledTime: false));
         }
-        else if (secondCharacter == Character.Monster)
+        else if (second != null && second.character == Character.Monster)
         {
-            StartCoroutine(ShakeText(barkTextDialogueSecond.rectTransform.anchoredPosition,
-                                     (dialogueFirst.Length * delayBetweenCharacters) + (dialogueSecond.Length * delayBetweenCharacters) + delayBeforeCharactersVanish * 2,
-                                     barkTextDialogueSecond));
+            float firstLength = first != null ? first.dialogue.Length : 0;
+            StartCoroutine(DialogueTyper.Shake(barkTextDialogueSecond, barkTextDialogueSecond.rectTransform.anchoredPosition,
+                                               (firstLength * delayBetweenCharacters) + (second.dialogue.Length * delayBetweenCharacters) + delayBeforeCharactersVanish * 2,
+                                               delayBetweenShakes, deltaX, deltaY, useUnscaledTime: false));
         }
     }
 
@@ -129,67 +94,17 @@ public class BarkGameOver : MonoBehaviour
     /// </summary>
     IEnumerator PlayCharacter(string firstDialogue, string secondDialogue)
     {
-        int index = 0;
-        while (index < firstDialogue.Length)
-        {
-            barkTextDialogueFirst.text += firstDialogue[index];
-            yield return new WaitForSeconds(delayBetweenCharacters);
-            index++;
-        }
+        yield return DialogueTyper.TypeText(barkTextDialogueFirst, firstDialogue, delayBetweenCharacters, useUnscaledTime: false);
 
         yield return new WaitForSeconds(delayBetweenDialogues);
 
         if (secondDialogue.Length > 0)
         {
-            index = 0;
-            while (index < secondDialogue.Length)
-            {
-                barkTextDialogueSecond.text += secondDialogue[index];
-                yield return new WaitForSeconds(delayBetweenCharacters);
-                index++;
-            }
+            yield return DialogueTyper.TypeText(barkTextDialogueSecond, secondDialogue, delayBetweenCharacters, useUnscaledTime: false);
 
             yield return new WaitForSeconds(delayBetweenDialogues);
         }
 
-        while (barkTextDialogueFirst.color.a > 0)
-        {
-            barkTextDialogueFirst.color = new Color(barkTextDialogueFirst.color.r, barkTextDialogueFirst.color.g, barkTextDialogueFirst.color.b, barkTextDialogueFirst.color.a - Time.deltaTime);
-            barkTextDialogueSecond.color = new Color(barkTextDialogueSecond.color.r, barkTextDialogueSecond.color.g, barkTextDialogueSecond.color.b, barkTextDialogueSecond.color.a - Time.deltaTime);
-            yield return null;
-        }
-    }
-
-    /// <summary>
-    /// Randomly jitters the text's position for "shakeDuration" seconds, then
-    /// snaps it back to where it started.
-    /// </summary>
-    IEnumerator ShakeText(Vector3 initialAnchoredPosition, float shakeDuration, TMP_Text textComponent)
-    {
-        float timerDuration = 0f;
-        float timerBetweenShakes = 0f;
-
-        while (timerDuration < shakeDuration)
-        {
-            if (timerBetweenShakes >= delayBetweenShakes)
-            {
-                textComponent.rectTransform.anchoredPosition = new Vector3(initialAnchoredPosition.x + UnityEngine.Random.Range(-deltaX, deltaX + 1),
-                                                                   initialAnchoredPosition.y + UnityEngine.Random.Range(-deltaY, deltaY + 1),
-                                                                   initialAnchoredPosition.z);
-                timerBetweenShakes = 0f;
-            }
-
-            timerDuration += Time.deltaTime;
-            timerBetweenShakes += Time.deltaTime;
-
-            // IMPORTANT FIX: this yield was missing in the original. Without it, the
-            // while loop never hands control back to Unity between iterations, so the
-            // whole "shakeDuration" worth of jitter happens synchronously within a
-            // single frame - the shake never actually renders, it just freezes for
-            // one tick and immediately snaps back to initialPosition afterward.
-            yield return null;
-        }
-
-        textComponent.rectTransform.anchoredPosition = initialAnchoredPosition;
+        yield return DialogueTyper.FadeOutTogether(barkTextDialogueFirst, barkTextDialogueSecond, fadeSpeed: 1f, useUnscaledTime: false);
     }
 }

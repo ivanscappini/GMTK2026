@@ -3983,19 +3983,49 @@ MonoBehaviour:
     dialogue: "AGENT VECTOR REPORTING IN. THIS DIMENSION SEEMS TO RESEMBLE CATACOMBS
       OF SOME SORT, THERE\u2019S NOTHING OF VALUE HERE"
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 1
     dialogue: "VECTOR, WE\u2019RE DETECTING AN ENTITY NEARBY. PROCEED WITH CAUTION
       AND ASSESS HOSTILITY"
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: YOU OVERSTEPPED, AGENT
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 0
     dialogue: VERY HOSTILE, CHIEF
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: RUN
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 1
+    fontSizeOverride: 700
   barkTextDialogue: {fileID: 6627219634634863975}
   delayBetweenCharacters: 0.1
   delayBetweenCharactersLastDialogue: 0.8
@@ -4006,7 +4036,7 @@ MonoBehaviour:
   barkFontMonster: {fileID: 11400000, guid: 8965042acce532f40b40d9f802ef4503, type: 2}
   barkFontVector: {fileID: 11400000, guid: 2ba348c6b838c394fbeaf159eb70df06, type: 2}
   barkFontHQ: {fileID: 11400000, guid: be7cff1750d03214f80b07e9f75a1e5f, type: 2}
-  lastDialogueFontSize: 700
+  sceneToLoadAfterDialogues: Blockout
   interactAction:
     m_Name: Interact
     m_Type: 0
@@ -5451,6 +5481,12 @@ MonoBehaviour:
     character: 0
     dialogue: Press e to go to the next dialogue
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
 --- !u!222 &6157948627311519247
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5493,9 +5529,21 @@ MonoBehaviour:
   - character: 0
     dialogue: WE FIGHT TO CLEANSE REALITY OF THOSE WHO WISH TO CONSUME IT
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 0
     dialogue: Agency of Dimensional Control
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   dialoguesText: {fileID: 7464507824068080743}
   textAudio: {fileID: 7048132984312749423}
   delayBetweenCharacters: 0.15
