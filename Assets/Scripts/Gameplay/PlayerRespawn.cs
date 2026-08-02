@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -19,6 +20,8 @@ public class PlayerRespawn : MonoBehaviour
     private Vector3 checkpointLocation;
     private Quaternion checkpointRotation;
     private float savedTimeAtCheckpoint;
+
+    public event Action OnRespawnToCheckpoint;
 
     private void Start()
     {
@@ -101,5 +104,7 @@ public class PlayerRespawn : MonoBehaviour
         {
             Mon.SetActive(true);
         }
+
+        OnRespawnToCheckpoint?.Invoke();
     }
 }

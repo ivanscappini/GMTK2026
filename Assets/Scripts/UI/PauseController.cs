@@ -226,14 +226,14 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
             }
         }
 
-            // play pause/unpause sounds
-            if (audioSource != null)
-            {
-                if (IsPaused && pauseClip != null)
-                    audioSource.PlayOneShot(pauseClip);
-                else if (!IsPaused && unpauseClip != null)
-                    audioSource.PlayOneShot(unpauseClip);
-            }
+        // play pause/unpause sounds
+        if (audioSource != null)
+        {
+            if (IsPaused && pauseClip != null)
+                audioSource.PlayOneShot(pauseClip);
+            else if (!IsPaused && unpauseClip != null)
+                audioSource.PlayOneShot(unpauseClip);
+        }
     }
 
     public void ResumeGame()
@@ -252,7 +252,7 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
         PlaySelectSound();
 
         // attempt to find the player respawn component in scene
-        var player = FindObjectOfType<PlayerRespawn>();
+        var player = FindFirstObjectByType<PlayerRespawn>();
         if (player == null)
         {
             Debug.LogWarning("No PlayerRespawn found for rewind.");

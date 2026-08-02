@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -14,6 +15,15 @@ public class TimePickup : MonoBehaviour
     [SerializeField] float timeChange = 5;
     [SerializeField] AudioClip pickupSound;
     [SerializeField] public AudioSource audioSource;
+
+    private void Start()
+    {
+        FindFirstObjectByType<PlayerRespawn>().OnRespawnToCheckpoint += RespawnPickUp;
+    }
+    private void OnDestroy()
+    {
+        FindFirstObjectByType<PlayerRespawn>().OnRespawnToCheckpoint -= RespawnPickUp;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -53,7 +63,13 @@ public class TimePickup : MonoBehaviour
                 });
             }
             //After being triggered the game object is destroyed
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            gameObject.SetActive(false);
         }
+    }
+
+    private void RespawnPickUp()
+    {
+        gameObject.SetActive(true);
     }
 }
