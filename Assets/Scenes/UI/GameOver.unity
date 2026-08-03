@@ -1065,7 +1065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41eb11cac67e48344befa5eaaba8d758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsLoader
-  masterMixer: {fileID: 0}
+  masterMixer: {fileID: 24100000, guid: e02fb9a42fc7e214db9e01498906d9bc, type: 2}
   musicParam: BGMVolume
   sfxParam: SFXMasterVolume
   minSensitivity: 0.01
