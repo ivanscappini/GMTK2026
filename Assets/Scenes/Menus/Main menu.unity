@@ -1358,7 +1358,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 750, y: -400}
+  m_AnchoredPosition: {x: 700, y: -400}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &671798651
@@ -4734,7 +4734,7 @@ MonoBehaviour:
   barkFontMonster: {fileID: 11400000, guid: 8965042acce532f40b40d9f802ef4503, type: 2}
   barkFontVector: {fileID: 11400000, guid: 2ba348c6b838c394fbeaf159eb70df06, type: 2}
   barkFontHQ: {fileID: 11400000, guid: be7cff1750d03214f80b07e9f75a1e5f, type: 2}
-  sceneToLoadAfterDialogues: Blockout
+  sceneToLoadAfterDialogues: Level
   interactAction:
     m_Name: Interact
     m_Type: 0
@@ -6179,7 +6179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
   gameplaySceneAsset: {fileID: 102900000, guid: 8d248d64159ebfa4cb681c23c0a4a3ca, type: 3}
-  gameplaySceneName: Prototype Map
+  gameplaySceneName: Gym
   optionsPanel: {fileID: 1648152211}
   creditsPanel: {fileID: 8739398322083287004}
   audioSource: {fileID: 1417801307}
@@ -7275,7 +7275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
   gameplaySceneAsset: {fileID: 102900000, guid: 8d248d64159ebfa4cb681c23c0a4a3ca, type: 3}
-  gameplaySceneName: Prototype Map
+  gameplaySceneName: Gym
   optionsPanel: {fileID: 0}
   creditsPanel: {fileID: 0}
   audioSource: {fileID: 0}

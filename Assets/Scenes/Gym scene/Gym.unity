@@ -463,17 +463,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 337378455377867288, guid: b6e5e71eb6bd7ca40ad35df63430a789, type: 3}
   m_PrefabInstance: {fileID: 344547054}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &553006459 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4048631862370831030, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-  m_PrefabInstance: {fileID: 388886836331931904}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
 --- !u!1001 &695658391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -860,21 +849,57 @@ MonoBehaviour:
   - character: 0
     dialogue: HOW DID WE GET HERE?
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: FEELING LOST?
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: "DON\u2019T YOU MISS HOME, AGENT?"
     dialogueIndex: 1
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 0
     dialogue: "YOU- THIS ISN\u2019T POSSIBLE"
     dialogueIndex: 1
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 1
     dialogue: VECTOR, WE DETECTED A DIMENSIONAL SHIFT
     dialogueIndex: 2
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 0
     dialogue: "IT\u2019S THE ENTITY! I DON\u2019T KNOW HOW IT\u2019S DOING IT!"
     dialogueIndex: 2
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   barkTextDialogueFirst: {fileID: 238735588}
   barkTextDialogueSecond: {fileID: 1317785598}
   delayBetweenCharacters: 0.1
@@ -997,32 +1022,86 @@ MonoBehaviour:
   - character: 2
     dialogue: TIME'S UP
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: FASTER! RUN FASTER!
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 0
     dialogue: IT'S CATCHING UP!
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   barksStandingStill:
   - character: 2
     dialogue: I'M GETTING CLOSER VECTOR
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: STANDING STILL SPOILS THE FUN!
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: KEEP RUNNING!
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   barksPausingGame:
   - character: 2
     dialogue: "THIS TRICK WON\u2019T LAST LONG, VECTOR"
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: WHAT ARE YOU DOING? KEEP RUNNING!
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   - character: 2
     dialogue: WHAT IS THIS? LET ME MOVE!
     dialogueIndex: 0
+    overrideFont: 0
+    fontOverride: {fileID: 0}
+    overrideColor: 0
+    colorOverride: {r: 0, g: 0, b: 0, a: 0}
+    overrideFontSize: 0
+    fontSizeOverride: 0
   delayBetweenCharacters: 0.1
   delayBeforeCharactersVanish: 1.2
   delayBeforeCanBarkAgain: 1
@@ -1049,67 +1128,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &388886836331931904
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 23.291666
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.95
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -58.98
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886963399928348873, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5491833907884678205, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_Name
-      value: Spline
-      objectReference: {fileID: 0}
-    - target: {fileID: 5491833907884678205, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 159ba752c951d4a438f62dc71cf99596, type: 3}
 --- !u!1001 &1011765362857157055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1381,71 +1399,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9287ea50152e864da52b9d75e15cf84, type: 3}
---- !u!1001 &5880406176244833904
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1376368898235384902, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_Target
-      value: 
-      objectReference: {fileID: 553006459}
-    - target: {fileID: 3743995395772469131, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_Name
-      value: Monster
-      objectReference: {fileID: 0}
-    - target: {fileID: 3743995395772469131, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 23.291666
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.95
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -58.98
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7070997
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7070996
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.003192575
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.003192575
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851252706975672837, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7ab4312ac2a1f6842bd8f1d6a3f8cda5, type: 3}
 --- !u!1001 &6666457907218861528
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1798,8 +1751,6 @@ SceneRoots:
   - {fileID: 223330821}
   - {fileID: 1448546636}
   - {fileID: 2644099784096416365}
-  - {fileID: 388886836331931904}
-  - {fileID: 5880406176244833904}
   - {fileID: 2392327696140772857}
   - {fileID: 4753291434745581272}
   - {fileID: 1800952904}
