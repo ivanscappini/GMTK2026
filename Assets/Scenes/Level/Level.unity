@@ -23308,6 +23308,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube Ending Game
       objectReference: {fileID: 0}
+    - target: {fileID: 3949476169278792116, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
+      propertyPath: hint.dialogue
+      value: Press p to go to main menu
+      objectReference: {fileID: 0}
     - target: {fileID: 6632488744041727408, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
       propertyPath: audioToFade
       value: 
