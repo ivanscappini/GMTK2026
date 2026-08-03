@@ -58,7 +58,7 @@ public class SafeZoneScripts : MonoBehaviour
                 m.SetActive(true);
             }
 
-            // Optional: unlock an activity/ability. Only show the unlock dialog if it wasn't already enabled.
+            // Optional: unlock an activity/ability. Always unlock, but only show popup if setting allows.
             if (activityToUnlock != null)
             {
                 var manager = playerRef.GetComponentInParent<ActivityManager>();
@@ -66,7 +66,7 @@ public class SafeZoneScripts : MonoBehaviour
                 {
                     bool alreadyEnabled = manager.IsEnabled(activityToUnlock);
                     manager.SetEnabled(activityToUnlock, true);
-                    if (!alreadyEnabled && dialogueBoxController != null)
+                    if (!alreadyEnabled && dialogueBoxController != null && SettingsManager.TutorialPopupsEnabled)
                     {
                         dialogueBoxController.ShowDialogueBox(unlockTitle, unlockDescription);
                     }
@@ -77,8 +77,9 @@ public class SafeZoneScripts : MonoBehaviour
                 }
             }
 
+            if (!SettingsManager.TutorialPopupsEnabled) return;
+
             // Optional tutorial/dialogue that can be shown on entering this safe zone.
-            // This is independent of activity unlocks and will be shown if configured.
             if (tutorialDialogueController != null && (!string.IsNullOrEmpty(tutorialTitle) || !string.IsNullOrEmpty(tutorialDescription)))
             {
                 bool shouldShow = true;

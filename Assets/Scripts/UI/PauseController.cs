@@ -16,6 +16,7 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
 
     [Header("UI Reference")]
     [SerializeField] private GameObject pauseMenuPanel;
+    [SerializeField] private GameObject optionsPanel;
 
     [SerializeField] private TMP_Text playText;
     [SerializeField] private Image playPauseButtonImage;
@@ -102,6 +103,13 @@ public class PauseController : MonoBehaviour, ISerializationCallbackReceiver
                 playPauseSpriteRenderer = pauseMenuPanel.GetComponentInChildren<SpriteRenderer>(true);
             }
         }
+    }
+
+    public void Button_ToggleOptions()
+    {
+        PlaySelectSound();
+        if (optionsPanel != null)
+            optionsPanel.SetActive(!optionsPanel.activeSelf);
     }
 
     public void Button_MainMenu()

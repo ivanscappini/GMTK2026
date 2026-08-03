@@ -95,6 +95,8 @@ AudioMixerGroupController:
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 9ef1148a723afe84bbaec90b5c32aa92
   m_Children:
+  - {fileID: 1700635888689470497}
+  - {fileID: -718430422947186742}
   - {fileID: -3988939100199559806}
   - {fileID: 6798637683309025882}
   - {fileID: -5716535641315336069}
@@ -155,7 +157,11 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 9171f2669b4242443b544dc8657135f2
+    name: BGMVolume
+  - guid: 98ff2641df0ec9a44bfb0f7a514e1052
+    name: SFXMasterVolume
   m_AudioMixerGroupViews:
   - guids:
     - 286a19e0df72d7f4c8f167204eb17e65
@@ -180,8 +186,6 @@ AudioMixerGroupController:
   m_GroupID: 286a19e0df72d7f4c8f167204eb17e65
   m_Children:
   - {fileID: -8301117669853679626}
-  - {fileID: -718430422947186742}
-  - {fileID: 1700635888689470497}
   - {fileID: -3330978227708399953}
   m_Volume: e8c2132dfcb5e604f80ce7ebb63a87f0
   m_Pitch: d381665c0effe56489f08d7865785fc3

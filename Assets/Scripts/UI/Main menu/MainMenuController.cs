@@ -8,15 +8,32 @@ public class MainMenuController : MonoBehaviour, ISerializationCallbackReceiver
     [SerializeField] private UnityEditor.SceneAsset gameplaySceneAsset;
 #endif
 
-    [HideInInspector] 
+    [HideInInspector]
     [SerializeField] private string gameplaySceneName;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private GameObject creditsPanel;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip clickSound;
 
     private void OnEnable()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        if (optionsPanel != null) optionsPanel.SetActive(false);
+        if (creditsPanel != null) creditsPanel.SetActive(false);
     }
-    
+
+    public void PlayClickSound()
+    {
+        if (audioSource != null && clickSound != null)
+            audioSource.PlayOneShot(clickSound);
+    }
+
     public void Button_StartGame()
     {
         if (string.IsNullOrEmpty(gameplaySceneName))
@@ -25,21 +42,42 @@ public class MainMenuController : MonoBehaviour, ISerializationCallbackReceiver
             return;
         }
 
-        
-
+        PlayClickSound();
         Debug.Log($"Starting Game: {gameplaySceneName}");
         SceneManager.LoadScene(gameplaySceneName);
     }
 
+    public void Button_ToggleOptions()
+    {
+        PlayClickSound();
+        if (optionsPanel != null)
+            optionsPanel.SetActive(!optionsPanel.activeSelf);
+    }
+
+    public void Button_OpenCredits()
+    {
+        PlayClickSound();
+        if (creditsPanel != null)
+            creditsPanel.SetActive(true);
+    }
+
+    public void Button_CloseCredits()
+    {
+        PlayClickSound();
+        if (creditsPanel != null)
+            creditsPanel.SetActive(false);
+    }
+
     public void Button_QuitGame()
     {
+        PlayClickSound();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit(); 
+        Application.Quit();
 #endif
     }
-    
+
     public void OnBeforeSerialize()
     {
 #if UNITY_EDITOR
