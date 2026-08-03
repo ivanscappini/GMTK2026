@@ -42,6 +42,7 @@ public class SequentialDialoguePlayer : MonoBehaviour
     private int dialogueIndex = 0;
 
     [SerializeField] public InputAction interactAction;
+    [SerializeField] public InputAction skipAction;
 
     private void Awake()
     {
@@ -64,18 +65,27 @@ public class SequentialDialoguePlayer : MonoBehaviour
     {
         interactAction.Enable();
         interactAction.started += OnInteract;
+        skipAction.Enable();
+        skipAction.started += OnSkip;
     }
 
     private void OnDisable()
     {
         interactAction.started -= OnInteract;
         interactAction.Disable();
+        skipAction.started -= OnSkip;
+        skipAction.Disable();
     }
 
     private void OnDestroy()
     {
         if (HintDialogue.Instance != null)
             HintDialogue.Instance.onHintAppeared -= SetIsBarking;
+    }
+
+    public void OnSkip(InputAction.CallbackContext context)
+    {
+        SceneManager.LoadScene(sceneToLoadAfterDialogues);
     }
 
     public void OnInteract(InputAction.CallbackContext context)

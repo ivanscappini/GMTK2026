@@ -4590,6 +4590,23 @@ MonoBehaviour:
       m_Action: Interact
       m_Flags: 0
     m_Flags: 0
+  skipAction:
+    m_Name: Skip
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 613e66cf-8fce-4398-bfcb-b9feb28279e3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8c27a8a7-ec1c-4089-b6e5-3a3a282e36ec
+      m_Path: <Keyboard>/p
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Skip
+      m_Flags: 0
+    m_Flags: 0
 --- !u!224 &2060814391656730928
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6995,7 +7012,7 @@ GameObject:
   - component: {fileID: 4494274214798894712}
   - component: {fileID: 6090279549324699983}
   m_Layer: 5
-  m_Name: Hint
+  m_Name: Hint interact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

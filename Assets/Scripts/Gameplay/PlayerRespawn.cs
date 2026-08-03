@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class PlayerRespawn : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class PlayerRespawn : MonoBehaviour
     private Vector3 checkpointLocation;
     private Quaternion checkpointRotation;
     private float savedTimeAtCheckpoint;
+
+    public event Action OnRespawnToCheckpoint;
 
     private void Start()
     {
@@ -70,7 +74,7 @@ public class PlayerRespawn : MonoBehaviour
         checkpointRotation = target.transform.rotation;
         savedTimeAtCheckpoint = checkpointTime;
         Debug.Log($"Checkpoint recorded at {checkpointLocation} with time {savedTimeAtCheckpoint}");
-        
+
         Monster = monsters;
     }
 
@@ -88,11 +92,19 @@ public class PlayerRespawn : MonoBehaviour
         {
             Timer.Instance.SetTime(savedTimeAtCheckpoint);
         }
-        
+
         //activate monster at respawn
+        foreach (var Mon in Monster)
+        {
+            Mon.GetComponent<SplineAnimate>().ElapsedTime = 0;
+            Mon.SetActive(false);
+        }
+
         foreach (var Mon in Monster)
         {
             Mon.SetActive(true);
         }
+
+        OnRespawnToCheckpoint?.Invoke();
     }
 }
