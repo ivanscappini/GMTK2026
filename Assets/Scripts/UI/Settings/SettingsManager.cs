@@ -44,18 +44,6 @@ public class SettingsManager : MonoBehaviour
 
     private float savedFisheyeStrength;
     private const float MinDb = -80f;
-    private const float DefaultMinSens = 0.01f;
-    private const float DefaultMaxSens = 0.3f;
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void ApplySavedSensitivityOnLoad()
-    {
-        var fp = FindObjectOfType<FPController>();
-        if (fp == null) return;
-        float sens = Mathf.Lerp(DefaultMinSens, DefaultMaxSens, SavedSensitivity);
-        fp.Preset.LookSensitivity = new Vector2(sens, sens);
-    }
-
     void OnEnable()
     {
         if (crtMaterial != null)
