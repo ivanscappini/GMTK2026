@@ -23298,7 +23298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1805348490564768253, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
       propertyPath: skipAction.m_SingletonActionBindings.Array.data[0].m_Path
-      value: <Keyboard>/p
+      value: <Keyboard>/space
       objectReference: {fileID: 0}
     - target: {fileID: 1805348490564768253, guid: 6c4b99c013cef4943a0c666eaeea4a3b, type: 3}
       propertyPath: skipAction.m_SingletonActionBindings.Array.data[0].m_Action
@@ -56405,7 +56405,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 261306020564340821, guid: e77c4779c65877a448f18605cf844efa, type: 3}
       propertyPath: timerStartTime
-      value: 150
+      value: 130
       objectReference: {fileID: 0}
     - target: {fileID: 2378729406115171821, guid: e77c4779c65877a448f18605cf844efa, type: 3}
       propertyPath: m_LocalPosition.x
